@@ -1,7 +1,12 @@
 <resources>
     <string name="app_name">JavaQ</string>
+
     <string name="quiz">Quiz</string>
     <string name="community">Community</string>
     <string name="progress">Progress</string>
     <string name="me">Me</string>
+
+    <string name="continue_button">Continue</string>
+    <string name="back_button">Back to home</string>
+    <string name="retry_button">Retry</string>
 </resources>
