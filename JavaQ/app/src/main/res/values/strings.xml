@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JavaQ</string>
+    <string name="quiz">Quiz</string>
+    <string name="community">Community</string>
+    <string name="progress">Progress</string>
+    <string name="me">Me</string>
 </resources>
