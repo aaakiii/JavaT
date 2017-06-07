@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 
 public class QuizListFragment extends Fragment {
-    ListView mQuizListListView;
+    ListView mListView;
 
 
     @Override
@@ -50,13 +51,17 @@ public class QuizListFragment extends Fragment {
         mSectionList.add("Method");
         mSectionList.add("Classes");
 
-        // adapterのインスタンスを作成
         myArrayAdapter adapter =
                 new myArrayAdapter(getActivity(), R.layout.quiz_list_item, mSectionList);
 
-        mQuizListListView = (ListView) view.findViewById(R.id.quiz_list_view);
-        mQuizListListView.setAdapter(adapter);
+        mListView = (ListView) view.findViewById(R.id.quiz_list_view);
+        mListView.setAdapter(adapter);
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "position: " + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         return view;
     }
 
@@ -72,7 +77,7 @@ public class QuizListFragment extends Fragment {
 
             this.resourceId = resourceId;
             this.items = items;
-            this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
         @Override
@@ -87,13 +92,13 @@ public class QuizListFragment extends Fragment {
             String item = this.items.get(position);
 
             // set texts
-            TextView mQuizListNameTextView = (TextView)view.findViewById(R.id.list_name);
+            TextView mQuizListNameTextView = (TextView) view.findViewById(R.id.list_name);
             mQuizListNameTextView.setText(item);
 
-            TextView mQuizListNumTextView = (TextView)view.findViewById(R.id.list_num);
-            mQuizListNumTextView.setText("Quiz" + position);
+            TextView mQuizListNumTextView = (TextView) view.findViewById(R.id.list_num);
+            mQuizListNumTextView.setText("Quiz " + (position + 1));
 
-            // アイコンをセット
+            // set icon
 //            ImageView appInfoImage = (ImageView)view.findViewById(R.id.item_image);
 //            appInfoImage.setImageResource(item.getImageId());
 
