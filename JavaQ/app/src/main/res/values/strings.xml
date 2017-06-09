@@ -9,4 +9,7 @@
     <string name="continue_button">Continue</string>
     <string name="back_button">Back to home</string>
     <string name="retry_button">Retry</string>
+
+    <string name="open">open</string>
+    <string name="close">close</string>
 </resources>
