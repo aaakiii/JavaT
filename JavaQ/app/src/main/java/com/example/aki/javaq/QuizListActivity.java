@@ -1,77 +1,79 @@
 package com.example.aki.javaq;
 
-import android.app.FragmentManager;
+
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import static com.example.aki.javaq.R.styleable.MenuItem;
+import android.widget.TextView;
 
 public class QuizListActivity extends QuizListSingleFragmentActivity {
-    private String[] mPlanetTitles = {"Quiz", "Community", "Progress", "Me"};
+
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ListView mListView;
+
+    private final String[] mMainMenuItems = new String[]{"Quiz", "Community", "Progress", "Nortifications", "Setting"};
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_list_fragment_activity);
 
-//        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+//        _txvMessage = (TextView) findViewById(R.id.txvMessage);
 
-        // Set the adapter for the list view
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-    }
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drwMain);
 
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
+        // ツールバーの一番左にトグルボタンを設定
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+                R.string.app_name, R.string.app_name);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-    /** Swaps fragments in the main content view */
-    private void selectItem(int position) {
-        // Create a new fragment and specify the planet to show based on position
-        Fragment fragment = new QuizListFragment();
-        Bundle args = new Bundle();
-        args.putInt(QuizListFragment.ARG_PLANET_NUMBER, position);
-        fragment.setArguments(args);
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
-                .commit();
-
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        // ナビゲーションドロワの中にリストビューを定義
+        mListView = (ListView) findViewById(R.id.lsvDrawer);
+        mListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mMainMenuItems));
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // ナビゲーションドロワを左側に閉じる
+                mDrawerLayout.closeDrawer(Gravity.LEFT);
+            }
+        });
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // アクティビティ作成後にトグルボタンを同期
+        mDrawerToggle.syncState();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Android端末のステータスに変化があった場合、その内容をトグルボタンに伝える
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected Fragment createFragment() {
         return new QuizListFragment();
     }
-
 }

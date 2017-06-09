@@ -8,4 +8,11 @@
         <!--android:icon="@drawable" -->
     </item>
 
+    <item
+        android:id="@+id/menu_main"
+        app:showAsAction="ifRoom"
+        android:title="Compose">
+        <!--android:icon="@drawable" -->
+    </item>
+
 </menu>

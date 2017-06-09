@@ -2,8 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        Customize your theme here.
-        <item name="android:actionBarStyle">@style/CustomActionBarTheme</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/main_color</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/sub_color</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="CustomActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
