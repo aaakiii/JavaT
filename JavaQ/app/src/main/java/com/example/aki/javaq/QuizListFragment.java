@@ -1,6 +1,7 @@
 package com.example.aki.javaq;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -27,6 +28,7 @@ import java.util.List;
 
 public class QuizListFragment extends Fragment {
     ListView mListView;
+    public static final String EXTRA_SECTION_POSITON = "aki.javaq_extra_section_position";
 
 
     @Override
@@ -60,6 +62,9 @@ public class QuizListFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Toast.makeText(getActivity(), "position: " + position, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(),QuizActivity.class);
+                intent.putExtra(EXTRA_SECTION_POSITON, position);
+                startActivity(intent);
             }
         });
         return view;
