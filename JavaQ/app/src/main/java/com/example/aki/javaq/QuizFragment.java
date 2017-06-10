@@ -168,7 +168,7 @@ public class QuizFragment extends Fragment {
             return false;
         }
     }
-    
+
     @Override
     public void onPause() {
         super.onPause();
