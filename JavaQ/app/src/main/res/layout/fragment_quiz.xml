@@ -31,21 +31,21 @@
         android:textColor="@color/main_color"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="@+id/progress_bar"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="57dp"
+        android:layout_marginTop="50dp"
+        android:textSize="21dp"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
         android:id="@+id/first_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/main_text"
         android:background="@drawable/answer_button_customize"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -53,13 +53,16 @@
         app:layout_constraintTop_toBottomOf="@+id/question_item"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/question_item"
-        android:layout_marginTop="82dp"
+        android:layout_marginTop="70dp"
+        android:padding="10dp"
+        android:textSize="20dp"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
         android:id="@+id/second_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/main_text"
         android:background="@drawable/answer_button_customize"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -68,6 +71,8 @@
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/first_button"
         android:layout_marginTop="27dp"
+        android:padding="10dp"
+        android:textSize="20dp"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
@@ -75,7 +80,7 @@
         android:text="Answer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/sub_text"
+        android:textColor="@color/main_text"
         android:background="@drawable/answer_button_customize"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -83,7 +88,9 @@
         app:layout_constraintTop_toBottomOf="@+id/second_button"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/second_button"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="27dp"
+        android:padding="10dp"
+        android:textSize="20dp"
         app:layout_constraintHorizontal_bias="0.0" />
 
     <Button
@@ -99,7 +106,10 @@
         app:layout_constraintTop_toBottomOf="@+id/third_button"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/third_button"
-        android:layout_marginTop="59dp"
-        app:layout_constraintHorizontal_bias="0.0" />
+        android:layout_alignParentBottom="true"
+        android:padding="8dp"
+        android:textSize="20dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="70dp" />
 
 </android.support.constraint.ConstraintLayout>
