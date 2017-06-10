@@ -1,0 +1,39 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_quiz"
+            android:icon="@drawable/navi_quiz"
+            android:title="@string/quiz"
+            android:checked="true"/>
+        <item
+            android:id="@+id/nav_community"
+            android:icon="@drawable/navi_community"
+            android:title="@string/community" />
+        <item
+            android:id="@+id/nav_progress"
+            android:icon="@drawable/navi_progress"
+            android:title="@string/progress" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/navi_progress"
+            android:title="@string/setting" />
+        <item
+            android:id="@+id/nav_notification"
+            android:icon="@drawable/navi_progress"
+            android:title="@string/notification" />
+
+        <item android:title="@string/other">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:title="@string/aboutus" />
+                    <item
+                        android:title="@string/pp" />
+                </group>
+            </menu>
+        </item>
+    </group>
+
+
+</menu>
