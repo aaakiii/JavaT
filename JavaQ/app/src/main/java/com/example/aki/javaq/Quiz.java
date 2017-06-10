@@ -1,35 +1,35 @@
 package com.example.aki.javaq;
 
-import java.io.Serializable;
+
 import java.util.UUID;
 
 /**
  * Created by AKI on 2017-06-06.
  */
 
-public class Quiz implements Serializable{
+public class Quiz{
     private UUID mId;
     private int mQuizNumber;
     private String mSectionName;
     private String mQuestionText;
-    private String[] mChoices = new String[3];
+    private String mFirstChoice;
+    private String mSecondChoice;
+    private String mThirdChoice;
     private int mAnswerIndex;
 
-    private static Quiz[] mQuizBank = new Quiz[5];
-
-    public Quiz(int QuizNumber, String SectionName, String QuestionText, String[] Choices, int AnswerIndex){
+    public Quiz(int QuizNumber, String SectionName, String QuestionText,String FirstChoice, String SecondChoice,String ThirdChoice,int AnswerIndex){
+        mId = UUID.randomUUID();
         mQuizNumber = QuizNumber;
         mSectionName = SectionName;
         mQuestionText = QuestionText;
-        mChoices = Choices;
+        mFirstChoice = FirstChoice;
+        mSecondChoice = SecondChoice;
+        mThirdChoice = ThirdChoice;
         mAnswerIndex = AnswerIndex;
-        mId = UUID.randomUUID();
     }
     public UUID getId(){
         return mId;
     }
-
-
     public int getmQuizNumber() {
         return mQuizNumber;
     }
@@ -42,8 +42,16 @@ public class Quiz implements Serializable{
         return mQuestionText;
     }
 
-    public String[] getmChoices() {
-        return mChoices;
+    public String getmFirstChoice() {
+        return mFirstChoice;
+    }
+
+    public String getmSecondChoice() {
+        return mSecondChoice;
+    }
+
+    public String getmThirdChoice() {
+        return mThirdChoice;
     }
 
     public int getmAnswerIndex() {
@@ -62,28 +70,20 @@ public class Quiz implements Serializable{
         this.mQuestionText = mQuestionText;
     }
 
-    public void setmChoices(String[] mChoices) {
-        this.mChoices = mChoices;
+    public void setmFirstChoice(String mFirstChoice) {
+        this.mFirstChoice = mFirstChoice;
+    }
+
+    public void setmSecondChoice(String mSecondChoice) {
+        this.mSecondChoice = mSecondChoice;
+    }
+
+    public void setmThirsChoice(String mThirsChoice) {
+        this.mThirdChoice = mThirsChoice;
     }
 
     public void setmAnswerIndex(int mAnswerIndex) {
         this.mAnswerIndex = mAnswerIndex;
-    }
-    public static void init() {
-        mQuizBank[0] = new Quiz(0, "Basic Concept", "Which of these lines create a variable?", new String[]{"myAge = 17;", "String myName;", "myName = \"Marty\";"}, 2);
-        mQuizBank[1] = new Quiz(1, "Basic Concept", "Which of these lines create a variable?", new String[]{"myAge = 17;", "String myName;", "myName = \"Marty\";"}, 2);
-        mQuizBank[2] = new Quiz(2, "Basic Concept", "Which of these lines create a variable?", new String[]{"myAge = 17;", "String myName;", "myName = \"Marty\";"}, 2);
-        mQuizBank[3] = new Quiz(3, "Basic Concept", "Which of these lines create a variable?", new String[]{"myAge = 17;", "String myName;", "myName = \"Marty\";"}, 2);
-        mQuizBank[4] = new Quiz(4, "Basic Concept", "Which of these lines create a variable?", new String[]{"myAge = 17;", "String myName;", "myName = \"Marty\";"}, 2);
-
-
-    }
-
-    public static Quiz getQuiz(int num){
-        if (num >= mQuizBank.length){
-            return null;
-        }
-        return mQuizBank[num];
     }
 
 }
