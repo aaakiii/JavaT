@@ -18,7 +18,6 @@ public class Quiz{
     private int mAnswerIndex;
 
     public Quiz(int QuizNumber, String SectionName, String QuestionText,String FirstChoice, String SecondChoice,String ThirdChoice,int AnswerIndex){
-        mId = UUID.randomUUID();
         mQuizNumber = QuizNumber;
         mSectionName = SectionName;
         mQuestionText = QuestionText;
@@ -27,9 +26,7 @@ public class Quiz{
         mThirdChoice = ThirdChoice;
         mAnswerIndex = AnswerIndex;
     }
-    public UUID getId(){
-        return mId;
-    }
+
     public int getmQuizNumber() {
         return mQuizNumber;
     }
