@@ -41,33 +41,6 @@ public class QuizFragment extends Fragment {
     private QuizLab quizLab;
     private Quiz mQuiz;
     final List<Quiz> mQuizzes = new QuizLab().getQuizzes();
-
-//    private Quiz mQuiz;
-//    private List<Quiz> mQuizzes;
-//
-//    private Quiz[] mQuiz = new Quiz[]{
-//            new Quiz(1,"Basic Concept","Which of these lines create a variable?","myAge = 17;","String myName;","myName = \"Marty\";",2),
-//            new Quiz(2,"Basic concept","What's true about 42 and \"42\"?","42 is an integer value while \"42\"is a string value","They're the same","42 can not be used for arithmetic",1),
-//            new Quiz(3,"Basic concept","Can you find the mistake in this snippet?\nint myAge;\nmyAge = \"17\";\nSystem.out.print(myAge);","myAge needs to be a double-type variable","print()can't be used for integer","myAge can't take a String-type value like \"17\"",3),
-//            new Quiz(4,"Basic concept","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(5,"Basic concept","Can you anticipate the result of this not-so-complex arithmetic operation?\nint number = 80;\nSystem.out.print(number/40);","40","20","20.0",2),
-//            new Quiz(6,"Basic concept","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(7,"Basic concept","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(8,"Basic concept","What's the difference between int and double","int defines variable while double defines a method","They are the same","Itegers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(1,"Variables","Which of these lines create a variable?","myAge = 17;","String myName;","myName = \"Marty\";",2),
-//            new Quiz(2,"Variables","What's true about 42 and \"42\"?","42 is an integer value while \"42\"is a string value","They're the same","42 can not be used for arithmetic",1),
-//            new Quiz(3,"Variables","Can you find the mistake in this snippet?\nint myAge;\nmyAge = \"17\";\nSystem.out.print(myAge);","myAge needs to be a double-type variable","print()can't be used for integer","myAge can't take a String-type value like \"17\"",3),
-//            new Quiz(4,"Variables","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(5,"Variables","Can you anticipate the result of this not-so-complex arithmetic operation?\nint number = 80;\nSystem.out.print(number/40);","40","20","20.0",2),
-//            new Quiz(6,"Variables","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(7,"Variables","What's the difference between int and double","int defines variable while double defines a method","They are the same","Integers are whole numbers while doubles have a decimal point",3),
-//            new Quiz(8,"Variables","What's the difference between int and double","int defines variable while double defines a method","They are the same","Itegers are whole numbers while doubles have a decimal point",3)
-//    };
-//    public void bind(Quiz quiz){
-//        QuizLab quizLab = QuizLab.get(getActivity());
-//        List<Quiz> quizzes = quizLab.getQuizzes();
-//        mQuiz = quiz;
-//    }
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
