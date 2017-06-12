@@ -45,10 +45,9 @@ public class QuizFragment extends Fragment {
     private Quiz mQuiz;
     private int mCurrentSectionID;
     private String[] mSectionList;
+    private List<Quiz> mQuizzes;
 
     public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
-
-    final List<Quiz> mQuizzes = new QuizLab().getQuizzes();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,13 +60,15 @@ public class QuizFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mQuiz = new QuizLab().getQuiz();
+        Intent i = getActivity().getIntent();
+        mCurrentSectionID = i.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
+        mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
+
+        mQuiz = new QuizLab(mCurrentSectionID).getQuiz();
         View v = inflater.inflate(R.layout.quiz_fragment, container, false);
 
         mSectionList = getResources().getStringArray(R.array.section_list);
 
-        Intent i = getActivity().getIntent();
-        mCurrentSectionID = i.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
 
         mProgressBar1 = (ImageView) v.findViewById(R.id.progress_bar_1);
         mProgressBar1.setImageResource(R.drawable.icon_progress_maincolor);

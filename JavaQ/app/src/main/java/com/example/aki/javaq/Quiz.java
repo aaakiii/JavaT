@@ -7,19 +7,17 @@ import java.util.UUID;
  * Created by AKI on 2017-06-06.
  */
 
-public class Quiz{
+public class Quiz {
     private UUID mId;
-    private int mQuizNumber;
-    private String mSectionName;
+    private int mQuizSectionID;
     private String mQuestionText;
     private String mFirstChoice;
     private String mSecondChoice;
     private String mThirdChoice;
     private int mAnswerIndex;
 
-    public Quiz(int QuizNumber, String SectionName, String QuestionText,String FirstChoice, String SecondChoice,String ThirdChoice,int AnswerIndex){
-        mQuizNumber = QuizNumber;
-        mSectionName = SectionName;
+    public Quiz(int sectionID, String QuestionText, String FirstChoice, String SecondChoice, String ThirdChoice, int AnswerIndex) {
+        mQuizSectionID = sectionID;
         mQuestionText = QuestionText;
         mFirstChoice = FirstChoice;
         mSecondChoice = SecondChoice;
@@ -28,11 +26,7 @@ public class Quiz{
     }
 
     public int getmQuizNumber() {
-        return mQuizNumber;
-    }
-
-    public String getmSectionName() {
-        return mSectionName;
+        return mQuizSectionID;
     }
 
     public String getmQuestionText() {
@@ -56,12 +50,9 @@ public class Quiz{
     }
 
     public void setmQuizNumber(int mQuizNumber) {
-        this.mQuizNumber = mQuizNumber;
+        this.mQuizSectionID = mQuizNumber;
     }
 
-    public void setmSectionName(String mSectionName) {
-        this.mSectionName = mSectionName;
-    }
 
     public void setmQuestionText(String mQuestionText) {
         this.mQuestionText = mQuestionText;
