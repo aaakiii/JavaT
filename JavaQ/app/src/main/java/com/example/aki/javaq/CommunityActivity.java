@@ -25,7 +25,7 @@ public class CommunityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_list_fragment_activity);
+        setContentView(R.layout.quiz_section_activity);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);

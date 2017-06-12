@@ -5,14 +5,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public abstract class QuizListSingleFragmentActivity extends AppCompatActivity {
+public abstract class QuizSectionSingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_list_fragment_activity);
+        setContentView(R.layout.quiz_section_activity);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.quiz_list_fragment_container);
