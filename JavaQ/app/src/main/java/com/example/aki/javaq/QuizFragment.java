@@ -175,7 +175,8 @@ public class QuizFragment extends Fragment {
                     //SharedPreferences
                     SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = data.edit();
-                    editor.putInt(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, score);
+//                    editor.putString(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, String.valueOf(mCurrentSectionID) + "-" + String.valueOf(score) );
+                    editor.putInt(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, score );
                     editor.apply();
                 } else {
                     mCurrentIndex %= mQuizzes.size();

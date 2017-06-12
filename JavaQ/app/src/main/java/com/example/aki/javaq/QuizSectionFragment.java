@@ -106,7 +106,10 @@ public class QuizSectionFragment extends Fragment {
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-            int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 1);
+//            String scoreString = data.getString(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, "");
+//            String[] separated = scoreString.split("-");
+//            int score = Integer.parseInt(separated[1]);
+            int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 0);
 
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
@@ -120,6 +123,9 @@ public class QuizSectionFragment extends Fragment {
                     mBadgeImageView.setImageResource(R.drawable.badge_copper);
                     break;
                 case "" :
+                    mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
+                    break;
+                default:
                     mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
                     break;
             }

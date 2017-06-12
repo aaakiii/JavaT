@@ -18,10 +18,12 @@ public class Badge {
     public String getBadgeStatus() {
         if (mMaxScore * 0.9 <= mScore) {
             return "gold";
-        } else if(mMaxScore * 0.8 < mScore && mScore < mMaxScore * 0.9){
+        } else if(mMaxScore * 0.8 <= mScore && mScore <= mMaxScore * 0.9){
             return "silver";
-        } else if(mMaxScore * 0.7 < mScore && mScore < mMaxScore * 0.8){
+        } else if(mMaxScore * 0.7 <= mScore && mScore <= mMaxScore * 0.8){
             return "copper";
+        } else if(mScore == 0 ){
+            return "";
         } else {
             return "";
         }
