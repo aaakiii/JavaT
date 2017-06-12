@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ResultFragment extends Fragment{
+public class QuizResultFragment extends Fragment{
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private int mScore;
     private TextView mScoreTextView;
@@ -52,7 +52,6 @@ public class ResultFragment extends Fragment{
                 mScoreBadge.setImageResource(R.drawable.badge_copper);
             }
         }
-
 
         return v;
     }

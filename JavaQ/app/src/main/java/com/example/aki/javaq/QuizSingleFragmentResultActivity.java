@@ -12,7 +12,7 @@ import android.widget.Button;
  * Created by AKI on 2017-06-11.
  */
 
-public abstract class SingleFragmentResultActivity extends AppCompatActivity {
+public abstract class QuizSingleFragmentResultActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
     private Button mHomeButton;
