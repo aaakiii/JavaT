@@ -74,8 +74,8 @@ public class QuizSectionActivity extends QuizSectionSingleFragmentActivity {
             case R.id.nav_quiz:
                 fragmentClass = QuizSectionFragment.class;
                 break;
-            case R.id.nav_community:
-                fragmentClass = CommunityFragment.class;
+            case R.id.nav_progress:
+                fragmentClass = ProgressFragment.class;
                 break;
             default:
                 fragmentClass = QuizSectionFragment.class;

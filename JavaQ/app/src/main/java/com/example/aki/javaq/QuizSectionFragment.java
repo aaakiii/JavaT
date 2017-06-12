@@ -106,9 +106,6 @@ public class QuizSectionFragment extends Fragment {
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-//            String scoreString = data.getString(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, "");
-//            String[] separated = scoreString.split("-");
-//            int score = Integer.parseInt(separated[1]);
             int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 0);
 
             String status = new Badge(score, position).getBadgeStatus();

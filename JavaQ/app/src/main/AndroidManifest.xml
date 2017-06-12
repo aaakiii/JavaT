@@ -17,7 +17,7 @@
         </activity>
         <activity android:name=".QuizActivity"></activity>
         <activity android:name=".QuizResultActivity"></activity>
-        <activity android:name=".CommunityActivity"></activity>
+        <activity android:name=".ProgressActivity"></activity>
     </application>
 
 </manifest>
