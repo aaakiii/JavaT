@@ -3,20 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:background="@color/main_color"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/score_area"
-        android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:background="@color/main_color"
-        android:orientation="vertical"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="-181dp" />
 
 
     <View
@@ -92,42 +82,7 @@
         android:textColor="@color/white"
         tools:text="Fantastic!"/>
 
-    <Button
-        android:id="@+id/home_button"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="8dp"
-        android:background="@drawable/continue_button_customize"
-        android:padding="8dp"
-        android:text="@string/back_button"
-        android:textColor="@color/white"
-        android:textSize="20dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/result_comment"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.68" />
 
-    <Button
-        android:id="@+id/retry_button"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/retry_button_customize"
-        android:padding="8dp"
-        android:text="@string/retry_button"
-        android:textColor="@color/main_color"
-        android:textSize="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="18dp"
-        app:layout_constraintTop_toBottomOf="@+id/home_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintVertical_bias="0.16" />
 
 
 </android.support.constraint.ConstraintLayout>

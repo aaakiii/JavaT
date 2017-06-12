@@ -18,6 +18,7 @@ import java.util.List;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
+
 public class QuizFragment extends Fragment {
     private ImageView mProgressBar1;
     private ImageView mProgressBar2;
@@ -35,12 +36,14 @@ public class QuizFragment extends Fragment {
     private Button mContinueButton;
     private int score = 0;
     private static final String KEY_INDEX = "index";
+    private String EXTRA_SCORE = "com.example.aki.javaq.score";
     private SoundPool soundPool;
     private int good_se;
     private int bad_se;
     private QuizLab quizLab;
     private Quiz mQuiz;
     final List<Quiz> mQuizzes = new QuizLab().getQuizzes();
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -153,7 +156,8 @@ public class QuizFragment extends Fragment {
                         break;
                 }
                 if(mQuizzes.get(mCurrentIndex).getmQuizNumber() == 8){
-                    Intent intent = ResultActivity.newIntent(getActivity(), score);
+                    Intent intent = new Intent(getActivity().getApplication(), ResultActivity.class);
+                    intent.putExtra(EXTRA_SCORE, score);
                     startActivity(intent);
                 }
                 else{
@@ -166,7 +170,6 @@ public class QuizFragment extends Fragment {
             soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
         } else {
             AudioAttributes attr = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build();
-
             soundPool = new SoundPool.Builder().setAudioAttributes(attr).setMaxStreams(2).build();
         }
         good_se = soundPool.load(getContext(), R.raw.good, 1);
@@ -210,6 +213,7 @@ public class QuizFragment extends Fragment {
         super.onPause();
         soundPool.release();
     }
+
 
 
 }
