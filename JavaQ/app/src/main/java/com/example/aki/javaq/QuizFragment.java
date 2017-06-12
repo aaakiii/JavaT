@@ -168,7 +168,7 @@ public class QuizFragment extends Fragment {
                         mProgressBar8.setImageResource(R.drawable.icon_progress_maincolor);
                         break;
                 }
-                if (mQuizzes.get(mCurrentIndex).getmQuizNumber() == 8) {
+                if (mCurrentIndex == mQuizzes.size()) {
                     Intent intent = QuizResultActivity.newIntent(getActivity(), score);
                     startActivity(intent);
 
