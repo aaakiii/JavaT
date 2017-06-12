@@ -12,4 +12,14 @@
         <item>Method</item>
         <item>Classes</item>
     </string-array>
+    <string-array name="Correct_word_list">
+        <item>Great!</item>
+        <item>Good!!</item>
+        <item>Perfect!!</item>
+        <item>Correct!</item>
+    </string-array>
+    <string-array name="Incorrect_word_list">
+        <item>OMG!!</item>
+        <item>Oops..</item>
+    </string-array>
 </resources>

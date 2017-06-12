@@ -15,8 +15,10 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.Random;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -46,8 +48,9 @@ public class QuizFragment extends Fragment {
     private int mCurrentSectionID;
     private String[] mSectionList;
     private List<Quiz> mQuizzes;
+    private String[] mCorrectWords;
+    private String[] mIncorrectWords;
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
-
     public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
 
     @Override
@@ -203,11 +206,19 @@ public class QuizFragment extends Fragment {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
             mContinueButton.setVisibility(VISIBLE);
+            mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
+            int correct = new Random().nextInt(mCorrectWords.length);
+            String correctWord = (mCorrectWords[correct]);
+            Toast.makeText(getActivity(), correctWord,Toast.LENGTH_SHORT).show();
             score++;
             return true;
         } else {
             mContinueButton.setVisibility(VISIBLE);
             soundPool.play(bad_se, 1F, 1F, 0, 0, 1F);
+            mIncorrectWords = getResources().getStringArray(R.array.Incorrect_word_list);
+            int incorrect = new Random().nextInt(mIncorrectWords.length);
+            String incorrectWord = (mIncorrectWords[incorrect]);
+            Toast.makeText(getActivity(), incorrectWord ,Toast.LENGTH_SHORT).show();
             return false;
         }
     }
