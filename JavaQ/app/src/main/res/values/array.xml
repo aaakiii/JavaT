@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="section_list">
+        <item>Basic concepts</item>
+        <item>Variable</item>
+        <item>Booleans</item>
+        <item>If and else</item>
+        <item>Arrays</item>
+        <item>String</item>
+        <item>ArrayLists</item>
+        <item>Loop</item>
+        <item>Method</item>
+        <item>Classes</item>
+    </string-array>
+</resources>

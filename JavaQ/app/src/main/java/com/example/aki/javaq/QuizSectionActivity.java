@@ -9,20 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-public class QuizListActivity extends QuizListSingleFragmentActivity {
+public class QuizSectionActivity extends QuizSectionSingleFragmentActivity {
     private DrawerLayout mDrawer;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
@@ -34,7 +24,7 @@ public class QuizListActivity extends QuizListSingleFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_list_fragment_activity);
+        setContentView(R.layout.quiz_section_activity);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,13 +72,13 @@ public class QuizListActivity extends QuizListSingleFragmentActivity {
         Class fragmentClass;
         switch(menuItem.getItemId()) {
             case R.id.nav_quiz:
-                fragmentClass = QuizListFragment.class;
+                fragmentClass = QuizSectionFragment.class;
                 break;
             case R.id.nav_community:
                 fragmentClass = CommunityFragment.class;
                 break;
             default:
-                fragmentClass = QuizListFragment.class;
+                fragmentClass = QuizSectionFragment.class;
         }
 
         try {
@@ -143,7 +133,7 @@ public class QuizListActivity extends QuizListSingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new QuizListFragment();
+        return new QuizSectionFragment();
     }
 
 

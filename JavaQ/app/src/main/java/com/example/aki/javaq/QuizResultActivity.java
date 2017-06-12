@@ -8,9 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class ResultActivity extends AppCompatActivity {
+public class QuizResultActivity extends AppCompatActivity {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private int mScore;
     private TextView mScoreTextView;
@@ -21,7 +20,7 @@ public class ResultActivity extends AppCompatActivity {
 
 
     public static Intent newIntent(Context context,int score){
-        Intent intent = new Intent(context, ResultActivity.class);
+        Intent intent = new Intent(context, QuizResultActivity.class);
         intent.putExtra(EXTRA_SCORE, score);
         return intent;
     }
@@ -31,13 +30,13 @@ public class ResultActivity extends AppCompatActivity {
 
         mScore = getIntent().getIntExtra(EXTRA_SCORE, 0);
         if(mScore <= 5){
-            setContentView(R.layout.result_failed_fragment);
+            setContentView(R.layout.quiz_result_failed_fragment);
             mScoreTextView = (TextView) findViewById(R.id.result_score);
             mScoreTextView.setText(String.valueOf(mScore));
 
         }
         else{
-            setContentView(R.layout.result_badge_fragment);
+            setContentView(R.layout.quiz_result_badge_fragment);
             mScoreTextView = (TextView) findViewById(R.id.result_score);
             mScoreTextView.setText(String.valueOf(mScore));
             mScoreCommentTextView = (TextView) findViewById(R.id.result_comment);
@@ -78,7 +77,7 @@ public class ResultActivity extends AppCompatActivity {
     }
     //Back to Home button 押したら
     public void backToSection(){
-        Intent intent = new Intent(getApplication(), QuizListActivity.class);
+        Intent intent = new Intent(getApplication(), QuizSectionActivity.class);
         startActivity(intent);
     }
 

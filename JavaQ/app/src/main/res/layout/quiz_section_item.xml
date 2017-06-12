@@ -49,6 +49,7 @@
         android:layout_marginBottom="18dp"
         app:layout_constraintVertical_bias="0.454" />
     <ImageView
+        android:id="@+id/section_badge"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:src="@drawable/badge_not_passed"

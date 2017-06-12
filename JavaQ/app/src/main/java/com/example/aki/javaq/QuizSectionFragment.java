@@ -2,22 +2,17 @@ package com.example.aki.javaq;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +21,15 @@ import java.util.List;
  * Created by MinaFujisawa on 2017/06/06.
  */
 
-public class QuizListFragment extends Fragment {
+public class QuizSectionFragment extends Fragment {
     ListView mListView;
     public static final String EXTRA_SECTION_POSITON = "aki.javaq_extra_section_position";
+    List<String> mSectionArrayList;
+    String[] mSectionList;
+    SharedPreferences data;
+
+    TextView mQuizListNameTextView;
+    ImageView mBadgeImageView;
 
 
     @Override
@@ -38,31 +39,27 @@ public class QuizListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.quiz_list_fragment, container, false);
+        View view = inflater.inflate(R.layout.quiz_section_fragment, container, false);
 
-        List<String> mSectionList = new ArrayList<>();
+        data = getContext().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
 
-        mSectionList.add("Basic concepts");
-        mSectionList.add("Variable");
-        mSectionList.add("Booleans");
-        mSectionList.add("If and else");
-        mSectionList.add("Arrays");
-        mSectionList.add("String");
-        mSectionList.add("ArrayLists");
-        mSectionList.add("Loop");
-        mSectionList.add("Method");
-        mSectionList.add("Classes");
+
+        mSectionArrayList = new ArrayList<>();
+        mSectionList = getResources().getStringArray(R.array.section_list);
+
+        for (int i = 0; i < mSectionList.length; i++) {
+            mSectionArrayList.add(mSectionList[i]);
+        }
 
         myArrayAdapter adapter =
-                new myArrayAdapter(getActivity(), R.layout.quiz_list_item, mSectionList);
+                new myArrayAdapter(getActivity(), R.layout.quiz_section_item, mSectionArrayList);
 
         mListView = (ListView) view.findViewById(R.id.quiz_list_view);
         mListView.setAdapter(adapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "position: " + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getActivity(),QuizActivity.class);
+                Intent intent = new Intent(getActivity(), QuizActivity.class);
                 intent.putExtra(EXTRA_SECTION_POSITON, position);
                 startActivity(intent);
             }
@@ -106,6 +103,11 @@ public class QuizListFragment extends Fragment {
             // set icon
 //            ImageView appInfoImage = (ImageView)view.findViewById(R.id.item_image);
 //            appInfoImage.setImageResource(item.getImageId());
+
+            // set badge
+            mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
+            int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 1);
+
 
             return view;
         }
