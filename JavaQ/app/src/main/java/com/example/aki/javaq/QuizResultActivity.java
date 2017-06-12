@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 
 
 
-public class ResultActivity extends SingleFragmentResultActivity{
+public class QuizResultActivity extends SingleFragmentResultActivity{
     @Override
     protected Fragment createFragment() {
 

@@ -21,7 +21,7 @@ public abstract class SingleFragmentResultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.result_activity);
+        setContentView(R.layout.quiz_result_activity);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.result_fragment_container);
@@ -53,7 +53,7 @@ public abstract class SingleFragmentResultActivity extends AppCompatActivity {
     }
     //Back to Home button 押したら
     public void backToSection(){
-        Intent intent = new Intent(getApplication(), QuizListActivity.class);
+        Intent intent = new Intent(getApplication(), QuizSectionActivity.class);
         startActivity(intent);
     }
 

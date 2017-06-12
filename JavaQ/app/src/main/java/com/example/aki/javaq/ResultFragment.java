@@ -29,12 +29,12 @@ public class ResultFragment extends Fragment{
         mScore = intent.getIntExtra(EXTRA_SCORE, 0);
         View v;
         if(mScore <= 5){
-            v = inflater.inflate(R.layout.result_failed_fragment, container, false);
+            v = inflater.inflate(R.layout.quiz_result_failed_fragment, container, false);
             mScoreTextView = (TextView) v.findViewById(R.id.result_score);
             mScoreTextView.setText(String.valueOf(mScore));
         }
         else{
-            v = inflater.inflate(R.layout.result_badge_fragment, container, false);
+            v = inflater.inflate(R.layout.quiz_result_badge_fragment, container, false);
             mScoreTextView = (TextView) v.findViewById(R.id.result_score);
             mScoreTextView.setText(String.valueOf(mScore));
             mScoreCommentTextView = (TextView) v.findViewById(R.id.result_comment);
