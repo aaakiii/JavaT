@@ -46,6 +46,7 @@ public class QuizFragment extends Fragment {
     private int mCurrentSectionID;
     private String[] mSectionList;
     private List<Quiz> mQuizzes;
+    private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
 
     public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
 
@@ -169,7 +170,8 @@ public class QuizFragment extends Fragment {
                         break;
                 }
                 if (mCurrentIndex == mQuizzes.size()) {
-                    Intent intent = QuizResultActivity.newIntent(getActivity(), score);
+                    Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class );
+                    intent.putExtra(EXTRA_SCORE, score);
                     startActivity(intent);
 
                     //SharedPreferences
