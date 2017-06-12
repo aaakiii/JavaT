@@ -37,29 +37,37 @@ public class QuizLab {
                 mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 1 :
                 mQuizzes.add(new Quiz(1, "Section number 1", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 mQuizzes.add(new Quiz(1, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 mQuizzes.add(new Quiz(1, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 2:
                 mQuizzes.add(new Quiz(2, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 3:
                 mQuizzes.add(new Quiz(3, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 4:
                 mQuizzes.add(new Quiz(4, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 5:
                 mQuizzes.add(new Quiz(5, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 6:
                 mQuizzes.add(new Quiz(6, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
 
             case 7:
                 mQuizzes.add(new Quiz(7, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                break;
         }
     }
 

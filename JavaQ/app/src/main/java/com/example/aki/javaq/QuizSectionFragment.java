@@ -94,7 +94,7 @@ public class QuizSectionFragment extends Fragment {
             String item = this.items.get(position);
 
             // set texts
-            TextView mQuizListNameTextView = (TextView) view.findViewById(R.id.list_name);
+            mQuizListNameTextView = (TextView) view.findViewById(R.id.list_name);
             mQuizListNameTextView.setText(item);
 
             TextView mQuizListNumTextView = (TextView) view.findViewById(R.id.list_num);
@@ -107,6 +107,22 @@ public class QuizSectionFragment extends Fragment {
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
             int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 1);
+
+            String status = new Badge(score, position).getBadgeStatus();
+            switch (status){
+                case "gold" :
+                    mBadgeImageView.setImageResource(R.drawable.badge_gold);
+                    break;
+                case "silver" :
+                    mBadgeImageView.setImageResource(R.drawable.badge_silver);
+                    break;
+                case "copper":
+                    mBadgeImageView.setImageResource(R.drawable.badge_copper);
+                    break;
+                case "" :
+                    mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
+                    break;
+            }
 
 
             return view;
