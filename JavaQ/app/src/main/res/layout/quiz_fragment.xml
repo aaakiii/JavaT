@@ -7,76 +7,15 @@
     android:orientation="vertical"
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
+    android:id="@+id/main"
     tools:context=".QuizActivity">
 
     <LinearLayout
+        android:id="@+id/progress_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="24dp">
-
-        <ImageView
-            android:id="@+id/progress_bar_1"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_maincolor" />
-
-        <ImageView
-            android:id="@+id/progress_bar_2"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_3"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_4"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_5"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_6"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_7"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
-
-        <ImageView
-            android:id="@+id/progress_bar_8"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:src="@drawable/icon_progress_gray" />
     </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -109,6 +48,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <TextView
+        android:id="@+id/answer_text_popup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

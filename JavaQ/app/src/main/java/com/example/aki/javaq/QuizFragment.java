@@ -10,12 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.widget.Toast;
+
 
 import java.util.List;
 import java.util.Random;
@@ -25,13 +26,7 @@ import static android.view.View.VISIBLE;
 
 public class QuizFragment extends Fragment {
     private ImageView mProgressBar1;
-    private ImageView mProgressBar2;
-    private ImageView mProgressBar3;
-    private ImageView mProgressBar4;
-    private ImageView mProgressBar5;
-    private ImageView mProgressBar6;
-    private ImageView mProgressBar7;
-    private ImageView mProgressBar8;
+    private ImageView mProgressBar;
     private TextView mQuizText;
     private Button mFirstButtons;
     private Button mSecondButtons;
@@ -52,7 +47,9 @@ public class QuizFragment extends Fragment {
     private String[] mIncorrectWords;
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
-
+    private LinearLayout mLinearLayout;
+    private ImageView mPopUpImageView;
+    private TextView mPopUpTextView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,27 +61,60 @@ public class QuizFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Intent i = getActivity().getIntent();
-        mCurrentSectionID = i.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
+        Intent intent = getActivity().getIntent();
+        mCurrentSectionID = intent.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
         mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
-
         mQuiz = new QuizLab(mCurrentSectionID).getQuiz();
         View v = inflater.inflate(R.layout.quiz_fragment, container, false);
-
         mSectionList = getResources().getStringArray(R.array.section_list);
-
-
-        mProgressBar1 = (ImageView) v.findViewById(R.id.progress_bar_1);
+        mLinearLayout = (LinearLayout)v.findViewById(R.id.progress_linear);
+        mProgressBar1 = new ImageView(getContext());
         mProgressBar1.setImageResource(R.drawable.icon_progress_maincolor);
-        mProgressBar2 = (ImageView) v.findViewById(R.id.progress_bar_2);
-        mProgressBar3 = (ImageView) v.findViewById(R.id.progress_bar_3);
-        mProgressBar4 = (ImageView) v.findViewById(R.id.progress_bar_4);
-        mProgressBar5 = (ImageView) v.findViewById(R.id.progress_bar_5);
-        mProgressBar6 = (ImageView) v.findViewById(R.id.progress_bar_6);
-        mProgressBar7 = (ImageView) v.findViewById(R.id.progress_bar_7);
-        mProgressBar8 = (ImageView) v.findViewById(R.id.progress_bar_8);
+        mLinearLayout.addView(mProgressBar1);
+        for(int i = 1; i < mQuizzes.size(); i++){
+            mProgressBar = new ImageView(getContext());
+            mProgressBar.setImageResource(R.drawable.icon_progress_gray);
+            mLinearLayout.addView(mProgressBar);
+        }
+        mContinueButton = (Button) v.findViewById(R.id.continue_button);
+        mContinueButton.setVisibility(INVISIBLE);
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1);
+                mPopUpImageView.setVisibility(INVISIBLE);
+                mPopUpTextView.setVisibility(INVISIBLE);
+                mFirstButtons.setEnabled(true);
+                mSecondButtons.setEnabled(true);
+                mThirdButtons.setEnabled(true);
+
+                for(int j = 1; j < mQuizzes.size(); j++){
+
+//                   mProgressBar.setImageResource(R.drawable.icon_progress_maincolor);
+                }
+                if (mCurrentIndex == mQuizzes.size()) {
+                    Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class );
+                    intent.putExtra(EXTRA_SCORE, score);
+                    startActivity(intent);
+
+                    //SharedPreferences
+                    SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = data.edit();
+//                    editor.putString(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, String.valueOf(mCurrentSectionID) + "-" + String.valueOf(score) );
+                    editor.putInt(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, score );
+                    editor.apply();
+                } else {
+                    mCurrentIndex %= mQuizzes.size();
+                    updateQuestion();
+                }
+            }
+        });
         mQuizText = (TextView) v.findViewById(R.id.question_item);
         mQuizText.setText(mQuizzes.get(mCurrentIndex).getmQuestionText());
+        mPopUpImageView = (ImageView) v.findViewById(R.id.answer_image_popup);
+        mPopUpImageView.setVisibility(INVISIBLE);
+        mPopUpTextView = (TextView)v.findViewById(R.id.answer_text_popup);
+        mPopUpTextView.setVisibility(INVISIBLE);
         mFirstButtons = (Button) v.findViewById(R.id.first_button);
         mFirstButtons.setText(mQuizzes.get(mCurrentIndex).getmFirstChoice());
         mFirstButtons.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +122,9 @@ public class QuizFragment extends Fragment {
             public void onClick(View v) {
                 mFirstButtons.setBackgroundResource(R.color.sub_color);
                 mFirstButtons.setTextColor(getResources().getColor(R.color.white));
+                mFirstButtons.setEnabled(false);
+                mSecondButtons.setEnabled(false);
+                mThirdButtons.setEnabled(false);
                 if (checkAnswer(1) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
                         mSecondButtons.setBackgroundResource(R.color.white);
@@ -111,6 +144,9 @@ public class QuizFragment extends Fragment {
             public void onClick(View v) {
                 mSecondButtons.setBackgroundResource(R.color.sub_color);
                 mSecondButtons.setTextColor(getResources().getColor(R.color.white));
+                mFirstButtons.setEnabled(false);
+                mSecondButtons.setEnabled(false);
+                mThirdButtons.setEnabled(false);
                 if (checkAnswer(2) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
                         mFirstButtons.setBackgroundResource(R.color.white);
@@ -131,6 +167,9 @@ public class QuizFragment extends Fragment {
             public void onClick(View v) {
                 mThirdButtons.setBackgroundResource(R.color.sub_color);
                 mThirdButtons.setTextColor(getResources().getColor(R.color.white));
+                mFirstButtons.setEnabled(false);
+                mSecondButtons.setEnabled(false);
+                mThirdButtons.setEnabled(false);
                 if (checkAnswer(3) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
                         mFirstButtons.setBackgroundResource(R.color.white);
@@ -143,52 +182,7 @@ public class QuizFragment extends Fragment {
                 }
             }
         });
-        mContinueButton = (Button) v.findViewById(R.id.continue_button);
-        mContinueButton.setVisibility(INVISIBLE);
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1);
-                switch (mCurrentIndex) {
-                    case 1:
-                        mProgressBar2.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 2:
-                        mProgressBar3.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 3:
-                        mProgressBar4.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 4:
-                        mProgressBar5.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 5:
-                        mProgressBar6.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 6:
-                        mProgressBar7.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                    case 7:
-                        mProgressBar8.setImageResource(R.drawable.icon_progress_maincolor);
-                        break;
-                }
-                if (mCurrentIndex == mQuizzes.size()) {
-                    Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class );
-                    intent.putExtra(EXTRA_SCORE, score);
-                    startActivity(intent);
 
-                    //SharedPreferences
-                    SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = data.edit();
-//                    editor.putString(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, String.valueOf(mCurrentSectionID) + "-" + String.valueOf(score) );
-                    editor.putInt(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, score );
-                    editor.apply();
-                } else {
-                    mCurrentIndex %= mQuizzes.size();
-                    updateQuestion();
-                }
-            }
-        });
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
         } else {
@@ -206,19 +200,27 @@ public class QuizFragment extends Fragment {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
             mContinueButton.setVisibility(VISIBLE);
+            mPopUpImageView.setVisibility(VISIBLE);
+            mPopUpImageView.setImageResource(R.drawable.icon_correct);
             mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
             int correct = new Random().nextInt(mCorrectWords.length);
             String correctWord = (mCorrectWords[correct]);
-            Toast.makeText(getActivity(), correctWord,Toast.LENGTH_SHORT).show();
+            mPopUpTextView.setVisibility(VISIBLE);
+            mPopUpTextView.setText(correctWord);
+            mPopUpTextView.setTextColor(getResources().getColor(R.color.main_color));
             score++;
             return true;
         } else {
             mContinueButton.setVisibility(VISIBLE);
+            mPopUpImageView.setVisibility(VISIBLE);
+            mPopUpImageView.setImageResource(R.drawable.icon_incorrect);
             soundPool.play(bad_se, 1F, 1F, 0, 0, 1F);
             mIncorrectWords = getResources().getStringArray(R.array.Incorrect_word_list);
             int incorrect = new Random().nextInt(mIncorrectWords.length);
             String incorrectWord = (mIncorrectWords[incorrect]);
-            Toast.makeText(getActivity(), incorrectWord ,Toast.LENGTH_SHORT).show();
+            mPopUpTextView.setVisibility(VISIBLE);
+            mPopUpTextView.setText(incorrectWord);
+            mPopUpTextView.setTextColor(getResources().getColor(R.color.red));
             return false;
         }
     }
