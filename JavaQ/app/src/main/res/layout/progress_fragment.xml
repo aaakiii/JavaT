@@ -1,14 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/quiz_list_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:divider="@null"
-    android:dividerHeight="0dp">
+    android:orientation="vertical"
+    android:padding="24dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Community page"/>
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/active_streak"
+            android:textColor="@color/main_text"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/main_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/day"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/day"
+            android:textColor="@color/main_text"
+            android:textSize="20sp"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/longest_streak"
+            android:textColor="@color/main_text"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/day" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/main_text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/day2"
+            app:layout_constraintTop_toBottomOf="@+id/day"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/day2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/day"
+            android:textColor="@color/main_text"
+            android:textSize="20sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/day" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/weekly_mon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="M"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/weekly_tue"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="T"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/weekly_wed"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="W"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/weekly_thu"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="T"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/weekly_fri"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="F"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/weekly_sta"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="S"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/weekly_sun"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="48dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="S"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 </LinearLayout>
