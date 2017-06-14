@@ -25,7 +25,7 @@ public class Quiz {
         mAnswerIndex = AnswerIndex;
     }
 
-    public int getmQuizNumber() {
+    public int getmQuizSectionID() {
         return mQuizSectionID;
     }
 
