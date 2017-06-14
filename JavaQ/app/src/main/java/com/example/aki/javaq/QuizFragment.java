@@ -84,9 +84,7 @@ public class QuizFragment extends Fragment {
                 mCurrentIndex = (mCurrentIndex + 1);
                 mPopUpImageView.setVisibility(INVISIBLE);
                 mPopUpTextView.setVisibility(INVISIBLE);
-                mFirstButtons.setEnabled(true);
-                mSecondButtons.setEnabled(true);
-                mThirdButtons.setEnabled(true);
+                ButtonsEnable(true);
 
                 for(int j = 1; j < mQuizzes.size(); j++){
 
@@ -120,18 +118,16 @@ public class QuizFragment extends Fragment {
         mFirstButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFirstButtons.setBackgroundResource(R.color.sub_color);
+                mFirstButtons.setBackgroundResource(R.drawable.correct_answer_button_customize);
                 mFirstButtons.setTextColor(getResources().getColor(R.color.white));
-                mFirstButtons.setEnabled(false);
-                mSecondButtons.setEnabled(false);
-                mThirdButtons.setEnabled(false);
+                ButtonsEnable(false);
                 if (checkAnswer(1) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        mSecondButtons.setBackgroundResource(R.color.white);
+                        mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mSecondButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        mThirdButtons.setBackgroundResource(R.color.white);
+                        mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mThirdButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                 }
@@ -142,18 +138,16 @@ public class QuizFragment extends Fragment {
         mSecondButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSecondButtons.setBackgroundResource(R.color.sub_color);
+                mSecondButtons.setBackgroundResource(R.drawable.correct_answer_button_customize);
                 mSecondButtons.setTextColor(getResources().getColor(R.color.white));
-                mFirstButtons.setEnabled(false);
-                mSecondButtons.setEnabled(false);
-                mThirdButtons.setEnabled(false);
+                ButtonsEnable(false);
                 if (checkAnswer(2) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        mFirstButtons.setBackgroundResource(R.color.white);
+                        mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mFirstButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        mThirdButtons.setBackgroundResource(R.color.white);
+                        mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mThirdButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                 }
@@ -165,18 +159,16 @@ public class QuizFragment extends Fragment {
         mThirdButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mThirdButtons.setBackgroundResource(R.color.sub_color);
+                mThirdButtons.setBackgroundResource(R.drawable.correct_answer_button_customize);
                 mThirdButtons.setTextColor(getResources().getColor(R.color.white));
-                mFirstButtons.setEnabled(false);
-                mSecondButtons.setEnabled(false);
-                mThirdButtons.setEnabled(false);
+                ButtonsEnable(false);
                 if (checkAnswer(3) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        mFirstButtons.setBackgroundResource(R.color.white);
+                        mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mFirstButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        mSecondButtons.setBackgroundResource(R.color.white);
+                        mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
                         mSecondButtons.setTextColor(getResources().getColor(R.color.red));
                     }
                 }
@@ -226,19 +218,18 @@ public class QuizFragment extends Fragment {
     }
 
     public void updateQuestion() {
-
         mContinueButton.setVisibility(INVISIBLE);
         String question = mQuizzes.get(mCurrentIndex).getmQuestionText();
         mQuizText.setText(question);
-        mFirstButtons.setBackgroundResource(R.color.white);
+        mFirstButtons.setBackgroundResource(R.drawable.answer_button_customize);
         mFirstButtons.setTextColor(getResources().getColor(R.color.main_text));
         String first_button = mQuizzes.get(mCurrentIndex).getmFirstChoice();
         mFirstButtons.setText(first_button);
-        mSecondButtons.setBackgroundResource(R.color.white);
+        mSecondButtons.setBackgroundResource(R.drawable.answer_button_customize);
         mSecondButtons.setTextColor(getResources().getColor(R.color.main_text));
         String second_button = mQuizzes.get(mCurrentIndex).getmSecondChoice();
         mSecondButtons.setText(second_button);
-        mThirdButtons.setBackgroundResource(R.color.white);
+        mThirdButtons.setBackgroundResource(R.drawable.answer_button_customize);
         mThirdButtons.setTextColor(getResources().getColor(R.color.main_text));
         String third_button = mQuizzes.get(mCurrentIndex).getmThirdChoice();
         mThirdButtons.setText(third_button);
@@ -249,6 +240,16 @@ public class QuizFragment extends Fragment {
         super.onPause();
         soundPool.release();
     }
-
-
+    public void ButtonsEnable(boolean IsButtonEnable){
+        if(IsButtonEnable) {
+            mFirstButtons.setEnabled(true);
+            mSecondButtons.setEnabled(true);
+            mThirdButtons.setEnabled(true);
+        }
+        else{
+            mFirstButtons.setEnabled(false);
+            mSecondButtons.setEnabled(false);
+            mThirdButtons.setEnabled(false);
+        }
+    }
 }
