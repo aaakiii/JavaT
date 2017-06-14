@@ -51,15 +51,16 @@ public class QuizFragment extends Fragment {
     private LinearLayout mLinearLayout;
     private ImageView mPopUpImageView;
     private TextView mPopUpTextView;
+    private ViewGroup mViewGroup;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
-
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Intent intent = getActivity().getIntent();
@@ -69,13 +70,12 @@ public class QuizFragment extends Fragment {
         View v = inflater.inflate(R.layout.quiz_fragment, container, false);
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout)v.findViewById(R.id.progress_linear);
-        mProgressBar1 = new ImageView(getContext());
-        mProgressBar1.setImageResource(R.drawable.icon_progress_maincolor);
-        mLinearLayout.addView(mProgressBar1);
-        for(int i = 1; i < mQuizzes.size(); i++){
-            mProgressBar = new ImageView(getContext());
+
+
+        for(int i = 0; i < mQuizzes.size(); i++){
+            mProgressBar = new ImageView(getActivity().getApplicationContext());
+            mProgressBar.setId(i);
             mProgressBar.setImageResource(R.drawable.icon_progress_gray);
-            mLinearLayout.addView(mProgressBar);
         }
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.setVisibility(INVISIBLE);
@@ -86,11 +86,6 @@ public class QuizFragment extends Fragment {
                 mPopUpImageView.setVisibility(INVISIBLE);
                 mPopUpTextView.setVisibility(INVISIBLE);
                 ButtonsEnable(true);
-
-                for(int j = 1; j < mQuizzes.size(); j++){
-
-//                   mProgressBar.setImageResource(R.drawable.icon_progress_maincolor);
-                }
                 if (mCurrentIndex == mQuizzes.size()) {
                     Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class );
                     intent.putExtra(EXTRA_SCORE, score);
@@ -125,12 +120,10 @@ public class QuizFragment extends Fragment {
                 ButtonsEnable(false);
                 if (checkAnswer(1) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mSecondButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsTwo();
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mThirdButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsThree();
                     }
                 }
             }
@@ -145,12 +138,10 @@ public class QuizFragment extends Fragment {
                 ButtonsEnable(false);
                 if (checkAnswer(2) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mFirstButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsOne();
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mThirdButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsThree();
                     }
                 }
 
@@ -166,12 +157,10 @@ public class QuizFragment extends Fragment {
                 ButtonsEnable(false);
                 if (checkAnswer(3) == false) {
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mFirstButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsOne();
                     }
                     if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-                        mSecondButtons.setTextColor(getResources().getColor(R.color.red));
+                        answerIsTwo();
                     }
                 }
             }
@@ -189,6 +178,23 @@ public class QuizFragment extends Fragment {
 
         return v;
     }
+
+    private void answerIsOne() {
+        mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
+        mFirstButtons.setTextColor(getResources().getColor(R.color.red));
+    }
+
+    private void answerIsTwo() {
+        mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
+        mSecondButtons.setTextColor(getResources().getColor(R.color.red));
+    }
+
+    private void answerIsThree() {
+        mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
+        mThirdButtons.setTextColor(getResources().getColor(R.color.red));
+    }
+
+
 
     public boolean checkAnswer(int mClickedAnswer) {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
