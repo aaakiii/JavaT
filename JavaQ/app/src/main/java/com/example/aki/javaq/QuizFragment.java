@@ -47,6 +47,7 @@ public class QuizFragment extends Fragment {
     private String[] mIncorrectWords;
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
+    public static final String EXTRA_CURRENT_SECTION_ID = "com.example.aki.javaq.current_section_id";
     public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
     private LinearLayout mLinearLayout;
     private ImageView mPopUpImageView;
@@ -89,6 +90,7 @@ public class QuizFragment extends Fragment {
                 if (mCurrentIndex == mQuizzes.size()) {
                     Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class );
                     intent.putExtra(EXTRA_SCORE, score);
+                    intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
                     intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
                     startActivity(intent);
 
