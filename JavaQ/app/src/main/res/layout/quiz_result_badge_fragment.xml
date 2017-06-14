@@ -64,8 +64,8 @@
         android:layout_marginTop="55dp"
         app:layout_constraintTop_toTopOf="@+id/result_badge"
         app:layout_constraintLeft_toRightOf="@+id/slash"
-        android:text="8"
-        android:layout_marginLeft="4dp" />
+        android:layout_marginLeft="4dp"
+        tools:text="8"/>
 
     <TextView
         android:id="@+id/result_comment"

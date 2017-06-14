@@ -55,7 +55,7 @@
         android:layout_marginTop="91dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/slash"
-        android:text="8" />
+        tools:text="8" />
     <TextView
         android:id="@+id/result_comment"
         android:layout_width="wrap_content"
