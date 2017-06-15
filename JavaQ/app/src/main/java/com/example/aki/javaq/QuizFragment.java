@@ -78,9 +78,6 @@ public class QuizFragment extends Fragment {
 
         setProgressBar();
 
-//        ImageView mCurrentProgressBar = (ImageView) QuizFragment.this.findViewById(0);
-//        mCurrentProgressBar.setImageResource(R.drawable.icon_progress_maincolor);
-
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.setVisibility(INVISIBLE);
         mContinueButton.setOnClickListener(new View.OnClickListener() {

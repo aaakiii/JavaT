@@ -79,6 +79,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <TextView
+            android:id="@+id/weekly_sun"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/light_gray"
+            android:gravity="center"
+            android:text="S"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <TextView
             android:id="@+id/weekly_mon"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -142,23 +153,13 @@
             android:id="@+id/weekly_sta"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginRight="10dp"
             android:layout_marginTop="48dp"
             android:background="@color/light_gray"
             android:gravity="center"
             android:text="S"
             android:textSize="20sp"
             android:textStyle="bold" />
-        <TextView
-            android:id="@+id/weekly_sun"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="48dp"
-            android:background="@color/light_gray"
-            android:gravity="center"
-            android:text="S"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+
 
     </LinearLayout>
 </LinearLayout>

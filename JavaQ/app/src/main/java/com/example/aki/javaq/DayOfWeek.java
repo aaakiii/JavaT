@@ -11,16 +11,26 @@ import java.util.Locale;
 public class DayOfWeek {
     private Calendar currentDate;
     private String day;
+    private int intDay;
 
     public DayOfWeek() {
         currentDate = new GregorianCalendar();
         day = currentDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        intDay = currentDate.get(Calendar.DAY_OF_WEEK);
+
     }
     public String getDay() {
         return day;
     }
+    public int getIntDay(){
+        return intDay;
+    }
 
     public void setDay(String dayOfWeek) {
         this.day = dayOfWeek;
+    }
+
+    public void setIntDay(int intDayOfWeek){
+        this.intDay = intDayOfWeek;
     }
 }
