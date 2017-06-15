@@ -105,7 +105,7 @@ public class QuizResultFragment extends Fragment {
         editor.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
         editor.commit();
 
-        if(checkOnceParDay){
+        if (checkOnceParDay) {
             mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
             mCountAccess++;
             editor.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
@@ -113,7 +113,7 @@ public class QuizResultFragment extends Fragment {
 //            Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
-            if(!isUsedYesterday){
+            if (!isUsedYesterday) {
                 editor.clear().commit();
                 editor.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
                 editor.commit();
@@ -144,9 +144,9 @@ public class QuizResultFragment extends Fragment {
 
         if (nextMidnight < now && now < tomorrowMidnight) {
             return true;
-        } else if(lastCheckedMillis == 0){
+        } else if (lastCheckedMillis == 0) {
             return true;
-        } else if(tomorrowMidnight < now){
+        } else if (tomorrowMidnight < now) {
             isUsedYesterday = false;
             return false;
         } else {
@@ -156,73 +156,20 @@ public class QuizResultFragment extends Fragment {
 
     private void weeklyStreak() {
         dayOfWeek = new DayOfWeek();
-        set = new HashSet<>();
+//        set = new HashSet<>();
 
-        switch (dayOfWeek.getIntDay()) {
-            case 1:
-                if(!set.contains(String.valueOf(1))){
-                    set.add(String.valueOf(1));
-                }
-                else{
-                    set.remove(String.valueOf(1));
-                    set.add(String.valueOf(1));
-                }
-                break;
-            case 2:
-                if(!set.contains(String.valueOf(2))){
-                    set.add(String.valueOf(2));
-                }
-                else{
-                    set.remove(String.valueOf(2));
-                    set.add(String.valueOf(2));
-                }
-                break;
-            case 3:
-                if(!set.contains(String.valueOf(3))){
-
-                    set.add(String.valueOf(3));
-                }
-                else{
-                    set.remove(String.valueOf(3));
-                    set.add(String.valueOf(3));
-                }
-                break;
-            case 4: //Wednesday
-                if(!set.contains(String.valueOf(4))){
-                    set.add(String.valueOf(4));
-                }
-                break;
-            case 5:
-                if(!set.contains(String.valueOf(5))){
-                    set.add(String.valueOf(5));
-                }
-                break;
-            case 6:
-                if(!set.contains(String.valueOf(6))){
-                    set.add(String.valueOf(6));
-                }
-                else{
-                    set.remove(String.valueOf(6));
-                    set.add(String.valueOf(6));
-                }
-                break;
-            case 7:
-                if(!set.contains(String.valueOf(7))){
-                    set.add(String.valueOf(7));
-                }
-                else{
-                    set.remove(String.valueOf(7));
-                    set.add(String.valueOf(7));
-                }
-                break;
+        for (int i = 1; i < 7; i++) {
+            if(dayOfWeek.getIntDay() == i){
+                editor.putBoolean(String.valueOf(i), true);
+            }
         }
 
-        editor.putStringSet("key", set);
+
         editor.commit();
-        Toast.makeText(getActivity(), "size" + String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "size" + String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
         Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
 
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
+        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay() + dayOfWeek.getIntDay());
 
     }
 }
