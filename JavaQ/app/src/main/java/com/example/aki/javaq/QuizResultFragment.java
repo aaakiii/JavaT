@@ -17,7 +17,9 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class QuizResultFragment extends Fragment {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
@@ -35,6 +37,7 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences mAcStreakShearedPref;
     private SharedPreferences.Editor editor_days;
     private SharedPreferences.Editor editor_timeStamp;
+    private SharedPreferences mStreakData;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
 
@@ -150,5 +153,83 @@ public class QuizResultFragment extends Fragment {
             return false;
         }
     }
+    private void weeklyStreak() {
+        dayOfWeek = new DayOfWeek();
+        SharedPreferences.Editor editor = mStreakData.edit();
+        Set<String> set = new HashSet<>();
+
+            switch (dayOfWeek.getIntDay()) {
+                case 1:
+                    if(set.contains(String.valueOf(1))){
+                        set.remove(String.valueOf(1));
+                        set.add(String.valueOf(1));
+                    }
+                    else{
+                        set.add(String.valueOf(1));
+                    }
+                    break;
+                case 2:
+                    if(set.contains(String.valueOf(2))){
+                        set.remove(String.valueOf(2));
+                        set.add(String.valueOf(2));
+                    }
+                    else{
+                        set.add(String.valueOf(2));
+                    }
+                    break;
+                case 3:
+                    if(set.contains(String.valueOf(3))){
+                        set.remove(String.valueOf(3));
+                        set.add(String.valueOf(3));
+                    }
+                    else{
+                        set.add(String.valueOf(3));
+                    }
+                    break;
+                case 4:
+                    if(set.contains(String.valueOf(4))){
+                        set.remove(String.valueOf(4));
+                        set.add(String.valueOf(4));
+                    }
+                    else{
+                        set.add(String.valueOf(4));
+                    }
+                    break;
+                case 5:
+                    if(set.contains(String.valueOf(5))){
+                        set.remove(String.valueOf(5));
+                        set.add(String.valueOf(5));
+                    }
+                    else{
+                        set.add(String.valueOf(5));
+                    }
+                    break;
+                case 6:
+                    if(set.contains(String.valueOf(6))){
+                        set.remove(String.valueOf(6));
+                        set.add(String.valueOf(6));
+                    }
+                    else{
+                        set.add(String.valueOf(6));
+                    }
+                    break;
+                case 7:
+                    if(set.contains(String.valueOf(7))){
+                        set.remove(String.valueOf(7));
+                        set.add(String.valueOf(7));
+                    }
+                    else{
+                        set.add(String.valueOf(7));
+                    }
+                    break;
+            }
+
+        editor.putStringSet("key", set);
+        editor.apply();
+
+        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
+
+    }
+
 }
 
