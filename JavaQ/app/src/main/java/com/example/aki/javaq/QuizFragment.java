@@ -95,7 +95,7 @@ public class QuizFragment extends Fragment {
                     intent.putExtra(EXTRA_SCORE, score);
                     intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
                     intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
-//                    startActivityForResult(intent, 123);
+                    startActivity(intent);
 
                     //SharedPreferences
                     SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);

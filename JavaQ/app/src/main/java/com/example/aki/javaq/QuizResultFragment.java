@@ -41,6 +41,7 @@ public class QuizResultFragment extends Fragment {
     private boolean isUsedYesterday = true;
 
     private int mCountAccess;
+    private Set<String> set;
 
 
     @Override
@@ -109,16 +110,16 @@ public class QuizResultFragment extends Fragment {
             mCountAccess++;
             editor.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
             editor.commit();
-            Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if(!isUsedYesterday){
                 editor.clear().commit();
                 editor.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
                 editor.commit();
-                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -155,8 +156,8 @@ public class QuizResultFragment extends Fragment {
 
     private void weeklyStreak() {
         dayOfWeek = new DayOfWeek();
-        Set<String> set = new HashSet<>();
-        editor.putStringSet("key", set);
+        set = new HashSet<>();
+
         switch (dayOfWeek.getIntDay()) {
             case 1:
                 if(!set.contains(String.valueOf(1))){
@@ -186,22 +187,13 @@ public class QuizResultFragment extends Fragment {
                     set.add(String.valueOf(3));
                 }
                 break;
-            case 4:
+            case 4: //Wednesday
                 if(!set.contains(String.valueOf(4))){
-
-                    set.add(String.valueOf(4));
-                }
-                else{
-                    set.remove(String.valueOf(4));
                     set.add(String.valueOf(4));
                 }
                 break;
             case 5:
                 if(!set.contains(String.valueOf(5))){
-                    set.add(String.valueOf(5));
-                }
-                else{
-                    set.remove(String.valueOf(5));
                     set.add(String.valueOf(5));
                 }
                 break;
@@ -225,10 +217,10 @@ public class QuizResultFragment extends Fragment {
                 break;
         }
 
-
-        editor.apply();
-        Toast.makeText(getActivity(), String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(), String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
+        editor.putStringSet("key", set);
+        editor.commit();
+        Toast.makeText(getActivity(), "size" + String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
 
         Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
 

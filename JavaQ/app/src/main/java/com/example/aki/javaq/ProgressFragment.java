@@ -94,8 +94,8 @@ public class ProgressFragment extends Fragment {
         }
     }
     private void setWeeklyProgressColor() {
-        Set<String> fetch = mAcStreakShearedPref.getStringSet("key", new HashSet<String>());
-        Toast.makeText(getActivity(),String.valueOf(fetch.size()), Toast.LENGTH_SHORT).show();
+        Set<String> fetch = mAcStreakShearedPref.getStringSet("key", null);
+        Toast.makeText(getActivity(),"fetch.size " + String.valueOf(fetch.size()), Toast.LENGTH_SHORT).show();
 
         if(fetch.contains(String.valueOf(dayOfWeek.getIntDay()))){
             switch (dayOfWeek.getIntDay()) {
