@@ -9,5 +9,5 @@
         android:bottomLeftRadius="6dp"
         android:topLeftRadius="6dp"
         />
-    <stroke android:width="0.5dp" android:color="@color/sub_text" />
+    <stroke android:width="2dp" android:color="@color/light_gray" />
 </shape>
