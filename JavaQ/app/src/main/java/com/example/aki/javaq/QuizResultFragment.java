@@ -80,7 +80,7 @@ public class QuizResultFragment extends Fragment {
         dayOfWeek = new DayOfWeek();
         SharedPreferences.Editor editor = mStreakData.edit();
         editor.putBoolean("Thursday", true);
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay());
+        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
         editor.apply();
     }
 

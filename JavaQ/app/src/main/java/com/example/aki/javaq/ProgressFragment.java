@@ -32,6 +32,8 @@ public class ProgressFragment extends Fragment {
     public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
     public static final String ACTIVE_STREAK_PREF_DAYS = "activity_shared_pref_days";
     public static final String ACTIVE_STREAK_PREV_DAYS = "active_days";
+    private int todayDay;
+    private int prevDay;
 
 
     @Override
@@ -40,6 +42,8 @@ public class ProgressFragment extends Fragment {
         mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
         mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
         dayOfWeek = new DayOfWeek();
+        todayDay = dayOfWeek.getIntDay();
+        prevDay = todayDay -1;
     }
 
     @Override
@@ -57,10 +61,9 @@ public class ProgressFragment extends Fragment {
         SharedPreferences.Editor editor = data.edit();
         mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
 
-
         if (mStreakData.getBoolean("Thursday", false)) {
             if (mPrevActiveStreak == 0) {
-                mCountActiveStreak = 1;
+                mCountActiveStreak++;
                 editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
                 editor.apply();
             } else {
@@ -68,11 +71,30 @@ public class ProgressFragment extends Fragment {
                 editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
                 editor.apply();
             }
-        } else {
+        }
+        else {
             mCountActiveStreak = 0;
         }
         return mCountActiveStreak;
     }
+
+//    private int getLatestActiveStreakDays(){
+//        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = data.edit();
+//        mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
+//
+//
+//        if(mPrevActiveStreak ==  0){
+//            mCountActiveStreak++;
+//            editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
+//            editor.apply();
+//        } else {
+//            mCountActiveStreak = mPrevActiveStreak + 1;
+//            editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
+//            editor.apply();
+//        }
+//        return mCountActiveStreak;
+//    }
 
 
 }
