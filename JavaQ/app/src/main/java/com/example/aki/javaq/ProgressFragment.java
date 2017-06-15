@@ -40,15 +40,15 @@ public class ProgressFragment extends Fragment {
 
     public static final String EXTRA_SECTION_POSITON = "aki.javaq_extra_section_position";
     public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
-    public static final String ACTIVE_STREAK_PREF_DAYS = "activity_shared_pref_days";
-    public static final String ACTIVE_STREAK_PREV_DAYS = "active_days";
+    public static final String PREF_ACTIVE_STREAK_DAYS = "activity_shared_pref_days";
+//    public static final String PREF_ACTIVE_STREAK_DAYS = "active_days";
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
+//        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
         dayOfWeek = new DayOfWeek();
     }
 
@@ -64,35 +64,16 @@ public class ProgressFragment extends Fragment {
         mSunTextView = (TextView) view.findViewById(R.id.weekly_sun);
 
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
-        mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
+
+        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+//        mStreakDataActiveDays = data.getInt()
+//
+//        mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
 
         return view;
     }
 
-    private int getActiveStreakDays() {
-        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = data.edit();
-        mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
 
-        String currentDay = dayOfWeek.getDay();
-
-        if (mStreakData.getBoolean("Thursday", false)) {
-            setWeeklyProgressColor(currentDay);
-
-            if (mPrevActiveStreak == 0) {
-                mCountActiveStreak = 1;
-                editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
-                editor.apply();
-            } else {
-                mCountActiveStreak = mPrevActiveStreak + 1;
-                editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
-                editor.apply();
-            }
-        } else {
-            mCountActiveStreak = 0;
-        }
-        return mCountActiveStreak;
-    }
 
     private void setWeeklyProgressColor(String day) {
         switch (day) {

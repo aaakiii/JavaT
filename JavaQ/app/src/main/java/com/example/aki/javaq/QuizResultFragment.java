@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,12 +32,19 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences mStreakData;
     private DayOfWeek dayOfWeek;
 
+    private int mCountAccess;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStreakData = getActivity().getSharedPreferences(ProgressFragment.ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-        countStreak();
+
+        mStreakData = getActivity().getSharedPreferences(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, Context.MODE_PRIVATE);
+        if(checkOnceParDay()){
+            countStreak();
+        } else {
+            Toast.makeText(getActivity(), "no count", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -85,13 +93,47 @@ public class QuizResultFragment extends Fragment {
         return v;
     }
 
-    private void countStreak() {
-        dayOfWeek = new DayOfWeek();
-        SharedPreferences.Editor editor = mStreakData.edit();
-        editor.putBoolean("Thursday", true);
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay());
-        editor.apply();
+    private void countStreak(){
+        mCountAccess = mStreakData.getInt(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, 0);
+        mCountAccess++;
+        SharedPreferences.Editor editor_count = mStreakData.edit();
+        SharedPreferences.Editor editor_millis = mStreakData.edit();
+        editor_count.putInt(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, mCountAccess);
+        editor_millis.putLong("millis", System.currentTimeMillis());
+        editor_count.commit();
+        editor_millis.commit();
+//        resetPref(editor_count,editor_millis);
+        Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
     }
 
+    private void resetPref(SharedPreferences.Editor editor_count, SharedPreferences.Editor editor_millis){
+        editor_count.clear().commit();
+        editor_millis.clear().commit();
+        mCountAccess = 0;
+    }
+
+    private boolean checkOnceParDay(){
+        long lastCheckedMillis = mStreakData.getLong("millis", 0);
+        long now = System.currentTimeMillis();
+
+        // tomorrow at midnight
+        Calendar date = new GregorianCalendar();
+        date.setTime(new Date(lastCheckedMillis));
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        date.add(Calendar.DAY_OF_MONTH, 1); //next day
+        long nextMidnight = date.getTimeInMillis();
+
+        date.add(Calendar.DAY_OF_MONTH, 1); //next day
+        long tomorrowMidnight = date.getTimeInMillis();
+
+        if( nextMidnight < now && now < tomorrowMidnight) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
