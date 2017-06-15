@@ -25,6 +25,7 @@ public class QuizResultFragment extends Fragment {
     public static final String SHEARED_PREF_ACTIVE = "shared_pref_active";
     public static final String SHEARED_PREF_ACTIVE_DAYS = "shared_pref_active_days";
     public static final String SHEARED_PREF_ACTIVE_TIME_STAMP = "shared_pref_active_time_stamp";
+    public static final String SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS = "shared_pref_active_last_clicked_millis";
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -33,8 +34,7 @@ public class QuizResultFragment extends Fragment {
     private int mQuizzesNumber;
     private int mCurrentSectionID;
     private SharedPreferences mAcStreakShearedPref;
-    private SharedPreferences.Editor editor_days;
-    private SharedPreferences.Editor editor_timeStamp;
+    private SharedPreferences.Editor editor;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
 
@@ -46,6 +46,7 @@ public class QuizResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        editor = mAcStreakShearedPref.edit();
         countStreak(checkOnceParDay());
     }
 
@@ -96,34 +97,32 @@ public class QuizResultFragment extends Fragment {
     }
 
     private void countStreak(boolean checkOnceParDay) {
-        SharedPreferences.Editor editor_days = mAcStreakShearedPref.edit();
-        SharedPreferences.Editor editor_timeStamp = mAcStreakShearedPref.edit();
-        editor_timeStamp.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
-        editor_timeStamp.commit();
 
+        editor.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
+        editor.commit();
 
         if(checkOnceParDay){
             mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
             mCountAccess++;
-            editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
-            editor_days.commit();
+            editor.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
+            editor.commit();
             Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if(!isUsedYesterday){
-                editor_days.clear().commit();
-                editor_timeStamp.clear().commit();
-                editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                editor.clear().commit();
+                editor.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                editor.commit();
                 Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private boolean checkOnceParDay() {
         long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
+        editor.putLong(SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS, lastCheckedMillis);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight

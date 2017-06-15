@@ -3,6 +3,7 @@ package com.example.aki.javaq;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,24 +32,17 @@ public class ProgressFragment extends Fragment {
     private TextView mSatTextView;
     private TextView mSunTextView;
 
-    private int mCountActiveStreak = 0;
-    private int mPrevActiveStreak;
     private DayOfWeek dayOfWeek;
 
-    private SharedPreferences mStreakData;
-    private SharedPreferences mStreakDataActiveDays;
+    private SharedPreferences mAcStreakShearedPref;
+    private SharedPreferences.Editor editor;
 
     public static final String EXTRA_SECTION_POSITON = "aki.javaq_extra_section_position";
-    public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
-    public static final String PREF_ACTIVE_STREAK_DAYS = "activity_shared_pref_days";
-//    public static final String PREF_ACTIVE_STREAK_DAYS = "active_days";
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-//        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
         dayOfWeek = new DayOfWeek();
     }
 
@@ -64,13 +58,37 @@ public class ProgressFragment extends Fragment {
         mSunTextView = (TextView) view.findViewById(R.id.weekly_sun);
 
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
+        mAcStreakShearedPref = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        editor = mAcStreakShearedPref.edit();
+        long lastCheckedMillis = mAcStreakShearedPref.getLong(QuizResultFragment.SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
 
-//        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-//        mStreakDataActiveDays = data.getInt()
-//
-//        mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
+        // set active streak
+        if(isUsedYesterday(lastCheckedMillis)){
+            editor.clear().commit();
+        }
+        int activeDays = mAcStreakShearedPref.getInt(QuizResultFragment.SHEARED_PREF_ACTIVE_DAYS, 0);
+        mActiveStreakTextView.setText(String.valueOf(activeDays));
 
         return view;
+    }
+
+    // for active streak
+    private boolean isUsedYesterday(long lastCheckedMillis){
+        long now = System.currentTimeMillis();
+        // tomorrow at midnight
+        Calendar date = new GregorianCalendar();
+        date.setTime(new Date(lastCheckedMillis));
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        date.add(Calendar.DAY_OF_MONTH, 2); //next day
+        long tomorrowMidnight = date.getTimeInMillis();
+        if(tomorrowMidnight < now){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
