@@ -22,6 +22,9 @@ import java.util.Locale;
 public class QuizResultFragment extends Fragment {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
+    public static final String SHEARED_PREF_ACTIVE = "shared_pref_active";
+    public static final String SHEARED_PREF_ACTIVE_DAYS = "shared_pref_active_days";
+    public static final String SHEARED_PREF_ACTIVE_TIME_STAMP = "shared_pref_active_time_stamp";
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -29,8 +32,11 @@ public class QuizResultFragment extends Fragment {
     private TextView mScoreDenominator;
     private int mQuizzesNumber;
     private int mCurrentSectionID;
-    private SharedPreferences mStreakData;
+    private SharedPreferences mAcStreakSheredPref;
+    private SharedPreferences.Editor editor_days;
+    private SharedPreferences.Editor editor_timeStamp;
     private DayOfWeek dayOfWeek;
+    private boolean isUsedYesterday = true;
 
     private int mCountAccess;
 
@@ -39,12 +45,9 @@ public class QuizResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mStreakData = getActivity().getSharedPreferences(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, Context.MODE_PRIVATE);
-        if(checkOnceParDay()){
-            countStreak();
-        } else {
-            Toast.makeText(getActivity(), "no count", Toast.LENGTH_SHORT).show();
-        }
+//        mStreakData = getActivity().getSharedPreferences(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, Context.MODE_PRIVATE);
+        mAcStreakSheredPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        countStreak(checkOnceParDay());
     }
 
     @Override
@@ -69,12 +72,12 @@ public class QuizResultFragment extends Fragment {
             mScoreBadge = (ImageView) v.findViewById(R.id.result_badge);
 
             // set badges and comments
-            switch (status){
-                case "gold" :
+            switch (status) {
+                case "gold":
                     mScoreCommentTextView.setText("Fantastic!");
                     mScoreBadge.setImageResource(R.drawable.badge_gold);
                     break;
-                case "silver" :
+                case "silver":
                     mScoreCommentTextView.setText("Great!");
                     mScoreBadge.setImageResource(R.drawable.badge_silver);
                     break;
@@ -93,27 +96,43 @@ public class QuizResultFragment extends Fragment {
         return v;
     }
 
-    private void countStreak(){
-        mCountAccess = mStreakData.getInt(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, 0);
-        mCountAccess++;
-        SharedPreferences.Editor editor_count = mStreakData.edit();
-        SharedPreferences.Editor editor_millis = mStreakData.edit();
-        editor_count.putInt(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, mCountAccess);
-        editor_millis.putLong("millis", System.currentTimeMillis());
-        editor_count.commit();
-        editor_millis.commit();
-//        resetPref(editor_count,editor_millis);
-        Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+    private void countStreak(boolean checkOnceParDay) {
+        SharedPreferences.Editor editor_days = mAcStreakSheredPref.edit();
+        SharedPreferences.Editor editor_timeStamp = mAcStreakSheredPref.edit();
+        editor_timeStamp.putLong("shared_pref_active_time_stamp", System.currentTimeMillis());
+        editor_timeStamp.commit();
+
+
+        if(checkOnceParDay){
+            mCountAccess = mAcStreakSheredPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
+            mCountAccess++;
+            editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
+            editor_days.commit();
+            Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+        } else {
+            // reset to 1
+            if(!isUsedYesterday){
+                editor_days.clear().commit();
+                editor_timeStamp.clear().commit();
+                editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
     }
 
-    private void resetPref(SharedPreferences.Editor editor_count, SharedPreferences.Editor editor_millis){
+    private void resetPref(SharedPreferences.Editor editor_count, SharedPreferences.Editor editor_millis) {
         editor_count.clear().commit();
         editor_millis.clear().commit();
         mCountAccess = 0;
     }
 
-    private boolean checkOnceParDay(){
-        long lastCheckedMillis = mStreakData.getLong("millis", 0);
+    private boolean checkOnceParDay() {
+//        long lastCheckedMillis = mStreakData.getLong("millis", 0);
+        long lastCheckedMillis = mAcStreakSheredPref.getLong("shared_pref_active_time_stamp", 0);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
@@ -129,8 +148,13 @@ public class QuizResultFragment extends Fragment {
         date.add(Calendar.DAY_OF_MONTH, 1); //next day
         long tomorrowMidnight = date.getTimeInMillis();
 
-        if( nextMidnight < now && now < tomorrowMidnight) {
+        if (nextMidnight < now && now < tomorrowMidnight) {
             return true;
+        } else if(lastCheckedMillis == 0){
+            return true;
+        } else if(tomorrowMidnight < now){
+            isUsedYesterday = false;
+            return false;
         } else {
             return false;
         }

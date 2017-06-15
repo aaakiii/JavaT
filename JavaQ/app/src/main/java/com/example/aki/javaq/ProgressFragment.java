@@ -47,7 +47,7 @@ public class ProgressFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
+//        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
 //        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
         dayOfWeek = new DayOfWeek();
     }
@@ -65,7 +65,7 @@ public class ProgressFragment extends Fragment {
 
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
 
-        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+//        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
 //        mStreakDataActiveDays = data.getInt()
 //
 //        mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
