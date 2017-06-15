@@ -26,6 +26,14 @@
     </style>
 
 
+    <!-- gray tool bar -->
+    <style name="MyGrayToolbar">
+        <item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item>
+        <item name="android:background">@color/light_gray</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+    </style>
+
+
     <style name="CustomActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@color/main_color</item>
     </style>

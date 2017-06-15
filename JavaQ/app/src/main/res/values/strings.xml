@@ -14,6 +14,7 @@
     <string name="continue_button">Continue</string>
     <string name="back_button">Back to home</string>
     <string name="retry_button">Retry</string>
+    <string name="failed">failed...</string>
 
     <string name="active_streak">Active streak</string>
     <string name="longest_streak">Longest streak</string>
