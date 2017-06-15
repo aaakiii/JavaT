@@ -15,7 +15,9 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Created by MinaFujisawa on 2017/06/06.
@@ -61,6 +63,7 @@ public class ProgressFragment extends Fragment {
         mAcStreakShearedPref = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
         long lastCheckedMillis = mAcStreakShearedPref.getLong(QuizResultFragment.SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
+        setWeeklyProgressColor();
 
         // set active streak
         if(isUsedYesterday(lastCheckedMillis)){
@@ -90,41 +93,46 @@ public class ProgressFragment extends Fragment {
             return false;
         }
     }
+    private void setWeeklyProgressColor() {
+        Set<String> fetch = mAcStreakShearedPref.getStringSet("key", new HashSet<String>());
+        Toast.makeText(getActivity(),String.valueOf(fetch.size()), Toast.LENGTH_SHORT).show();
 
-
-
-    private void setWeeklyProgressColor(String day) {
-        switch (day) {
-            case "Monday":
-                mMonTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Tuesday":
-                mTueTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Wednesday":
-                mWedTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Thursday":
-                mThuTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Friday":
-                mFriTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Saturday":
-                mSatTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case "Sunday":
-                mSunTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
+        if(fetch.contains(String.valueOf(dayOfWeek.getIntDay()))){
+            switch (dayOfWeek.getIntDay()) {
+                case 1:
+                    mSunTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mSunTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 2:
+                    mMonTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 3:
+                    mTueTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mTueTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 4:
+                    mWedTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mWedTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 5:
+                    mThuTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mThuTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 6:
+                    mFriTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mFriTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+                case 7:
+                    mSatTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                    mSatTextView.setTextColor(getResources().getColor(R.color.white));
+                    break;
+            }
         }
+
     }
+
+
 
 
 }
