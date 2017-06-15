@@ -32,7 +32,7 @@ public class QuizResultFragment extends Fragment {
     private TextView mScoreDenominator;
     private int mQuizzesNumber;
     private int mCurrentSectionID;
-    private SharedPreferences mAcStreakSheredPref;
+    private SharedPreferences mAcStreakShearedPref;
     private SharedPreferences.Editor editor_days;
     private SharedPreferences.Editor editor_timeStamp;
     private DayOfWeek dayOfWeek;
@@ -45,7 +45,7 @@ public class QuizResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAcStreakSheredPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
         countStreak(checkOnceParDay());
     }
 
@@ -96,14 +96,14 @@ public class QuizResultFragment extends Fragment {
     }
 
     private void countStreak(boolean checkOnceParDay) {
-        SharedPreferences.Editor editor_days = mAcStreakSheredPref.edit();
-        SharedPreferences.Editor editor_timeStamp = mAcStreakSheredPref.edit();
+        SharedPreferences.Editor editor_days = mAcStreakShearedPref.edit();
+        SharedPreferences.Editor editor_timeStamp = mAcStreakShearedPref.edit();
         editor_timeStamp.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
         editor_timeStamp.commit();
 
 
         if(checkOnceParDay){
-            mCountAccess = mAcStreakSheredPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
+            mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
             mCountAccess++;
             editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
             editor_days.commit();
@@ -123,7 +123,7 @@ public class QuizResultFragment extends Fragment {
     }
 
     private boolean checkOnceParDay() {
-        long lastCheckedMillis = mAcStreakSheredPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
+        long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
