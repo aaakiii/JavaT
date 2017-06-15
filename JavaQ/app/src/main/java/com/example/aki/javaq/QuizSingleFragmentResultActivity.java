@@ -15,8 +15,7 @@ import android.widget.Button;
 public abstract class QuizSingleFragmentResultActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
-    private Button mHomeButton;
-    private Button mRetryButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,32 +29,5 @@ public abstract class QuizSingleFragmentResultActivity extends AppCompatActivity
             fragment = createFragment();
             fm.beginTransaction().add(R.id.result_fragment_container, fragment).commit();
         }
-        mRetryButton = (Button) findViewById(R.id.btn_retry);
-        mRetryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                retryQuestions();
-            }
-        });
-        mHomeButton = (Button)findViewById(R.id.btn_back_home);
-        mHomeButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                backToSection();
-            }
-        });
-
     }
-    //Retry　button押したら
-    public void retryQuestions(){
-        Intent intent = new Intent(getApplication(), QuizActivity.class);
-        startActivity(intent);
-    }
-    //Back to Home button 押したら
-    public void backToSection(){
-        Intent intent = new Intent(getApplication(), QuizSectionActivity.class);
-        startActivity(intent);
-    }
-
-
 }

@@ -64,11 +64,15 @@ public class QuizFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.quiz_fragment, container, false);
+
         Intent intent = getActivity().getIntent();
+        //from section
         mCurrentSectionID = intent.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
+//        //from retry button
+//        mCurrentSectionID = intent.getIntExtra(QuizFragment.EXTRA_CURRENT_SECTION_ID, 0);
         mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
         mQuiz = new QuizLab(mCurrentSectionID).getQuiz();
-        View v = inflater.inflate(R.layout.quiz_fragment, container, false);
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout) v.findViewById(R.id.progress_linear);
 
@@ -94,7 +98,7 @@ public class QuizFragment extends Fragment {
                     intent.putExtra(EXTRA_SCORE, score);
                     intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
                     intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
-                    startActivity(intent);
+//                    startActivityForResult(intent, 123);
 
                     //SharedPreferences
                     SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
