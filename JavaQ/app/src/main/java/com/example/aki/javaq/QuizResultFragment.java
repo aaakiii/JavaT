@@ -27,6 +27,7 @@ public class QuizResultFragment extends Fragment {
     private ImageView mScoreBadge;
     private TextView mScoreDenominator;
     private int mQuizzesNumber;
+    private int mCurrentSectionID;
     private SharedPreferences mStreakData;
     private DayOfWeek dayOfWeek;
 
@@ -36,7 +37,6 @@ public class QuizResultFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mStreakData = getActivity().getSharedPreferences(ProgressFragment.ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
         countStreak();
-
     }
 
     @Override
@@ -45,15 +45,13 @@ public class QuizResultFragment extends Fragment {
         Intent intent = getActivity().getIntent();
         mScore = intent.getIntExtra(EXTRA_SCORE, 0);
         mQuizzesNumber = intent.getIntExtra(EXTRA_QUIZZES, 0);
+        mCurrentSectionID = intent.getIntExtra(QuizFragment.EXTRA_CURRENT_SECTION_ID, 0);
         View v;
 
-        if (mScore <= 5) {
-            v = inflater.inflate(R.layout.quiz_result_failed_fragment, container, false);
-            mScoreDenominator = (TextView) v.findViewById(R.id.result_score_denominator);
-            mScoreDenominator.setText(String.valueOf(mQuizzesNumber));
-            mScoreTextView = (TextView) v.findViewById(R.id.result_score);
-            mScoreTextView.setText(String.valueOf(mScore));
-        } else {
+        String status = new Badge(mScore, mCurrentSectionID).getBadgeStatus();
+
+        // change inflate by status
+        if (status != "") {
             v = inflater.inflate(R.layout.quiz_result_badge_fragment, container, false);
             mScoreDenominator = (TextView) v.findViewById(R.id.result_score_denominator);
             mScoreDenominator.setText(String.valueOf(mQuizzesNumber));
@@ -61,18 +59,29 @@ public class QuizResultFragment extends Fragment {
             mScoreTextView.setText(String.valueOf(mScore));
             mScoreCommentTextView = (TextView) v.findViewById(R.id.result_comment);
             mScoreBadge = (ImageView) v.findViewById(R.id.result_badge);
-            if (mScore == 8) {
-                mScoreCommentTextView.setText("Fantastic!");
-                mScoreBadge.setImageResource(R.drawable.badge_gold);
-            } else if (mScore == 7) {
-                mScoreCommentTextView.setText("Great!");
-                mScoreBadge.setImageResource(R.drawable.badge_silver);
-            } else {
-                mScoreCommentTextView.setText("Good!");
-                mScoreBadge.setImageResource(R.drawable.badge_copper);
-            }
-        }
 
+            // set badges and comments
+            switch (status){
+                case "gold" :
+                    mScoreCommentTextView.setText("Fantastic!");
+                    mScoreBadge.setImageResource(R.drawable.badge_gold);
+                    break;
+                case "silver" :
+                    mScoreCommentTextView.setText("Great!");
+                    mScoreBadge.setImageResource(R.drawable.badge_silver);
+                    break;
+                case "copper":
+                    mScoreCommentTextView.setText("Good!");
+                    mScoreBadge.setImageResource(R.drawable.badge_copper);
+                    break;
+            }
+        } else {
+            v = inflater.inflate(R.layout.quiz_result_failed_fragment, container, false);
+            mScoreDenominator = (TextView) v.findViewById(R.id.result_score_denominator);
+            mScoreDenominator.setText(String.valueOf(mQuizzesNumber));
+            mScoreTextView = (TextView) v.findViewById(R.id.result_score);
+            mScoreTextView.setText(String.valueOf(mScore));
+        }
         return v;
     }
 

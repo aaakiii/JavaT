@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -21,6 +23,14 @@ import java.util.Locale;
 public class ProgressFragment extends Fragment {
     private TextView mActiveStreakTextView;
     private TextView mLongestStreakTextView;
+    private TextView mMonTextView;
+    private TextView mTueTextView;
+    private TextView mWedTextView;
+    private TextView mThuTextView;
+    private TextView mFriTextView;
+    private TextView mSatTextView;
+    private TextView mSunTextView;
+
     private int mCountActiveStreak = 0;
     private int mPrevActiveStreak;
     private DayOfWeek dayOfWeek;
@@ -32,8 +42,6 @@ public class ProgressFragment extends Fragment {
     public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
     public static final String ACTIVE_STREAK_PREF_DAYS = "activity_shared_pref_days";
     public static final String ACTIVE_STREAK_PREV_DAYS = "active_days";
-    private int todayDay;
-    private int prevDay;
 
 
     @Override
@@ -42,13 +50,18 @@ public class ProgressFragment extends Fragment {
         mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
         mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
         dayOfWeek = new DayOfWeek();
-        todayDay = dayOfWeek.getIntDay();
-        prevDay = todayDay -1;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.progress_fragment, container, false);
+        mMonTextView = (TextView) view.findViewById(R.id.weekly_mon);
+        mTueTextView = (TextView) view.findViewById(R.id.weekly_tue);
+        mWedTextView = (TextView) view.findViewById(R.id.weekly_wed);
+        mThuTextView = (TextView) view.findViewById(R.id.weekly_thu);
+        mFriTextView = (TextView) view.findViewById(R.id.weekly_fri);
+        mSatTextView = (TextView) view.findViewById(R.id.weekly_sta);
+        mSunTextView = (TextView) view.findViewById(R.id.weekly_sun);
 
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
         mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
@@ -61,9 +74,13 @@ public class ProgressFragment extends Fragment {
         SharedPreferences.Editor editor = data.edit();
         mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
 
+        String currentDay = dayOfWeek.getDay();
+
         if (mStreakData.getBoolean("Thursday", false)) {
+            setWeeklyProgressColor(currentDay);
+
             if (mPrevActiveStreak == 0) {
-                mCountActiveStreak++;
+                mCountActiveStreak = 1;
                 editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
                 editor.apply();
             } else {
@@ -71,30 +88,46 @@ public class ProgressFragment extends Fragment {
                 editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
                 editor.apply();
             }
-        }
-        else {
+        } else {
             mCountActiveStreak = 0;
         }
         return mCountActiveStreak;
     }
 
-//    private int getLatestActiveStreakDays(){
-//        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = data.edit();
-//        mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
-//
-//
-//        if(mPrevActiveStreak ==  0){
-//            mCountActiveStreak++;
-//            editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
-//            editor.apply();
-//        } else {
-//            mCountActiveStreak = mPrevActiveStreak + 1;
-//            editor.putInt(ACTIVE_STREAK_PREV_DAYS, mCountActiveStreak);
-//            editor.apply();
-//        }
-//        return mCountActiveStreak;
-//    }
+    private void setWeeklyProgressColor(String day) {
+        switch (day) {
+            case "Monday":
+                mMonTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Tuesday":
+                mTueTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Wednesday":
+                mWedTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Thursday":
+                mThuTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Friday":
+                mFriTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Saturday":
+                mSatTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+            case "Sunday":
+                mSunTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+                mMonTextView.setTextColor(getResources().getColor(R.color.white));
+                break;
+        }
+    }
 
 
 }
+
+
