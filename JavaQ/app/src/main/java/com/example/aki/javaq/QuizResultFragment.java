@@ -40,6 +40,8 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences mStreakData;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
+    public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
+    private SharedPreferences.Editor editor_week;
 
     private int mCountAccess;
 
@@ -47,9 +49,11 @@ public class QuizResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
         mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
         countStreak(checkOnceParDay());
+        weeklyStreak();
+
     }
 
     @Override
@@ -62,6 +66,7 @@ public class QuizResultFragment extends Fragment {
         View v;
 
         String status = new Badge(mScore, mCurrentSectionID).getBadgeStatus();
+//        weeklyStreak();
 
         // change inflate by status
         if (status != "") {
@@ -119,7 +124,7 @@ public class QuizResultFragment extends Fragment {
                 editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
                 Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), ACTIVE_STREAK_PREF, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -155,77 +160,81 @@ public class QuizResultFragment extends Fragment {
     }
     private void weeklyStreak() {
         dayOfWeek = new DayOfWeek();
-        SharedPreferences.Editor editor = mStreakData.edit();
+        editor_week = mStreakData.edit();
         Set<String> set = new HashSet<>();
-
+        editor_week.putStringSet("key", set);
             switch (dayOfWeek.getIntDay()) {
                 case 1:
-                    if(set.contains(String.valueOf(1))){
-                        set.remove(String.valueOf(1));
+                    if(!set.contains(String.valueOf(1))){
                         set.add(String.valueOf(1));
                     }
                     else{
+                        set.remove(String.valueOf(1));
                         set.add(String.valueOf(1));
                     }
                     break;
                 case 2:
-                    if(set.contains(String.valueOf(2))){
-                        set.remove(String.valueOf(2));
+                    if(!set.contains(String.valueOf(2))){
                         set.add(String.valueOf(2));
                     }
                     else{
+                        set.remove(String.valueOf(2));
                         set.add(String.valueOf(2));
                     }
                     break;
                 case 3:
-                    if(set.contains(String.valueOf(3))){
-                        set.remove(String.valueOf(3));
+                    if(!set.contains(String.valueOf(3))){
+
                         set.add(String.valueOf(3));
                     }
                     else{
+                        set.remove(String.valueOf(3));
                         set.add(String.valueOf(3));
                     }
                     break;
                 case 4:
-                    if(set.contains(String.valueOf(4))){
-                        set.remove(String.valueOf(4));
+                    if(!set.contains(String.valueOf(4))){
+
                         set.add(String.valueOf(4));
                     }
                     else{
+                        set.remove(String.valueOf(4));
                         set.add(String.valueOf(4));
                     }
                     break;
                 case 5:
-                    if(set.contains(String.valueOf(5))){
-                        set.remove(String.valueOf(5));
+                    if(!set.contains(String.valueOf(5))){
                         set.add(String.valueOf(5));
                     }
                     else{
+                        set.remove(String.valueOf(5));
                         set.add(String.valueOf(5));
                     }
                     break;
                 case 6:
-                    if(set.contains(String.valueOf(6))){
-                        set.remove(String.valueOf(6));
+                    if(!set.contains(String.valueOf(6))){
                         set.add(String.valueOf(6));
                     }
                     else{
+                        set.remove(String.valueOf(6));
                         set.add(String.valueOf(6));
                     }
                     break;
                 case 7:
-                    if(set.contains(String.valueOf(7))){
-                        set.remove(String.valueOf(7));
+                    if(!set.contains(String.valueOf(7))){
                         set.add(String.valueOf(7));
                     }
                     else{
+                        set.remove(String.valueOf(7));
                         set.add(String.valueOf(7));
                     }
                     break;
             }
 
-        editor.putStringSet("key", set);
-        editor.apply();
+
+        editor_week.apply();
+        Toast.makeText(getActivity(), String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
 
         Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
 

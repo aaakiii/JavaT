@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ public class ProgressFragment extends Fragment {
     private TextView mSatTextView;
     private TextView mSunTextView;
     private Set<String> fetch;
+    public static final String ACTIVE_STREAK_PREV_DAYS = "active_days";
 
     private int mCountActiveStreak = 0;
     private int mPrevActiveStreak;
@@ -50,82 +52,71 @@ public class ProgressFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
-       // mStreakData = getActivity().getSharedPreferences(ProgressFragment.ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-
-//        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-//        mStreakDataActiveDays = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF_DAYS, Context.MODE_PRIVATE);
+        fetch = mStreakData.getStringSet("key", new HashSet<String>());
         dayOfWeek = new DayOfWeek();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.progress_fragment, container, false);
+//        setWeeklyProgressColor(fetch);
+        setToast(dayOfWeek.getIntDay());
+        mSunTextView = (TextView) view.findViewById(R.id.weekly_sun);
         mMonTextView = (TextView) view.findViewById(R.id.weekly_mon);
         mTueTextView = (TextView) view.findViewById(R.id.weekly_tue);
         mWedTextView = (TextView) view.findViewById(R.id.weekly_wed);
         mThuTextView = (TextView) view.findViewById(R.id.weekly_thu);
         mFriTextView = (TextView) view.findViewById(R.id.weekly_fri);
         mSatTextView = (TextView) view.findViewById(R.id.weekly_sta);
-        mSunTextView = (TextView) view.findViewById(R.id.weekly_sun);
-
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
-        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefs = data.edit();
-        mPrevActiveStreak = data.getInt(ACTIVE_STREAK_PREF_DAYS, 0);
-        fetch = mStreakData.getStringSet("key", null);
-        setWeeklyProgressColor(fetch);
-
-//        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
-//        mStreakDataActiveDays = data.getInt()
-//
-//        mActiveStreakTextView.setText(String.valueOf(getActiveStreakDays()));
 
         return view;
     }
 
+    private void setToast(int day){
 
-    private void setWeeklyProgressColor(Set<String> fetch) {
-        String[] cases = {"1","2","3","4","5","6","7"};
-        int i;
-        for(i = 1; i < cases.length+1; i++) {
-            if (fetch.contains(cases[i]))
-                break;
-
-        switch (i) {
-            case 1:
-                mSunTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mSunTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 2:
-                mMonTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mMonTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 3:
-                mTueTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mTueTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 4:
-                mWedTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mWedTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 5:
-                mThuTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mThuTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 6:
-                mFriTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mFriTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-            case 7:
-                mSatTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
-                mSatTextView.setTextColor(getResources().getColor(R.color.white));
-                break;
-
-//              fetch.remove(cases[i]);
-
+        if(fetch.contains(String.valueOf(day))) {
+            Toast.makeText(getActivity(), String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
         }
+        else if(!fetch.contains(String.valueOf(day))){
+            Toast.makeText(getContext(), String.valueOf(fetch.size()), Toast.LENGTH_SHORT).show();
         }
     }
+//    private void setWeeklyProgressColor(Set<String> fetch) {
+//        if(fetch.contains(String.valueOf(dayOfWeek.getIntDay()))){
+//            Toast.makeText(getActivity(),String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
+//            switch (dayOfWeek.getIntDay()) {
+//                case 1:
+//                    mSunTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mSunTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 2:
+//                    mMonTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mMonTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 3:
+//                    mTueTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mTueTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 4:
+//                    mWedTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mWedTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 5:
+//                    mThuTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mThuTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 6:
+//                    mFriTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mFriTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//                case 7:
+//                    mSatTextView.setBackgroundColor(getResources().getColor(R.color.main_color));
+//                    mSatTextView.setTextColor(getResources().getColor(R.color.white));
+//                    break;
+//            }
+//        }
+//
+//    }
 }
 
