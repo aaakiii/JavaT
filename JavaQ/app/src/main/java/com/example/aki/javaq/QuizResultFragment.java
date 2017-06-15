@@ -17,9 +17,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
 
 public class QuizResultFragment extends Fragment {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
@@ -27,6 +25,7 @@ public class QuizResultFragment extends Fragment {
     public static final String SHEARED_PREF_ACTIVE = "shared_pref_active";
     public static final String SHEARED_PREF_ACTIVE_DAYS = "shared_pref_active_days";
     public static final String SHEARED_PREF_ACTIVE_TIME_STAMP = "shared_pref_active_time_stamp";
+    public static final String SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS = "shared_pref_active_last_clicked_millis";
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -35,13 +34,9 @@ public class QuizResultFragment extends Fragment {
     private int mQuizzesNumber;
     private int mCurrentSectionID;
     private SharedPreferences mAcStreakShearedPref;
-    private SharedPreferences.Editor editor_days;
-    private SharedPreferences.Editor editor_timeStamp;
-    private SharedPreferences mStreakData;
+    private SharedPreferences.Editor editor;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
-    public static final String ACTIVE_STREAK_PREF = "activity_shared_pref";
-    private SharedPreferences.Editor editor_week;
 
     private int mCountAccess;
 
@@ -49,11 +44,10 @@ public class QuizResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mStreakData = getActivity().getSharedPreferences(ACTIVE_STREAK_PREF, Context.MODE_PRIVATE);
-        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
-        countStreak(checkOnceParDay());
-        weeklyStreak();
 
+        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        editor = mAcStreakShearedPref.edit();
+        countStreak(checkOnceParDay());
     }
 
     @Override
@@ -66,7 +60,6 @@ public class QuizResultFragment extends Fragment {
         View v;
 
         String status = new Badge(mScore, mCurrentSectionID).getBadgeStatus();
-//        weeklyStreak();
 
         // change inflate by status
         if (status != "") {
@@ -104,34 +97,32 @@ public class QuizResultFragment extends Fragment {
     }
 
     private void countStreak(boolean checkOnceParDay) {
-        SharedPreferences.Editor editor_days = mAcStreakShearedPref.edit();
-        SharedPreferences.Editor editor_timeStamp = mAcStreakShearedPref.edit();
-        editor_timeStamp.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
-        editor_timeStamp.commit();
 
+        editor.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
+        editor.commit();
 
         if(checkOnceParDay){
             mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
             mCountAccess++;
-            editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
-            editor_days.commit();
+            editor.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
+            editor.commit();
             Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if(!isUsedYesterday){
-                editor_days.clear().commit();
-                editor_timeStamp.clear().commit();
-                editor_days.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                editor.clear().commit();
+                editor.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                editor.commit();
                 Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), ACTIVE_STREAK_PREF, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private boolean checkOnceParDay() {
         long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
+        editor.putLong(SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS, lastCheckedMillis);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
@@ -158,87 +149,5 @@ public class QuizResultFragment extends Fragment {
             return false;
         }
     }
-    private void weeklyStreak() {
-        dayOfWeek = new DayOfWeek();
-        editor_week = mStreakData.edit();
-        Set<String> set = new HashSet<>();
-        editor_week.putStringSet("key", set);
-            switch (dayOfWeek.getIntDay()) {
-                case 1:
-                    if(!set.contains(String.valueOf(1))){
-                        set.add(String.valueOf(1));
-                    }
-                    else{
-                        set.remove(String.valueOf(1));
-                        set.add(String.valueOf(1));
-                    }
-                    break;
-                case 2:
-                    if(!set.contains(String.valueOf(2))){
-                        set.add(String.valueOf(2));
-                    }
-                    else{
-                        set.remove(String.valueOf(2));
-                        set.add(String.valueOf(2));
-                    }
-                    break;
-                case 3:
-                    if(!set.contains(String.valueOf(3))){
-
-                        set.add(String.valueOf(3));
-                    }
-                    else{
-                        set.remove(String.valueOf(3));
-                        set.add(String.valueOf(3));
-                    }
-                    break;
-                case 4:
-                    if(!set.contains(String.valueOf(4))){
-
-                        set.add(String.valueOf(4));
-                    }
-                    else{
-                        set.remove(String.valueOf(4));
-                        set.add(String.valueOf(4));
-                    }
-                    break;
-                case 5:
-                    if(!set.contains(String.valueOf(5))){
-                        set.add(String.valueOf(5));
-                    }
-                    else{
-                        set.remove(String.valueOf(5));
-                        set.add(String.valueOf(5));
-                    }
-                    break;
-                case 6:
-                    if(!set.contains(String.valueOf(6))){
-                        set.add(String.valueOf(6));
-                    }
-                    else{
-                        set.remove(String.valueOf(6));
-                        set.add(String.valueOf(6));
-                    }
-                    break;
-                case 7:
-                    if(!set.contains(String.valueOf(7))){
-                        set.add(String.valueOf(7));
-                    }
-                    else{
-                        set.remove(String.valueOf(7));
-                        set.add(String.valueOf(7));
-                    }
-                    break;
-            }
-
-
-        editor_week.apply();
-        Toast.makeText(getActivity(), String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(), String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
-
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
-
-    }
-
 }
 
