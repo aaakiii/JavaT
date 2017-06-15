@@ -45,7 +45,6 @@ public class QuizResultFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        mStreakData = getActivity().getSharedPreferences(ProgressFragment.PREF_ACTIVE_STREAK_DAYS, Context.MODE_PRIVATE);
         mAcStreakSheredPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
         countStreak(checkOnceParDay());
     }
@@ -99,7 +98,7 @@ public class QuizResultFragment extends Fragment {
     private void countStreak(boolean checkOnceParDay) {
         SharedPreferences.Editor editor_days = mAcStreakSheredPref.edit();
         SharedPreferences.Editor editor_timeStamp = mAcStreakSheredPref.edit();
-        editor_timeStamp.putLong("shared_pref_active_time_stamp", System.currentTimeMillis());
+        editor_timeStamp.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
         editor_timeStamp.commit();
 
 
@@ -119,20 +118,12 @@ public class QuizResultFragment extends Fragment {
             } else {
                 Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
-
         }
 
     }
 
-    private void resetPref(SharedPreferences.Editor editor_count, SharedPreferences.Editor editor_millis) {
-        editor_count.clear().commit();
-        editor_millis.clear().commit();
-        mCountAccess = 0;
-    }
-
     private boolean checkOnceParDay() {
-//        long lastCheckedMillis = mStreakData.getLong("millis", 0);
-        long lastCheckedMillis = mAcStreakSheredPref.getLong("shared_pref_active_time_stamp", 0);
+        long lastCheckedMillis = mAcStreakSheredPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
