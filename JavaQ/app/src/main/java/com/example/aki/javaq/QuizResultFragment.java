@@ -16,7 +16,9 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class QuizResultFragment extends Fragment {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
@@ -88,10 +90,38 @@ public class QuizResultFragment extends Fragment {
     private void countStreak() {
         dayOfWeek = new DayOfWeek();
         SharedPreferences.Editor editor = mStreakData.edit();
-        editor.putBoolean("Thursday", true);
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
+        Set<String> set = new HashSet<>();
+        switch(dayOfWeek.getIntDay()){
+            case 1:
+                set.add(String.valueOf(1));
+                break;
+            case 2:
+                set.add(String.valueOf(2));
+                break;
+            case 3:
+                set.add(String.valueOf(3));
+                break;
+            case 4:
+                set.add(String.valueOf(4));
+                break;
+            case 5:
+                set.add(String.valueOf(5));
+                break;
+            case 6:
+                set.add(String.valueOf(6));
+                break;
+            case 7:
+                set.add(String.valueOf(7));
+                break;
+        }
+        editor.putStringSet("key", set);
         editor.apply();
+
+
+
+        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay()+ dayOfWeek.getIntDay());
+
     }
 
-}
 
+}

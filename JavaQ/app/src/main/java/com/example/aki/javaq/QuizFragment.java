@@ -72,19 +72,7 @@ public class QuizFragment extends Fragment {
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout) v.findViewById(R.id.progress_linear);
 
-
-//
-//        for(int i = 0; i < mQuizzes.size(); i++){
-//            mProgressBar = new ImageView(getActivity().getApplicationContext());
-//            mProgressBar.setId(i);
-//            mProgressBar.setImageResource(R.drawable.icon_progress_gray);
-//        }
-
         setProgressBar();
-
-//        ImageView mCurrentProgressBar = (ImageView) QuizFragment.this.findViewById(0);
-//        mCurrentProgressBar.setImageResource(R.drawable.icon_progress_maincolor);
-
 
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.setVisibility(INVISIBLE);
