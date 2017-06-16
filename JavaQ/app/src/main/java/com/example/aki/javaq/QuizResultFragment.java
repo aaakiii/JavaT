@@ -1,6 +1,5 @@
 package com.example.aki.javaq;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,12 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 public class QuizResultFragment extends Fragment {
@@ -39,7 +36,6 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
-
     private int mCountAccess;
 
 
@@ -224,8 +220,6 @@ public class QuizResultFragment extends Fragment {
                 }
                 break;
         }
-
-
         editor.apply();
         Toast.makeText(getActivity(), String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
         Toast.makeText(getActivity(), String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
