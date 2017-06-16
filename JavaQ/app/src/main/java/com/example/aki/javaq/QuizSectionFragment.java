@@ -35,13 +35,16 @@ public class QuizSectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // reset all shared preferences
+        resetSharedPref();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quiz_section_fragment, container, false);
 
-        data = getContext().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+        data = getContext().getSharedPreferences(QuizFragment.SHEARED_PREF_SCORE_KEY, Context.MODE_PRIVATE);
 
 
         mSectionArrayList = new ArrayList<>();
@@ -106,7 +109,7 @@ public class QuizSectionFragment extends Fragment {
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-            int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 0);
+            int score = data.getInt(mSectionList[position] + QuizFragment.SHEARED_PREF_SCORE_KEY, 0);
 
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
@@ -127,9 +130,19 @@ public class QuizSectionFragment extends Fragment {
                     break;
             }
 
-
             return view;
         }
+
+    }
+
+    public void resetSharedPref(){
+        SharedPreferences scoreData = getActivity().getSharedPreferences(QuizFragment.SHEARED_PREF_SCORE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = scoreData.edit();
+        editor.clear().commit();
+
+        SharedPreferences progressData = getActivity().getSharedPreferences("shared_pref_progress", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = progressData.edit();
+        editor2.clear().commit();
     }
 }
 
