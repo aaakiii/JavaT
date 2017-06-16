@@ -1,19 +1,16 @@
 package com.example.aki.javaq;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -156,13 +153,9 @@ public class QuizResultFragment extends Fragment {
         for (int i = 1; i <= 7; i++) {
             if(dayOfWeek.getIntDay() == i){
                 editor.putBoolean(SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
-                Toast.makeText(getActivity(), "day number" + String.valueOf(i), Toast.LENGTH_SHORT).show();
-
             }
         }
-
         editor.commit();
-//        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
     }
 }
 

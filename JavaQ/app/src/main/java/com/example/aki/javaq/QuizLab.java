@@ -11,15 +11,9 @@ import java.util.List;
  */
 
 public class QuizLab {
-    private static QuizLab sQuizLab;
+
     private List<Quiz> mQuizzes;
 
-//    public static QuizLab get(Context context, int sectionID) {
-//        if (sQuizLab == null) {
-//            sQuizLab = new QuizLab(sectionID);
-//        }
-//        return sQuizLab;
-//    }
 
     public QuizLab(int sectionID) {
         mQuizzes = new ArrayList<>();
