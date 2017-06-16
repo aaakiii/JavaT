@@ -37,7 +37,7 @@ public class QuizSectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // reset all shared preferences
-       //resetSharedPref();
+      // resetSharedPref();
     }
 
     @Override
@@ -137,6 +137,10 @@ public class QuizSectionFragment extends Fragment {
         SharedPreferences progressData = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor2 = progressData.edit();
         editor2.clear().commit();
+
+        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor3 = data.edit();
+        editor3.clear().commit();
     }
 
 }
