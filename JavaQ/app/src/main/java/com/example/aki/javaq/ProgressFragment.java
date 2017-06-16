@@ -39,7 +39,7 @@ public class ProgressFragment extends Fragment {
 
 
     @Override
-    
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dayOfWeek = new DayOfWeek();
@@ -82,7 +82,7 @@ public class ProgressFragment extends Fragment {
         else{
 
             mLongestDays = data.getInt("key", 0);
-            if(mLongestDays > activeDays){
+            if(mLongestDays >= activeDays){
                 editor.putInt("kry", mLongestDays);
                 editor.apply();
                 mLongestStreakTextView.setText(String.valueOf(mLongestDays));
