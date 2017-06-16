@@ -1,19 +1,16 @@
 package com.example.aki.javaq;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -106,16 +103,16 @@ public class QuizResultFragment extends Fragment {
             mCountAccess++;
             editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
             editor.commit();
-            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if (!isUsedYesterday) {
                 editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
                 editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
-                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -159,7 +156,6 @@ public class QuizResultFragment extends Fragment {
             }
         }
         editor.commit();
-//        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
     }
 }
 

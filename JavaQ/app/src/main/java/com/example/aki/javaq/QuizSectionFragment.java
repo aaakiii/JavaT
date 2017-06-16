@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +24,12 @@ import java.util.List;
 
 public class QuizSectionFragment extends Fragment {
     ListView mListView;
-    public static final String EXTRA_SECTION_POSITON = "aki.javaq_extra_section_position";
     List<String> mSectionArrayList;
     String[] mSectionList;
     SharedPreferences data;
-
     TextView mQuizListNameTextView;
     ImageView mBadgeImageView;
+    public static final String PREFS_NAME = "MyPrefsFile";
 
 
     @Override
@@ -37,15 +37,13 @@ public class QuizSectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // reset all shared preferences
-        resetSharedPref();
+//        resetSharedPref();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quiz_section_fragment, container, false);
-
-        data = getContext().getSharedPreferences(QuizFragment.SHEARED_PREF_SCORE_KEY, Context.MODE_PRIVATE);
-
+        data = getContext().getSharedPreferences(QuizFragment.SHARED_PREF_SCORE, Context.MODE_PRIVATE);
 
         mSectionArrayList = new ArrayList<>();
         mSectionList = getResources().getStringArray(R.array.section_list);
@@ -62,8 +60,11 @@ public class QuizSectionFragment extends Fragment {
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("position", position);
+                editor.commit();
                 Intent intent = new Intent(getActivity(), QuizActivity.class);
-                intent.putExtra(EXTRA_SECTION_POSITON, position);
                 startActivity(intent);
             }
         });
@@ -72,14 +73,12 @@ public class QuizSectionFragment extends Fragment {
 
 
     public class myArrayAdapter extends ArrayAdapter<String> {
-
         private int resourceId;
         private List<String> items;
         private LayoutInflater inflater;
 
         public myArrayAdapter(Context context, int resourceId, List<String> items) {
             super(context, resourceId, items);
-
             this.resourceId = resourceId;
             this.items = items;
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -103,13 +102,10 @@ public class QuizSectionFragment extends Fragment {
             TextView mQuizListNumTextView = (TextView) view.findViewById(R.id.list_num);
             mQuizListNumTextView.setText("Quiz " + (position + 1));
 
-            // set icon
-//            ImageView appInfoImage = (ImageView)view.findViewById(R.id.item_image);
-//            appInfoImage.setImageResource(item.getImageId());
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-            int score = data.getInt(mSectionList[position] + QuizFragment.SHEARED_PREF_SCORE_KEY, 0);
+            int score = data.getInt(mSectionList[position] + QuizFragment.SHARED_PREF_SCORE_KEY, 0);
 
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
@@ -129,21 +125,20 @@ public class QuizSectionFragment extends Fragment {
                     mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
                     break;
             }
-
             return view;
         }
-
     }
 
     public void resetSharedPref(){
-        SharedPreferences scoreData = getActivity().getSharedPreferences(QuizFragment.SHEARED_PREF_SCORE_KEY, Context.MODE_PRIVATE);
+        SharedPreferences scoreData = getActivity().getSharedPreferences(QuizFragment.SHARED_PREF_SCORE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = scoreData.edit();
         editor.clear().commit();
 
-        SharedPreferences progressData = getActivity().getSharedPreferences("shared_pref_progress", Context.MODE_PRIVATE);
+        SharedPreferences progressData = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor2 = progressData.edit();
         editor2.clear().commit();
     }
+
 }
 
 

@@ -6,13 +6,13 @@ package com.example.aki.javaq;
 
 public class Badge {
     private int mScore;
-    private int mSeciontID;
+    private int mSectionID;
     private int mMaxScore;
 
-    public Badge(int mScore, int mSeciontID) {
+    public Badge(int mScore, int mSectionID) {
         this.mScore = mScore;
-        this.mSeciontID = mSeciontID;
-        this.mMaxScore = new QuizLab(mSeciontID).getQuizzes().size();
+        this.mSectionID = mSectionID;
+        this.mMaxScore = new QuizLab(mSectionID).getQuizzes().size();
     }
 
     public String getBadgeStatus() {

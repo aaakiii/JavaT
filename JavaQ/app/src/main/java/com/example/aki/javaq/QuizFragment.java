@@ -16,8 +16,6 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-
-
 import java.util.List;
 import java.util.Random;
 
@@ -25,7 +23,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class QuizFragment extends Fragment {
-    private ImageView mProgressBar1;
+
     private TextView mQuizText;
     private Button mFirstButtons;
     private Button mSecondButtons;
@@ -37,7 +35,6 @@ public class QuizFragment extends Fragment {
     private SoundPool soundPool;
     private int good_se;
     private int bad_se;
-    private QuizLab quizLab;
     private Quiz mQuiz;
     private int mCurrentSectionID;
     private String[] mSectionList;
@@ -47,15 +44,12 @@ public class QuizFragment extends Fragment {
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
     public static final String EXTRA_CURRENT_SECTION_ID = "com.example.aki.javaq.current_section_id";
-    public static final String SHEARED_PREF_SCORE_KEY = "JavaQ_keyword_score";
-    public static final String SHEARED_PREF_SCORE = "shared_pref_progress";
+    public static final String SHARED_PREF_SCORE_KEY = "JavaQ_keyword_score";
+    public static final String SHARED_PREF_SCORE = "JavaQ_keyword_score";
     private LinearLayout mLinearLayout;
     private ImageView mPopUpImageView;
     private TextView mPopUpTextView;
-    private ViewGroup mViewGroup;
-
-
-
+    public static final String PREFS_NAME = "MyPrefsFile";
 
 
     @Override
@@ -71,48 +65,14 @@ public class QuizFragment extends Fragment {
         View v = inflater.inflate(R.layout.quiz_fragment, container, false);
 
         Intent intent = getActivity().getIntent();
-        //from section
-        mCurrentSectionID = intent.getIntExtra(QuizSectionFragment.EXTRA_SECTION_POSITON, 0);
-//        //from retry button
-//        mCurrentSectionID = intent.getIntExtra(QuizFragment.EXTRA_CURRENT_SECTION_ID, 0);
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        mCurrentSectionID = settings.getInt("position", 0);
         mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
         mQuiz = new QuizLab(mCurrentSectionID).getQuiz();
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout) v.findViewById(R.id.progress_linear);
-
         setProgressBar();
 
-        mContinueButton = (Button) v.findViewById(R.id.continue_button);
-        mContinueButton.setVisibility(INVISIBLE);
-        mContinueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1);
-                mPopUpImageView.setVisibility(INVISIBLE);
-                mPopUpTextView.setVisibility(INVISIBLE);
-                ButtonsEnable(true);
-                mLinearLayout.removeAllViews();
-                setProgressBar();
-
-                if (mCurrentIndex == mQuizzes.size()) {
-                    Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class);
-                    intent.putExtra(EXTRA_SCORE, score);
-                    intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
-                    intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
-                    startActivity(intent);
-
-                    //SharedPreferences
-                    SharedPreferences data = getActivity().getSharedPreferences(SHEARED_PREF_SCORE, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = data.edit();
-//                    editor.putString(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, String.valueOf(mCurrentSectionID) + "-" + String.valueOf(score) );
-                    editor.putInt(mSectionList[mCurrentSectionID] + SHEARED_PREF_SCORE_KEY, score);
-                    editor.apply();
-                } else {
-                    mCurrentIndex %= mQuizzes.size();
-                    updateQuestion();
-                }
-            }
-        });
         mQuizText = (TextView) v.findViewById(R.id.question_item);
         mQuizText.setText(mQuizzes.get(mCurrentIndex).getmQuestionText());
         mPopUpImageView = (ImageView) v.findViewById(R.id.answer_image_popup);
@@ -174,6 +134,34 @@ public class QuizFragment extends Fragment {
                 }
             }
         });
+        mContinueButton = (Button) v.findViewById(R.id.continue_button);
+        mContinueButton.setVisibility(INVISIBLE);
+        mContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentIndex = (mCurrentIndex + 1);
+                setItemVisibility(false);
+                ButtonsEnable(true);
+                mLinearLayout.removeAllViews();
+                setProgressBar();
+                if (mCurrentIndex == mQuizzes.size()) {
+                    Intent intent = new Intent(getActivity().getApplication(), QuizResultActivity.class);
+                    intent.putExtra(EXTRA_SCORE, score);
+                    intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
+                    intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
+                    startActivity(intent);
+                    //SharedPreferences
+                    SharedPreferences data = getActivity().getSharedPreferences(SHARED_PREF_SCORE, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = data.edit();
+                    editor.putInt(mSectionList[mCurrentSectionID] + SHARED_PREF_SCORE_KEY, score);
+                    editor.apply();
+
+                } else {
+                    mCurrentIndex %= mQuizzes.size();
+                    updateQuestion();
+                }
+            }
+        });
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
@@ -187,49 +175,52 @@ public class QuizFragment extends Fragment {
 
         return v;
     }
-
     private void answerIsOne() {
         mFirstButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
         mFirstButtons.setTextColor(getResources().getColor(R.color.red));
     }
-
     private void answerIsTwo() {
         mSecondButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
         mSecondButtons.setTextColor(getResources().getColor(R.color.red));
     }
-
     private void answerIsThree() {
         mThirdButtons.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
         mThirdButtons.setTextColor(getResources().getColor(R.color.red));
     }
-
-
     public boolean checkAnswer(int mClickedAnswer) {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
-            mContinueButton.setVisibility(VISIBLE);
-            mPopUpImageView.setVisibility(VISIBLE);
+            setItemVisibility(true);
             mPopUpImageView.setImageResource(R.drawable.icon_correct);
             mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
             int correct = new Random().nextInt(mCorrectWords.length);
             String correctWord = (mCorrectWords[correct]);
-            mPopUpTextView.setVisibility(VISIBLE);
             mPopUpTextView.setText(correctWord);
             mPopUpTextView.setTextColor(getResources().getColor(R.color.main_color));
             score++;
             return true;
         } else {
-            mContinueButton.setVisibility(VISIBLE);
-            mPopUpImageView.setVisibility(VISIBLE);
+            setItemVisibility(true);
             mPopUpImageView.setImageResource(R.drawable.icon_incorrect);
             soundPool.play(bad_se, 1F, 1F, 0, 0, 1F);
             mIncorrectWords = getResources().getStringArray(R.array.Incorrect_word_list);
             int incorrect = new Random().nextInt(mIncorrectWords.length);
             String incorrectWord = (mIncorrectWords[incorrect]);
-            mPopUpTextView.setVisibility(VISIBLE);
             mPopUpTextView.setText(incorrectWord);
             mPopUpTextView.setTextColor(getResources().getColor(R.color.red));
             return false;
+        }
+    }
+
+    public void setItemVisibility(boolean isVisible) {
+        if(isVisible){
+            mContinueButton.setVisibility(VISIBLE);
+            mPopUpImageView.setVisibility(VISIBLE);
+            mPopUpTextView.setVisibility(VISIBLE);
+        }
+        else{
+            mPopUpImageView.setVisibility(INVISIBLE);
+            mPopUpTextView.setVisibility(INVISIBLE);
         }
     }
 

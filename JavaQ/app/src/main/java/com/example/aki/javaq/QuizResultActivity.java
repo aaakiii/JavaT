@@ -4,7 +4,6 @@ package com.example.aki.javaq;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
 
@@ -46,14 +45,7 @@ public class QuizResultActivity extends QuizSingleFragmentResultActivity {
     //Retry button
     public void retryQuestions(){
         Intent intent = new Intent(getApplication(), QuizActivity.class);
-        Intent intentFromQuiz = getIntent();
-        int mCurrentSectionID = intentFromQuiz.getIntExtra(QuizFragment.EXTRA_CURRENT_SECTION_ID, 0);
-        intent.putExtra(QuizFragment.EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
         startActivity(intent);
     }
-
-
-
-
 }
 

@@ -21,5 +21,6 @@
     <string-array name="Incorrect_word_list">
         <item>OMG!!</item>
         <item>Oops..</item>
+        <item>Incorrect</item>
     </string-array>
 </resources>

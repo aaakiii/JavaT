@@ -1,7 +1,5 @@
 package com.example.aki.javaq;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +9,8 @@ import java.util.List;
  */
 
 public class QuizLab {
-    private static QuizLab sQuizLab;
+
     private List<Quiz> mQuizzes;
-
-//    public static QuizLab get(Context context, int sectionID) {
-//        if (sQuizLab == null) {
-//            sQuizLab = new QuizLab(sectionID);
-//        }
-//        return sQuizLab;
-//    }
-
     public QuizLab(int sectionID) {
         mQuizzes = new ArrayList<>();
         createArray(sectionID);
@@ -40,33 +30,33 @@ public class QuizLab {
                 break;
 
             case 1 :
-                mQuizzes.add(new Quiz(1, "Section number 1", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(1, "What are valid ways of declaring and initializing a variable?", "int a = 6;", "double b = 1;", "int c = null", 1));
                 mQuizzes.add(new Quiz(1, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 mQuizzes.add(new Quiz(1, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
 
             case 2:
-                mQuizzes.add(new Quiz(2, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(2, "How can we check if a variable called myNumber equals 15?", "myNumber == 15", "myNumber && 15", "myNumber = 15", 1));
                 break;
 
             case 3:
-                mQuizzes.add(new Quiz(3, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(3, "Section number 3", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
 
             case 4:
-                mQuizzes.add(new Quiz(4, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(4, "Section number 4", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
 
             case 5:
-                mQuizzes.add(new Quiz(5, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(5, "Section number 5", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
 
             case 6:
-                mQuizzes.add(new Quiz(6, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(6, "Section number 6", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
 
             case 7:
-                mQuizzes.add(new Quiz(7, "Section number 2", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
+                mQuizzes.add(new Quiz(7, "Section number 7", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point", 3));
                 break;
         }
     }
