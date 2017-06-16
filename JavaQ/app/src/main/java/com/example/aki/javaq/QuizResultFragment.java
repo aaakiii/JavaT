@@ -47,7 +47,7 @@ public class QuizResultFragment extends Fragment {
         mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
         countStreak(checkOnceParDay());
-        weeklyStreak();
+        weeklyProgress();
     }
 
     @Override
@@ -150,7 +150,7 @@ public class QuizResultFragment extends Fragment {
         }
     }
 
-    private void weeklyStreak() {
+    private void weeklyProgress() {
         dayOfWeek = new DayOfWeek();
 
         for (int i = 1; i <= 7; i++) {
@@ -158,7 +158,6 @@ public class QuizResultFragment extends Fragment {
                 editor.putBoolean(SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
             }
         }
-
         editor.commit();
 //        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
     }
