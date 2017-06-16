@@ -156,6 +156,8 @@ public class QuizResultFragment extends Fragment {
         for (int i = 1; i <= 7; i++) {
             if(dayOfWeek.getIntDay() == i){
                 editor.putBoolean(SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
+                Toast.makeText(getActivity(), "day number" + String.valueOf(i), Toast.LENGTH_SHORT).show();
+
             }
         }
 
