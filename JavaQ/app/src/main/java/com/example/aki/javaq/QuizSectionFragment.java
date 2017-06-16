@@ -35,12 +35,15 @@ public class QuizSectionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // reset all shared preferences
+//        resetSharedPref();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.quiz_section_fragment, container, false);
-        data = getContext().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+        data = getContext().getSharedPreferences(QuizFragment.SHARED_PREF_SCORE, Context.MODE_PRIVATE);
 
         mSectionArrayList = new ArrayList<>();
         mSectionList = getResources().getStringArray(R.array.section_list);
@@ -102,7 +105,7 @@ public class QuizSectionFragment extends Fragment {
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-            int score = data.getInt(mSectionList[position] + QuizFragment.KEYWORD_PREF_SCORE, 0);
+            int score = data.getInt(mSectionList[position] + QuizFragment.SHARED_PREF_SCORE_KEY, 0);
 
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
@@ -122,11 +125,20 @@ public class QuizSectionFragment extends Fragment {
                     mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
                     break;
             }
-
-
             return view;
         }
     }
+
+    public void resetSharedPref(){
+        SharedPreferences scoreData = getActivity().getSharedPreferences(QuizFragment.SHARED_PREF_SCORE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = scoreData.edit();
+        editor.clear().commit();
+
+        SharedPreferences progressData = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor2 = progressData.edit();
+        editor2.clear().commit();
+    }
+
 }
 
 

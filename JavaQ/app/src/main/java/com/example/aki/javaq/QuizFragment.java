@@ -44,7 +44,8 @@ public class QuizFragment extends Fragment {
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
     public static final String EXTRA_CURRENT_SECTION_ID = "com.example.aki.javaq.current_section_id";
-    public static final String KEYWORD_PREF_SCORE = "JavaQ_keyword_score";
+    public static final String SHARED_PREF_SCORE_KEY = "JavaQ_keyword_score";
+    public static final String SHARED_PREF_SCORE = "JavaQ_keyword_score";
     private LinearLayout mLinearLayout;
     private ImageView mPopUpImageView;
     private TextView mPopUpTextView;
@@ -150,9 +151,9 @@ public class QuizFragment extends Fragment {
                     intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
                     startActivity(intent);
                     //SharedPreferences
-                    SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+                    SharedPreferences data = getActivity().getSharedPreferences(SHARED_PREF_SCORE, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = data.edit();
-                    editor.putInt(mSectionList[mCurrentSectionID] + KEYWORD_PREF_SCORE, score);
+                    editor.putInt(mSectionList[mCurrentSectionID] + SHARED_PREF_SCORE_KEY, score);
                     editor.apply();
 
                 } else {

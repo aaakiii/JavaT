@@ -45,7 +45,7 @@ public class QuizResultFragment extends Fragment {
         mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
         countStreak(checkOnceParDay());
-        weeklyStreak();
+        weeklyProgress();
     }
 
     @Override
@@ -104,16 +104,16 @@ public class QuizResultFragment extends Fragment {
             mCountAccess++;
             editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
             editor.commit();
-            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if (!isUsedYesterday) {
                 editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
                 editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
-                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -148,7 +148,7 @@ public class QuizResultFragment extends Fragment {
         }
     }
 
-    private void weeklyStreak() {
+    private void weeklyProgress() {
         dayOfWeek = new DayOfWeek();
 
         for (int i = 1; i <= 7; i++) {
