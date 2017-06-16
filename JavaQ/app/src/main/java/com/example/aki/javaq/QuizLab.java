@@ -11,8 +11,6 @@ import java.util.List;
 public class QuizLab {
 
     private List<Quiz> mQuizzes;
-
-
     public QuizLab(int sectionID) {
         mQuizzes = new ArrayList<>();
         createArray(sectionID);
