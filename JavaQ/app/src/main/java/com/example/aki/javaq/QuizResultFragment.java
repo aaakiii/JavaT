@@ -17,17 +17,14 @@ import android.widget.Toast;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
 
 public class QuizResultFragment extends Fragment {
     public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
-    public static final String SHEARED_PREF_ACTIVE = "shared_pref_active";
-    public static final String SHEARED_PREF_ACTIVE_DAYS = "shared_pref_active_days";
-    public static final String SHEARED_PREF_ACTIVE_TIME_STAMP = "shared_pref_active_time_stamp";
-    public static final String SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS = "shared_pref_active_last_clicked_millis";
+    public static final String SHEARED_PREF_PROGRESS = "shared_pref_progress";
+    public static final String SHEARED_PREF_PROGRESS_ACTIVE_DAYS = "shared_pref_progress_active_days";
+    public static final String SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP = "shared_pref_progress_active_time_stamp";
+    public static final String SHEARED_PREF_PROGRESS_WEEKLY = "shared_pref_progress_weekly";
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -41,14 +38,13 @@ public class QuizResultFragment extends Fragment {
     private boolean isUsedYesterday = true;
 
     private int mCountAccess;
-    private Set<String> set;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_ACTIVE, Context.MODE_PRIVATE);
+        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
         countStreak(checkOnceParDay());
         weeklyStreak();
@@ -102,31 +98,31 @@ public class QuizResultFragment extends Fragment {
 
     private void countStreak(boolean checkOnceParDay) {
 
-        editor.putLong(SHEARED_PREF_ACTIVE_TIME_STAMP, System.currentTimeMillis());
+        editor.putLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, System.currentTimeMillis());
         editor.commit();
 
         if (checkOnceParDay) {
-            mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_ACTIVE_DAYS, 0);
+            mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 0);
             mCountAccess++;
-            editor.putInt(SHEARED_PREF_ACTIVE_DAYS, mCountAccess);
+            editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
             editor.commit();
-//            Toast.makeText(getActivity(), String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
         } else {
             // reset to 1
             if (!isUsedYesterday) {
                 editor.clear().commit();
-                editor.putInt(SHEARED_PREF_ACTIVE_DAYS, 1);
+                editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
-//                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
             } else {
-//                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private boolean checkOnceParDay() {
-        long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_ACTIVE_TIME_STAMP, 0);
-        editor.putLong(SHEARED_PREF_ACTIVE_LAST_CLICKED_MILLIS, lastCheckedMillis);
+        long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
+        editor.putLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, lastCheckedMillis);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
@@ -156,21 +152,15 @@ public class QuizResultFragment extends Fragment {
 
     private void weeklyStreak() {
         dayOfWeek = new DayOfWeek();
-//        set = new HashSet<>();
 
-        for (int i = 1; i < 7; i++) {
+        for (int i = 1; i <= 7; i++) {
             if(dayOfWeek.getIntDay() == i){
-                editor.putBoolean(String.valueOf(i), true);
+                editor.putBoolean(SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
             }
         }
 
-
         editor.commit();
-//        Toast.makeText(getActivity(), "size" + String.valueOf(set.size()), Toast.LENGTH_SHORT).show();
-        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
-
-        Log.d("log", "dayOfWeek.getDay() : " + dayOfWeek.getDay() + dayOfWeek.getIntDay());
-
+//        Toast.makeText(getActivity(), "day number" + String.valueOf(dayOfWeek.getIntDay()), Toast.LENGTH_SHORT).show();
     }
 }
 
