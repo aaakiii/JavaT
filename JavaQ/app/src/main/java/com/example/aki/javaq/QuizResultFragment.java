@@ -22,6 +22,7 @@ public class QuizResultFragment extends Fragment {
     public static final String SHEARED_PREF_PROGRESS_ACTIVE_DAYS = "shared_pref_progress_active_days";
     public static final String SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP = "shared_pref_progress_active_time_stamp";
     public static final String SHEARED_PREF_PROGRESS_WEEKLY = "shared_pref_progress_weekly";
+    public static final String SHEARED_PREF_PROGRESS_PREVIOUS_DAYS = "shared_pref_progress_previous_days";
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -33,7 +34,7 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
-
+    private int mPreviousCountAccess;
     private int mCountAccess;
 
 

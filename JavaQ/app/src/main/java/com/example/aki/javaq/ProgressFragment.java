@@ -32,6 +32,8 @@ public class ProgressFragment extends Fragment {
 
     private SharedPreferences mAcStreakShearedPref;
     private SharedPreferences.Editor editor;
+    private int mLongestDays = 0;
+    private int mPreLongestDays;
 
 
     @Override
@@ -44,10 +46,11 @@ public class ProgressFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.progress_fragment, container, false);
 
-
+        mLongestStreakTextView = (TextView) view.findViewById(R.id.longest_streak);
         mActiveStreakTextView = (TextView) view.findViewById(R.id.active_streak);
         mAcStreakShearedPref = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
+
         long lastCheckedMillis = mAcStreakShearedPref.getLong(QuizResultFragment.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
         // set active streak
         if (isUsedYesterday(lastCheckedMillis) && lastCheckedMillis > 0) {
@@ -55,6 +58,16 @@ public class ProgressFragment extends Fragment {
         }
         int activeDays = mAcStreakShearedPref.getInt(QuizResultFragment.SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 0);
         mActiveStreakTextView.setText(String.valueOf(activeDays));
+        //set longest streak
+        if(mLongestDays <= activeDays){
+            mLongestDays = activeDays;
+            editor.putInt("key", mLongestDays);
+            mLongestStreakTextView.setText(String.valueOf(mLongestDays));
+        }
+        else{
+            mLongestDays = mAcStreakShearedPref.getInt("key", 0);
+            mLongestStreakTextView.setText(String.valueOf(mLongestDays));
+        }
 
 
         mMonTextView = (TextView) view.findViewById(R.id.weekly_mon);
