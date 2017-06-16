@@ -58,7 +58,7 @@ public class ProgressFragment extends Fragment {
         long lastCheckedMillis = mAcStreakShearedPref.getLong(QuizResultFragment.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
         // set active streak
         if (isUsedYesterday(lastCheckedMillis) && lastCheckedMillis > 0) {
-            editor.clear().commit();
+            editor.remove(QuizResultFragment.SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
         }
         int activeDays = mAcStreakShearedPref.getInt(QuizResultFragment.SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 0);
         mActiveStreakTextView.setText(String.valueOf(activeDays));

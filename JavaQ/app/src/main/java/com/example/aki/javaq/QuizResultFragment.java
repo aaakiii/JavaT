@@ -110,7 +110,7 @@ public class QuizResultFragment extends Fragment {
         } else {
             // reset to 1
             if (!isUsedYesterday) {
-                editor.clear().commit();
+                editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
                 editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
                 Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
