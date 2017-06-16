@@ -37,7 +37,7 @@ public class QuizSectionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // reset all shared preferences
-//        resetSharedPref();
+       //resetSharedPref();
     }
 
     @Override
