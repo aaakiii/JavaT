@@ -36,6 +36,8 @@ public class ProgressFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private int mLongestDays =0;
     private int mFirstLongestDays;
+    private String KEY = "key";
+    private String SAVE = "save";
 
 
     @Override
@@ -64,15 +66,15 @@ public class ProgressFragment extends Fragment {
 
         //set longest streak
 
-        SharedPreferences data = getActivity().getSharedPreferences("DataSave", Context.MODE_PRIVATE);
+        SharedPreferences data = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS_LONGEST_DAYS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = data.edit();
         mFirstLongestDays = 0;
-        mFirstLongestDays = data.getInt("save", 0);
+        mFirstLongestDays = data.getInt(SAVE, 0);
         if(mFirstLongestDays < activeDays){
             mFirstLongestDays = activeDays +1;
             mLongestDays = activeDays;
-            editor.putInt("key", mLongestDays);
-            editor.putInt("save", mFirstLongestDays);
+            editor.putInt(KEY, mLongestDays);
+            editor.putInt(SAVE, mFirstLongestDays);
             editor.apply();
             mLongestStreakTextView.setText(String.valueOf(mLongestDays));
 //            Toast.makeText(getActivity(), "activeDays", Toast.LENGTH_SHORT).show();
@@ -81,26 +83,22 @@ public class ProgressFragment extends Fragment {
         }
         else{
 
-            mLongestDays = data.getInt("key", 0);
+            mLongestDays = data.getInt(KEY, 0);
             if(mLongestDays >= activeDays){
-                editor.putInt("kry", mLongestDays);
+                editor.putInt(KEY, mLongestDays);
                 editor.apply();
                 mLongestStreakTextView.setText(String.valueOf(mLongestDays));
 //                Toast.makeText(getActivity(), "longestDays>", Toast.LENGTH_SHORT).show();
             }
             else if(mLongestDays <= activeDays){
                 mLongestDays = activeDays;
-                editor.putInt("key", mLongestDays);
+                editor.putInt(KEY, mLongestDays);
                 editor.apply();
                 mLongestStreakTextView.setText(String.valueOf(mLongestDays));
 //                Toast.makeText(getActivity(),"longest<", Toast.LENGTH_SHORT).show();
 
             }
         }
-
-
-
-
 
         mMonTextView = (TextView) view.findViewById(R.id.weekly_mon);
         mTueTextView = (TextView) view.findViewById(R.id.weekly_tue);
