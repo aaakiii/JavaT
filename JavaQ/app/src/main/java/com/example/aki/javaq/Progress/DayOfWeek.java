@@ -1,4 +1,4 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Progress;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

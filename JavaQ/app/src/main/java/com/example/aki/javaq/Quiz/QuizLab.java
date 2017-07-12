@@ -1,4 +1,6 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Quiz;
+
+import com.example.aki.javaq.Quiz.Quiz;
 
 import java.util.ArrayList;
 import java.util.List;

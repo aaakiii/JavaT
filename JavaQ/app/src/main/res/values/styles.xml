@@ -21,6 +21,7 @@
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily" type="font_text_view">sans-serif-bold</item>
     </style>
+
     <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily" type="font_button">sans-serif-bold</item>
     </style>

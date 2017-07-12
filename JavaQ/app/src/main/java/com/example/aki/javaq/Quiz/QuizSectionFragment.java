@@ -1,4 +1,4 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Quiz;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.aki.javaq.R;
 
 import java.util.ArrayList;
 import java.util.List;

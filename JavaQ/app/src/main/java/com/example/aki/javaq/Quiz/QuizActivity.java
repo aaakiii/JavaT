@@ -1,4 +1,4 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Quiz;
 
 import android.support.v4.app.Fragment;
 

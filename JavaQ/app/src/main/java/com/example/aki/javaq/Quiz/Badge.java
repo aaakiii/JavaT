@@ -1,4 +1,6 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Quiz;
+
+import com.example.aki.javaq.Quiz.QuizLab;
 
 /**
  * Created by MinaFujisawa on 2017/06/11.

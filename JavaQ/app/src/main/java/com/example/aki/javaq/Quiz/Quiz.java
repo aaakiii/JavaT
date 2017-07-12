@@ -1,4 +1,4 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Quiz;
 
 
 import java.util.UUID;
