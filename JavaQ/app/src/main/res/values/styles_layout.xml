@@ -14,4 +14,9 @@
         <item name="android:textColor">@color/sub_text</item>
     </style>
 
+    <style name="mSubTitle">
+        <item name="android:textSize">@dimen/text_sub</item>
+        <item name="android:textColor">@color/subTitle_text</item>
+    </style>
+
 </resources>

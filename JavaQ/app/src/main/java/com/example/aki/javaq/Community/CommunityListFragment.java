@@ -14,10 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import com.example.aki.javaq.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -28,6 +34,8 @@ public class CommunityListFragment extends Fragment {
     private RecyclerView mComRecyclerView;
     private ComAdapter mAdapter;
     private int mLastAdapterClickedPosition = -1;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private int mCommentsNumInt = 18; //ダミー
 
@@ -87,17 +95,19 @@ public class CommunityListFragment extends Fragment {
 
 
     private class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mUserName;
+        private TextView mPostUserName;
         private TextView mPostText;
         private TextView mPostDate;
         private TextView mCommentsNum;
+        private CircleImageView mUserIcon;
 //        private Post mPost;
 
         public PostHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.com_list_item, parent, false));
 
             itemView.setOnClickListener(this);
-            mUserName = (TextView) itemView.findViewById(R.id.post_user_name);
+            mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
+            mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
             mPostDate = (TextView) itemView.findViewById(R.id.post_date);
             mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
@@ -106,21 +116,24 @@ public class CommunityListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-//            mLastAdapterClickedPosition = getAdapterPosition();
-//            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-//            startActivity(intent);
+            mLastAdapterClickedPosition = getAdapterPosition();
+            //ダミー
+            UUID uuid = UUID.randomUUID();
+            //第二引数はmPost.getId()になる
+            Intent intent = CommunityDetailActivity.newIntent(getActivity(), uuid);
+            startActivity(intent);
         }
 
         public void bind() {
 //            mPost = post;
 
             //ダミー
-            mUserName.setText("getUserName");
+            mPostUserName.setText("getUserName");
             mPostText.setText("getPostText");
             mPostDate.setText("5 h");
 
-            String subtitle = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-            mCommentsNum.setText(subtitle);
+            String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            mCommentsNum.setText(comments);
         }
 
     }

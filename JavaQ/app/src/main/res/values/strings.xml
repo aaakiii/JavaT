@@ -28,6 +28,9 @@
         <item quantity="other">%1$s comments</item>
     </plurals>
 
+    <string name="comment">Comment</string>
+    <string name="add_comment_ph">Write a comment</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_comunity_main">ComunityMainActivity</string>
