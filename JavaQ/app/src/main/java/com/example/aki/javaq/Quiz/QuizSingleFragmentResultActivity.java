@@ -11,6 +11,7 @@ import com.example.aki.javaq.R;
 
 /**
  * Created by AKI on 2017-06-11.
+ * Created by MinaFujisawa on 2017/07/12.
  */
 
 public abstract class QuizSingleFragmentResultActivity extends AppCompatActivity {

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.aki.javaq.Community.CommunityListFragment;
 import com.example.aki.javaq.R;
 
 public class ProgressActivity extends AppCompatActivity {
@@ -22,6 +23,5 @@ public class ProgressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.quiz_section_activity);
     }
-
 
 }

@@ -112,7 +112,7 @@ public class CommunityListFragment extends Fragment {
             //ダミー
             mUserName.setText("getUserName");
             mPostText.setText("getPostText");
-            mPostDate.setText("5h");
+            mPostDate.setText("5 h");
         }
 
     }
