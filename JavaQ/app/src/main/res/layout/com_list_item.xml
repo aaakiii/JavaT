@@ -13,8 +13,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/post_user_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/user_icon"
+        android:layout_height="@dimen/user_icon"
         android:src="@drawable/image_user_picture_dummy" />
 
     <TextView

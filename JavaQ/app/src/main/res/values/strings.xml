@@ -27,6 +27,9 @@
         <item quantity="one">%1$s comment</item>
         <item quantity="other">%1$s comments</item>
     </plurals>
+    
+    <string name="comment">Comment</string>
+    <string name="add_comment_ph">Write a comment</string>
 
     <string name="comment">Comment</string>
     <string name="add_comment_ph">Write a comment</string>

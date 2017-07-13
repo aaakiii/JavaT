@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import com.example.aki.javaq.Community.CommunityListFragment;
 import com.example.aki.javaq.Progress.ProgressFragment;
 import com.example.aki.javaq.Quiz.QuizSectionFragment;
-import com.example.aki.javaq.Quiz.QuizSectionSingleFragmentActivity;
 
 /**
  * Created by MinaFujisawa on 2017/07/12.
