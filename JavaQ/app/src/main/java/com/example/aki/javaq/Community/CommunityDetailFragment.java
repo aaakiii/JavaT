@@ -11,9 +11,9 @@ import com.example.aki.javaq.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CommunityDetailActivityFragment extends Fragment {
+public class CommunityDetailFragment extends Fragment {
 
-    public CommunityDetailActivityFragment() {
+    public CommunityDetailFragment() {
     }
 
     @Override

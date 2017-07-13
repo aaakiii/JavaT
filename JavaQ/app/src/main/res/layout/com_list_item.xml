@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/post_user_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@color/light_gray"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/post_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Mina"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toRightOf="@+id/post_user_icon"
+        app:layout_constraintTop_toTopOf="@+id/post_user_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/post_user_icon"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="5 d"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/post_user_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/post_user_icon"/>
+
+
+    <TextView
+        android:id="@+id/post_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="Hi, I have a question about something. Hi, I have a question about somethingHi, I have a question about somethingHi, I have a question about somethingHi, I have a question about something"
+        app:layout_constraintTop_toBottomOf="@+id/post_user_icon"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/post_comment_num"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="18 comments"
+        app:layout_constraintTop_toBottomOf="@+id/post_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+
+
+</android.support.constraint.ConstraintLayout>
