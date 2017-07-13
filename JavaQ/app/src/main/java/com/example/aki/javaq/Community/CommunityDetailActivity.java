@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.example.aki.javaq.R;
 
+
 import java.util.UUID;
 
 public class CommunityDetailActivity extends AppCompatActivity {

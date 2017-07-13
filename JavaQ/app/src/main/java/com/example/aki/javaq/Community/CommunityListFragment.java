@@ -1,7 +1,9 @@
 package com.example.aki.javaq.Community;
 
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aki.javaq.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -25,6 +34,8 @@ public class CommunityListFragment extends Fragment {
     private RecyclerView mComRecyclerView;
     private ComAdapter mAdapter;
     private int mLastAdapterClickedPosition = -1;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     private int mCommentsNumInt = 18; //ダミー
 
@@ -87,17 +98,19 @@ public class CommunityListFragment extends Fragment {
         private TextView mPostUserName;
         private TextView mPostText;
         private TextView mPostDate;
-        private TextView mPostCommentsNum;
+        private TextView mCommentsNum;
+        private CircleImageView mUserIcon;
 //        private Post mPost;
 
         public PostHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.com_list_item, parent, false));
 
             itemView.setOnClickListener(this);
+            mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
             mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
             mPostDate = (TextView) itemView.findViewById(R.id.post_date);
-            mPostCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
+            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
 
         }
 
@@ -120,7 +133,7 @@ public class CommunityListFragment extends Fragment {
             mPostDate.setText("5 h");
 
             String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-            mPostCommentsNum.setText(comments);
+            mCommentsNum.setText(comments);
         }
 
     }
