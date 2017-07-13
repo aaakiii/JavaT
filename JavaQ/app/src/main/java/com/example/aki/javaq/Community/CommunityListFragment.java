@@ -18,6 +18,7 @@ import com.example.aki.javaq.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -106,9 +107,12 @@ public class CommunityListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-//            mLastAdapterClickedPosition = getAdapterPosition();
-//            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-//            startActivity(intent);
+            mLastAdapterClickedPosition = getAdapterPosition();
+            //ダミー
+            UUID uuid = UUID.randomUUID();
+            //第二引数はmPost.getId()になる
+            Intent intent = CommunityDetailActivity.newIntent(getActivity(), uuid);
+            startActivity(intent);
         }
 
         public void bind() {
