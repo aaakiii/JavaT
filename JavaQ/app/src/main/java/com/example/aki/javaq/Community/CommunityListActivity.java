@@ -1,6 +1,7 @@
 package com.example.aki.javaq.Community;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,8 @@ public class CommunityListActivity extends AppCompatActivity {
             fragment = new CommunityListFragment();
             fm.beginTransaction().add(R.id.fragment_container, fragment).commit();
         }
+
+
 
     }
 

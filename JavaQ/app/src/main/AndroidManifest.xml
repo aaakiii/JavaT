@@ -21,16 +21,13 @@
         <activity android:name=".Progress.ProgressActivity" />
         <activity
             android:name=".Community.CommunityDetailActivity"
-            android:label="@string/title_activity_community_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_community_detail" />
         <activity
             android:name=".Community.CommunityPostActivity"
-            android:label="@string/title_activity_community_post"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_community_post" />
         <activity
             android:name=".Community.GoogleSignInActivity"
-            android:label="@string/title_activity_google_sign_in"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_google_sign_in" />
     </application>
 
 </manifest>
