@@ -87,6 +87,7 @@ public class CommunityListFragment extends Fragment {
     private class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mUserName;
         private TextView mPostText;
+        private TextView mPostDate;
 //        private Post mPost;
 
         public PostHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -95,6 +96,7 @@ public class CommunityListFragment extends Fragment {
             itemView.setOnClickListener(this);
             mUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
+            mPostDate = (TextView) itemView.findViewById(R.id.post_date);
         }
 
         @Override
@@ -106,8 +108,11 @@ public class CommunityListFragment extends Fragment {
 
         public void bind() {
 //            mPost = post;
+
+            //ダミー
             mUserName.setText("getUserName");
             mPostText.setText("getPostText");
+            mPostDate.setText("5h");
         }
 
     }
