@@ -18,6 +18,7 @@ import com.example.aki.javaq.Community.CommunityListFragment;
 import com.example.aki.javaq.Progress.ProgressFragment;
 import com.example.aki.javaq.Quiz.QuizSectionFragment;
 
+
 /**
  * Created by MinaFujisawa on 2017/07/12.
  */
