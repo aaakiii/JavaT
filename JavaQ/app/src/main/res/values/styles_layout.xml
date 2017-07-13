@@ -19,4 +19,10 @@
         <item name="android:textColor">@color/subTitle_text</item>
     </style>
 
+    <style name="mBorder">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
 </resources>
