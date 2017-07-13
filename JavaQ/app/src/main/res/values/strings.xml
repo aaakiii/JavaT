@@ -4,7 +4,6 @@
     <string name="quiz">Quiz</string>
     <string name="community">Community</string>
     <string name="progress">Progress</string>
-    <string name="me">Me</string>
     <string name="setting">Setting</string>
     <string name="notification">Notification</string>
     <string name="other">Other</string>
@@ -23,6 +22,11 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="sign_in">Sign In</string>
+
+    <plurals name="comments_plural">
+        <item quantity="one">%1$s comment</item>
+        <item quantity="other">%1$s comments</item>
+    </plurals>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

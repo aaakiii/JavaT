@@ -29,6 +29,8 @@ public class CommunityListFragment extends Fragment {
     private ComAdapter mAdapter;
     private int mLastAdapterClickedPosition = -1;
 
+    private int mCommentsNumInt = 18; //ダミー
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class CommunityListFragment extends Fragment {
         private TextView mUserName;
         private TextView mPostText;
         private TextView mPostDate;
+        private TextView mCommentsNum;
 //        private Post mPost;
 
         public PostHolder(LayoutInflater inflater, ViewGroup parent) {
@@ -97,6 +100,8 @@ public class CommunityListFragment extends Fragment {
             mUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
             mPostDate = (TextView) itemView.findViewById(R.id.post_date);
+            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
+
         }
 
         @Override
@@ -113,6 +118,9 @@ public class CommunityListFragment extends Fragment {
             mUserName.setText("getUserName");
             mPostText.setText("getPostText");
             mPostDate.setText("5 h");
+
+            String subtitle = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            mCommentsNum.setText(subtitle);
         }
 
     }

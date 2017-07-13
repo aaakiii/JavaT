@@ -19,11 +19,16 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/new_post_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/icon_post"
-        app:layout_anchor="@id/com_list_recycler_view"
-        app:layout_anchorGravity="bottom|right|end"/>
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center_vertical|left"
+        app:backgroundTint="@color/main_color"
+        android:tint="@color/white"
+        android:scaleType="center"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_anchor="@+id/com_list_recycler_view"
+        app:layout_anchorGravity="bottom|right"
+        app:useCompatPadding="true" />
 
 
 </android.support.design.widget.CoordinatorLayout>
