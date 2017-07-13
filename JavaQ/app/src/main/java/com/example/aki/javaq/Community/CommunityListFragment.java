@@ -1,9 +1,7 @@
 package com.example.aki.javaq.Community;
 
 import android.content.Intent;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,13 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aki.javaq.R;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -88,20 +84,20 @@ public class CommunityListFragment extends Fragment {
 
 
     private class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView mUserName;
+        private TextView mPostUserName;
         private TextView mPostText;
         private TextView mPostDate;
-        private TextView mCommentsNum;
+        private TextView mPostCommentsNum;
 //        private Post mPost;
 
         public PostHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.com_list_item, parent, false));
 
             itemView.setOnClickListener(this);
-            mUserName = (TextView) itemView.findViewById(R.id.post_user_name);
+            mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
             mPostDate = (TextView) itemView.findViewById(R.id.post_date);
-            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
+            mPostCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
 
         }
 
@@ -119,12 +115,12 @@ public class CommunityListFragment extends Fragment {
 //            mPost = post;
 
             //ダミー
-            mUserName.setText("getUserName");
+            mPostUserName.setText("getUserName");
             mPostText.setText("getPostText");
             mPostDate.setText("5 h");
 
-            String subtitle = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-            mCommentsNum.setText(subtitle);
+            String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            mPostCommentsNum.setText(comments);
         }
 
     }

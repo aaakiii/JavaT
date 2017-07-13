@@ -35,7 +35,7 @@
         android:padding="16dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/user_icon"
+            android:id="@+id/my_user_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/image_user_picture_dummy"
@@ -43,12 +43,14 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <EditText
+            android:id="@+id/add_new_comment_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/add_comment_ph"
+            android:hint="@string/add_comment_ph"
+            android:textColorHint="@color/sub_text"
             android:layout_marginLeft="16dp"
             android:background="@android:color/transparent"
-            app:layout_constraintLeft_toRightOf="@+id/user_icon"
+            app:layout_constraintLeft_toRightOf="@+id/my_user_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -56,7 +58,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/com_list_recycler_view"
+        android:id="@+id/com_comments_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
