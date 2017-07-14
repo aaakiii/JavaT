@@ -33,7 +33,7 @@ public class User {
     }
 
     public String getmUserIcon() {
-        return "IMG_" + getId().toString() + ".jpg";
+        return "IMG_" + getmUserId().toString() + ".jpg";
     }
 
     public void setmUserIcon(String mUserIcon) {
