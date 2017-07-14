@@ -1,22 +1,26 @@
 package com.example.aki.javaq.Community;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aki.javaq.R;
+import com.example.aki.javaq.TimeUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,16 +29,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A placeholder fragment containing a simple view.
  */
 public class CommunityDetailFragment extends Fragment {
-    private TextView mUserName;
-    private CircleImageView mUserIcon;
-    private TextView mPostText;
-    private TextView mPostDate;
-    private TextView mPostCommentsNum;
-    private EditText mAddCommentsText;
-    private CircleImageView mMyIcon;
+    private TextView mUserNameTextView;
+    private CircleImageView mUserIconImageView;
+    private TextView mPostTextView;
+    private TextView mPostDateTextView;
+    private TextView mPostCommentsNumTextView;
+    private EditText mAddCommentsEditTextView;
+    private CircleImageView mMyIconImageView;
     private RecyclerView mCommentsRecyclerView;
     private CommentsAdapter mAdapter;
     private int mCommentsNumInt = 18; //ダミー
+    private Date mCommentDate;
 
     public static final String ARG_POST_ID = "arg_post_id";
 
@@ -56,7 +61,6 @@ public class CommunityDetailFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.com_detail_fragment, container, false);
@@ -64,19 +68,19 @@ public class CommunityDetailFragment extends Fragment {
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //For Post
-        mUserName = (TextView) view.findViewById(R.id.post_user_name);
-        mUserIcon = (CircleImageView) view.findViewById(R.id.post_user_icon);
-        mPostText = (TextView) view.findViewById(R.id.post_text);
-        mPostDate = (TextView) view.findViewById(R.id.post_date);
-        mPostCommentsNum = (TextView) view.findViewById(R.id.post_comment_num);
-        mUserName.setText("Post Name");
-        mPostText.setText("Post Test");
-        mPostDate.setText("5h");
+        mUserNameTextView = (TextView) view.findViewById(R.id.post_user_name);
+        mUserIconImageView = (CircleImageView) view.findViewById(R.id.post_user_icon);
+        mPostTextView = (TextView) view.findViewById(R.id.post_text);
+        mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
+        mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
+        mUserNameTextView.setText("Post Name");
+        mPostTextView.setText("Post Test");
+        mPostDateTextView.setText("5h");
 
         //For Add a comment
-        mMyIcon = (CircleImageView) view.findViewById(R.id.my_user_icon);
-        mAddCommentsText = (EditText) view.findViewById(R.id.add_new_comment_text);
-        mAddCommentsText.addTextChangedListener(new TextWatcher() {
+        mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
+        mAddCommentsEditTextView = (EditText) view.findViewById(R.id.add_new_comment_text);
+        mAddCommentsEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //
@@ -95,7 +99,7 @@ public class CommunityDetailFragment extends Fragment {
         });
 
         String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-        mPostCommentsNum.setText(comments);
+        mPostCommentsNumTextView.setText(comments);
 
         updateUI();
         return view;
@@ -126,44 +130,47 @@ public class CommunityDetailFragment extends Fragment {
     }
 
 
-
-
     private class CommentsHolder extends RecyclerView.ViewHolder {
-        private TextView mCommentUserName;
-        private CircleImageView mCommentUserIcon;
-        private TextView mCommentText;
-        private TextView mCommentDate;
-        private TextView mCommentGood;
-        private TextView mCommentBad;
+        private TextView mCommentUserNameTextView;
+        private CircleImageView mCommentUserIconImageView;
+        private TextView mCommentTextView;
+        private TextView mCommentDateTextView;
+        private TextView mCommentGoodTextView;
+        private TextView mCommentBadTextView;
 
 //        private Post mPost;
 
         public CommentsHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.com_detail_comment_item, parent, false));
 
-            mCommentUserName = (TextView) itemView.findViewById(R.id.comment_user_name);
-            mCommentUserIcon = (CircleImageView) itemView.findViewById(R.id.comment_user_icon);
-            mCommentText = (TextView) itemView.findViewById(R.id.comment_text);
-            mCommentDate = (TextView) itemView.findViewById(R.id.comment_date);
-            mCommentGood = (TextView) itemView.findViewById(R.id.comment_good_num);
-            mCommentBad = (TextView) itemView.findViewById(R.id.comment_bad_num);
+            mCommentUserNameTextView = (TextView) itemView.findViewById(R.id.comment_user_name);
+            mCommentUserIconImageView = (CircleImageView) itemView.findViewById(R.id.comment_user_icon);
+            mCommentTextView = (TextView) itemView.findViewById(R.id.comment_text);
+            mCommentDateTextView = (TextView) itemView.findViewById(R.id.comment_date);
+            mCommentGoodTextView = (TextView) itemView.findViewById(R.id.comment_good_num);
+            mCommentBadTextView = (TextView) itemView.findViewById(R.id.comment_bad_num);
         }
 
         public void bind() {
 //            mPost = post;
 
             //全部ダミー
-            mCommentUserName.setText("getCommentUserName");
-            mCommentText.setText("getCommentText");
-            mCommentDate.setText("4m");
-            mCommentGood.setText("12");
-            mCommentBad.setText("2");
+            mCommentUserNameTextView.setText("getCommentUserName");
+            mCommentTextView.setText("getCommentText");
+
+            // TODO: ちゃんとセット
+            mCommentDate = new Date(2017 - 1900, 6, 10, 22, 49, 00);
+            mCommentDateTextView.setText(TimeUtils.getTimeAgo(mCommentDate.getTime()));
+
+            mCommentGoodTextView.setText("12");
+            mCommentBadTextView.setText("2");
         }
 
     }
 
     private class CommentsAdapter extends RecyclerView.Adapter<CommentsHolder> {
         private ArrayList<String> mComments;
+
         public CommentsAdapter(ArrayList<String> comments) {
             mComments = comments;
         }
@@ -192,4 +199,6 @@ public class CommunityDetailFragment extends Fragment {
 //            mCrimes = crimes;
 //        }
     }
+
+
 }
