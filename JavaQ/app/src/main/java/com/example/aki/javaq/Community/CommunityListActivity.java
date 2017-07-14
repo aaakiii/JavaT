@@ -1,5 +1,7 @@
 package com.example.aki.javaq.Community;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.example.aki.javaq.DrawerMenuActivity;
 import com.example.aki.javaq.R;
 

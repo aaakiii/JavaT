@@ -6,15 +6,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aki.javaq.R;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -36,6 +40,9 @@ public class CommunityListFragment extends Fragment {
     private int mLastAdapterClickedPosition = -1;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private FloatingActionButton mNewPostButton;
+    private GoogleApiClient mGoogleApiClient;
+
 
     private int mCommentsNumInt = 18; //ダミー
 
@@ -54,14 +61,36 @@ public class CommunityListFragment extends Fragment {
         view = inflater.inflate(R.layout.com_list_fragment, container, false);
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mComRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
         updateUI();
 
         // FloatingActionButton
-        FloatingActionButton mNewPostButton = (FloatingActionButton) view.findViewById(R.id.new_post_button);
+        mNewPostButton = (FloatingActionButton) view.findViewById(R.id.new_post_button);
         mNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // New Post画面へ遷移
+                // Initialize Firebase Auth
+                mFirebaseAuth = FirebaseAuth.getInstance();
+                mFirebaseUser = mFirebaseAuth.getCurrentUser();
+//                if (mFirebaseUser == null) {
+                    // Not signed in, launch the Sign In activity
+                    startActivity(new Intent(getActivity(), GoogleSignInActivity.class));
+
+//                }else{
+//                    Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
+//                    startActivity(intent);
+//
+//                }
+
+                //要確認extends問題
+
+//                mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+//                        .enableAutoManage(getActivity() /* FragmentActivity */, /* OnConnectionFailedListener */)
+//                        .addApi(Auth.GOOGLE_SIGN_IN_API)
+//                        .build();
+
             }
         });
         return view;
