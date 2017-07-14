@@ -34,6 +34,13 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
+    <!-- ToolBar -->
+    <style name="mToolBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+    </style>
+
 
     <style name="CustomActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
         <item name="android:background">@color/main_color</item>

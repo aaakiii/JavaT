@@ -3,5 +3,6 @@
     <dimen name="text_normal">18sp</dimen>
     <dimen name="text_sub">16sp</dimen>
     <dimen name="user_icon">40dp</dimen>
+    <dimen name="user_icon_large">56dp</dimen>
     <dimen name="user_icon_small">32dp</dimen>
 </resources>
