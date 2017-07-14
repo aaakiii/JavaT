@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
     android:orientation="vertical"
-    android:layout_marginTop="16dp"
     android:background="@color/white">
 
+    <View
+        style="@style/mBorder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/post_user_icon"
         android:layout_width="@dimen/user_icon"
         android:layout_height="@dimen/user_icon"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:src="@drawable/image_user_picture_dummy" />
 
     <TextView
@@ -34,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="5 d"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/post_user_icon"
         app:layout_constraintBottom_toBottomOf="@+id/post_user_icon"/>
@@ -47,8 +54,8 @@
         style="@style/mMainText"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/post_user_icon"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintRight_toRightOf="@+id/post_date"
+        app:layout_constraintLeft_toLeftOf="@+id/post_user_icon" />
 
     <TextView
         android:id="@+id/post_comment_num"
@@ -59,8 +66,14 @@
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/post_text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="@+id/post_user_icon"/>
 
+    <View
+        style="@style/mBorder"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/post_comment_num"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
