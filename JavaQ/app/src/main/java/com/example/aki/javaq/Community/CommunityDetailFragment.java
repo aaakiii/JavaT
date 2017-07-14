@@ -1,25 +1,26 @@
 package com.example.aki.javaq.Community;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aki.javaq.R;
 import com.example.aki.javaq.TimeUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -40,6 +41,10 @@ public class CommunityDetailFragment extends Fragment {
     private CommentsAdapter mAdapter;
     private int mCommentsNumInt = 18; //ダミー
     private Date mCommentDate;
+    private int mGoodNum;
+    private int mBadNum;
+    private boolean mGoodTapped;
+    private boolean mBadTapped;
 
     public static final String ARG_POST_ID = "arg_post_id";
 
@@ -58,6 +63,7 @@ public class CommunityDetailFragment extends Fragment {
         if (savedInstanceState != null) {
 //            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
+
     }
 
 
@@ -80,21 +86,10 @@ public class CommunityDetailFragment extends Fragment {
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
         mAddCommentsEditTextView = (EditText) view.findViewById(R.id.add_new_comment_text);
-        mAddCommentsEditTextView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //入力したテキストをセット
-//                mComment.setCommentText(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //
+        mAddCommentsEditTextView.setImeActionLabel("Custom text", KeyEvent.KEYCODE_ENTER);
+        mAddCommentsEditTextView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //TODO: コメント投稿画面へ遷移
             }
         });
 
@@ -116,16 +111,8 @@ public class CommunityDetailFragment extends Fragment {
 //        CrimeLab crimeLab = CrimeLab.get(getActivity());
 
 //        List<Crime> crimes = crimeLab.getCrimes();
-        if (mAdapter == null) {
-            mAdapter = new CommentsAdapter(comments);
-            mCommentsRecyclerView.setAdapter(mAdapter);
-        } else {
-//            if (mLastAdapterClickedPosition >= 0) {
-//                mAdapter.notifyItemChanged(mLastAdapterClickedPosition);
-//                mLastAdapterClickedPosition = -1;
-//            }
-//            mAdapter.setCrimes(crimes);
-        }
+        mAdapter = new CommentsAdapter(comments);
+        mCommentsRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -135,8 +122,11 @@ public class CommunityDetailFragment extends Fragment {
         private CircleImageView mCommentUserIconImageView;
         private TextView mCommentTextView;
         private TextView mCommentDateTextView;
+        private ImageButton mCommentGoodButton;
+        private ImageButton mCommentBadButton;
         private TextView mCommentGoodTextView;
         private TextView mCommentBadTextView;
+
 
 //        private Post mPost;
 
@@ -149,6 +139,15 @@ public class CommunityDetailFragment extends Fragment {
             mCommentDateTextView = (TextView) itemView.findViewById(R.id.comment_date);
             mCommentGoodTextView = (TextView) itemView.findViewById(R.id.comment_good_num);
             mCommentBadTextView = (TextView) itemView.findViewById(R.id.comment_bad_num);
+            mCommentGoodButton = (ImageButton) itemView.findViewById(R.id.comment_button_good);
+            mCommentBadButton = (ImageButton) itemView.findViewById(R.id.comment_button_bad);
+
+            // TODO: データベースから取得
+            mGoodNum = 12;
+            mBadNum = 3;
+            mCommentDate = new Date(2017 - 1900, 6, 10, 22, 49, 00);
+            mGoodTapped = false;
+            mBadTapped = false;
         }
 
         public void bind() {
@@ -157,15 +156,66 @@ public class CommunityDetailFragment extends Fragment {
             //全部ダミー
             mCommentUserNameTextView.setText("getCommentUserName");
             mCommentTextView.setText("getCommentText");
-
-            // TODO: ちゃんとセット
-            mCommentDate = new Date(2017 - 1900, 6, 10, 22, 49, 00);
             mCommentDateTextView.setText(TimeUtils.getTimeAgo(mCommentDate.getTime()));
 
-            mCommentGoodTextView.setText("12");
-            mCommentBadTextView.setText("2");
+
+            // Good button
+            mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addGood();
+                }
+            });
+            mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+            mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addGood();
+                }
+            });
+
+            //Bad button
+            mCommentBadButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addBad();
+                }
+            });
+
+            mCommentBadTextView.setText(String.valueOf(mBadNum));
+            mCommentBadTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addBad();
+                }
+            });
+
         }
 
+        //TODO:mGoodNumとmGoodTappedをデータベースに保存
+        private void addGood() {
+            if(!mGoodTapped){
+                mGoodNum++;
+                mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+                mGoodTapped = true;
+            } else {
+                mGoodNum--;
+                mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                mGoodTapped = false;
+            }
+        }
+
+        private void addBad() {
+            if(!mBadTapped){
+                mBadNum++;
+                mCommentBadTextView.setText(String.valueOf(mBadNum));
+                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+                mBadTapped = true;
+            } else {
+                mBadNum--;
+                mCommentBadTextView.setText(String.valueOf(mBadNum));
+                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                mBadTapped = false;
+            }
+        }
     }
 
     private class CommentsAdapter extends RecyclerView.Adapter<CommentsHolder> {
