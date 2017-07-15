@@ -4,8 +4,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.aki.javaq.LoginDialogFragment;
 import com.example.aki.javaq.R;
 import com.example.aki.javaq.TimeUtils;
 
@@ -51,8 +54,9 @@ public class CommunityDetailFragment extends Fragment {
     private boolean mGoodTapped;
     private boolean mBadTapped;
 
-
+    private static final int REQUEST_CODE_LOGIN = 1;
     public static final String ARG_POST_ID = "arg_post_id";
+    private static final String LOGIN_DIALOG = "login_dialog";
 
 
     public static CommunityDetailFragment newInstance(UUID postID) {
@@ -112,10 +116,19 @@ public class CommunityDetailFragment extends Fragment {
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
         mAddCommentsEditTextView = (EditText) view.findViewById(R.id.add_new_comment_text);
-        mAddCommentsEditTextView.setImeActionLabel("Custom text", KeyEvent.KEYCODE_ENTER);
+        mAddCommentsEditTextView.setFocusable(false);
         mAddCommentsEditTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO: コメント投稿画面へ遷移
+                //TODO: ログイン済みかGET
+                boolean mLogined = false;
+                if (mLogined) {
+                    //TODO: コメント投稿画面へ遷移
+                } else {
+                    // display dialog
+                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                    LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityDetailFragment.this, REQUEST_CODE_LOGIN);
+                    dialog.show(manager, LOGIN_DIALOG);
+                }
             }
         });
 
@@ -216,7 +229,7 @@ public class CommunityDetailFragment extends Fragment {
 
         //TODO:mGoodNumとmGoodTappedをデータベースに保存
         private void addGood() {
-            if(!mGoodTapped){
+            if (!mGoodTapped) {
                 mGoodNum++;
                 mCommentGoodTextView.setText(String.valueOf(mGoodNum));
                 DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
@@ -230,7 +243,7 @@ public class CommunityDetailFragment extends Fragment {
         }
 
         private void addBad() {
-            if(!mBadTapped){
+            if (!mBadTapped) {
                 mBadNum++;
                 mCommentBadTextView.setText(String.valueOf(mBadNum));
                 DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
