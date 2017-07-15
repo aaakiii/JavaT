@@ -3,18 +3,22 @@ package com.example.aki.javaq.Community;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.aki.javaq.R;
@@ -30,6 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A placeholder fragment containing a simple view.
  */
 public class CommunityDetailFragment extends Fragment {
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mUserNameTextView;
     private CircleImageView mUserIconImageView;
     private TextView mPostTextView;
@@ -45,6 +50,7 @@ public class CommunityDetailFragment extends Fragment {
     private int mBadNum;
     private boolean mGoodTapped;
     private boolean mBadTapped;
+
 
     public static final String ARG_POST_ID = "arg_post_id";
 
@@ -66,12 +72,32 @@ public class CommunityDetailFragment extends Fragment {
 
     }
 
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            // 3秒待機
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 3000);
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.com_detail_fragment, container, false);
         mCommentsRecyclerView = (RecyclerView) view.findViewById(R.id.com_comments_recycler_view);
         mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        //For Refresh
+        // SwipeRefreshLayoutの設定
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
 
         //For Post
         mUserNameTextView = (TextView) view.findViewById(R.id.post_user_name);
@@ -80,7 +106,7 @@ public class CommunityDetailFragment extends Fragment {
         mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
         mUserNameTextView.setText("Post Name");
-        mPostTextView.setText("Post Test");
+        mPostTextView.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic");
         mPostDateTextView.setText("5h");
 
         //For Add a comment
