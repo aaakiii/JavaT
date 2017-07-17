@@ -51,16 +51,20 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.com_post_activity);
 
+        //Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_with_button);
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+        //TODO: drawableにclose iconいれてそれにセットする
+        ab.setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
+
 
         mCommentEditTextView = (EditText) findViewById(R.id.edit_post);
         mCommentEditTextView.setHint(R.string.add_comment_ph);
         //show keyboard
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.showSoftInput(mCommentEditTextView, InputMethodManager.SHOW_IMPLICIT);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mCommentEditTextView, InputMethodManager.SHOW_IMPLICIT);
 //        if (!(imm == null))
 //            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
 
@@ -91,14 +95,6 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_post, menu);
         return true;
     }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu (Menu menu) {
-//        if (mCommentText != null) {
-//            menu.findItem(R.id.action_post).setEnabled(true);
-//        }
-//        return true;
-//    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -131,6 +127,12 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return false;
     }
 
 

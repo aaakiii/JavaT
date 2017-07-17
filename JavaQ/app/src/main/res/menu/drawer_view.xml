@@ -27,9 +27,11 @@
             <menu>
                 <group android:checkableBehavior="single">
                     <item
-                        android:title="@string/aboutus" />
-                    <item
+                        android:id="@+id/nav_pp"
                         android:title="@string/pp" />
+                    <item
+                        android:id="@+id/nav_feedback"
+                        android:title="@string/feedback" />
                 </group>
             </menu>
         </item>

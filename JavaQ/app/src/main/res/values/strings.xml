@@ -4,11 +4,12 @@
     <string name="quiz">Quiz</string>
     <string name="community">Community</string>
     <string name="progress">Progress</string>
-    <string name="setting">Setting</string>
+    <string name="setting">Account setting</string>
     <string name="notification">Notification</string>
     <string name="other">Other</string>
     <string name="aboutus">About us</string>
     <string name="pp">Privacy policy</string>
+    <string name="feedback">Send feedback</string>
 
     <string name="continue_button">Continue</string>
     <string name="back_button">Back to home</string>
