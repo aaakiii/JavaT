@@ -20,8 +20,6 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
 
-
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/add_user_icon"
         android:layout_width="56dp"

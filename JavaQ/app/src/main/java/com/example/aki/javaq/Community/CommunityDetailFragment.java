@@ -1,5 +1,6 @@
 package com.example.aki.javaq.Community;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -120,9 +121,10 @@ public class CommunityDetailFragment extends Fragment {
         mAddCommentsEditTextView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //TODO: ログイン済みかGET
-                boolean mLogined = false;
+                boolean mLogined = true;
                 if (mLogined) {
-                    //TODO: コメント投稿画面へ遷移
+                    Intent intent = new Intent(getActivity().getApplicationContext(),CommunityAddCommentActivity.class);
+                    startActivity(intent);
                 } else {
                     // display dialog
                     FragmentManager manager = getActivity().getSupportFragmentManager();

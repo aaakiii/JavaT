@@ -38,7 +38,7 @@
     <style name="mToolBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="actionMenuTextColor">@color/toolbar_menu_color</item>
     </style>
 
 

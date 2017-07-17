@@ -20,6 +20,7 @@
         <activity android:name=".Quiz.QuizActivity" />
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Progress.ProgressActivity" />
+        <activity android:name=".Community.CommunityAddCommentActivity" />
         <activity
             android:name=".Community.CommunityDetailActivity"
             android:label="@string/title_activity_community_detail"
