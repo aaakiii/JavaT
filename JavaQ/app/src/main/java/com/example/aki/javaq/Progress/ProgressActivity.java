@@ -14,14 +14,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.aki.javaq.Community.CommunityListFragment;
+import com.example.aki.javaq.DrawermenuSingleFragmentActivity;
 import com.example.aki.javaq.R;
 
-public class ProgressActivity extends AppCompatActivity {
+public class ProgressActivity extends DrawermenuSingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_section_activity);
+    protected Fragment createFragment() {
+        return new ProgressFragment();
     }
-
 }
