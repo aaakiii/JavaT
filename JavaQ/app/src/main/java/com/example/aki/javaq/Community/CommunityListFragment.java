@@ -2,6 +2,8 @@ package com.example.aki.javaq.Community;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.example.aki.javaq.LoginDialogFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import android.net.Uri;
@@ -13,6 +15,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -91,6 +94,8 @@ public class CommunityListFragment extends Fragment {
     public DatabaseReference mFirebaseDatabaseReference;
     private LinearLayoutManager mLinearLayoutManager;
     private String mPhotoUrl;
+    private static final int REQUEST_CODE_LOGIN = 1;
+    private static final String LOGIN_DIALOG = "login_dialog";
 
     private String mUsername;
     private FirebaseRecyclerAdapter<PostMainContents, PostViewHolder> mFirebaseAdapter;
@@ -231,11 +236,18 @@ public class CommunityListFragment extends Fragment {
                 if (mFirebaseUser == null) {
                     // Not signed in, launch the Sign In activity
                     //TODO:DialogFragmentにするのか確認
-                    startActivity(new Intent(getActivity(), GoogleSignInActivity.class));
+
+//                    FragmentManager fm = getFragmentManager();
+//                    LoginDialogFragment dialogFragment = LoginDialogFragment.newInstance();
+                    startActivity(new Intent(getActivity(), LoginDialogFragment.class));
 
                 } else {
-                    Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
-                    startActivity(intent);
+
+                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                    LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityListFragment.this, REQUEST_CODE_LOGIN);
+                    dialog.show(manager, LOGIN_DIALOG);
+//                    Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
+//                    startActivity(intent);
 
                 }
 
