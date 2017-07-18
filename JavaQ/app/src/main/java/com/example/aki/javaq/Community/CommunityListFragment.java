@@ -133,9 +133,6 @@ public class CommunityListFragment extends Fragment {
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setStackFromEnd(true);
-//        if (savedInstanceState != null) {
-//            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
-//        }
 
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -236,18 +233,15 @@ public class CommunityListFragment extends Fragment {
                 if (mFirebaseUser == null) {
                     // Not signed in, launch the Sign In activity
                     //TODO:DialogFragmentにするのか確認
-
-//                    FragmentManager fm = getFragmentManager();
-//                    LoginDialogFragment dialogFragment = LoginDialogFragment.newInstance();
-                    startActivity(new Intent(getActivity(), LoginDialogFragment.class));
-
-                } else {
-
                     FragmentManager manager = getActivity().getSupportFragmentManager();
                     LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityListFragment.this, REQUEST_CODE_LOGIN);
                     dialog.show(manager, LOGIN_DIALOG);
-//                    Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
-//                    startActivity(intent);
+
+
+                } else {
+
+                    Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
+                    startActivity(intent);
 
                 }
 
