@@ -71,7 +71,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements
             Toast.makeText(this, "Welcome " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
             // Go back to the main activity
-            startActivity(new Intent(this, CommunityDetailActivity.class));
+            startActivity(new Intent(this, CommunityPostActivity.class));
         }
     }
 
@@ -121,13 +121,18 @@ public class GoogleSignInActivity extends AppCompatActivity implements
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
+                        if (task.isSuccessful()) {
+
+                            Intent intent = new Intent(GoogleSignInActivity.this, CommunityPostActivity.class);
+                            startActivity(intent);
+
+                        } else {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        } else {
-                            startActivity(new Intent(GoogleSignInActivity.this, CommunityDetailActivity.class));
-                            finish();
+
+//                            startActivity(new Intent(GoogleSignInActivity.this, CommunityPostActivity.class));
+//                            finish();
                         }
                     }
                 });

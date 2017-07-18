@@ -9,19 +9,28 @@ public class PostMainContents {
     private String mComText;
     private String mUserName;
     private boolean mComIsFavod;
+    private String mImageUrl;
 
 
     public PostMainContents(){
 
     }
 
-    public PostMainContents(String text, String name, boolean isFavoed){
+    public PostMainContents(String text, String name, boolean isFavoed, String imageUrl){
         mComText = text;
         mUserName = name;
         mComIsFavod = isFavoed;
+        mImageUrl = imageUrl;
 
     }
 
+    public String getImageUrl() {
+        return mImageUrl;
+    }
+
+    public void setImageUrl(String mImageUrl) {
+        this.mImageUrl = mImageUrl;
+    }
 
     public String getId() {
         return mComId;
