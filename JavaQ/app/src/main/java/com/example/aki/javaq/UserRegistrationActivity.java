@@ -256,6 +256,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
                 //TODO:mUserNameとmPicturePathをデータベスにset
+                //Todo:"保存しました!"みたいなトースト投げる
                 Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
 

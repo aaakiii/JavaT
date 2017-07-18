@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -61,6 +62,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
 
 
         mCommentEditTextView = (EditText) findViewById(R.id.edit_post);
+        mCommentEditTextView.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
         mCommentEditTextView.setHint(R.string.add_comment_ph);
         //show keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

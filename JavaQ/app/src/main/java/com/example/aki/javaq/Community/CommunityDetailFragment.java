@@ -123,7 +123,7 @@ public class CommunityDetailFragment extends Fragment {
                 //TODO: ログイン済みかGET
                 boolean mLogined = true;
                 if (mLogined) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(),CommunityAddCommentActivity.class);
+                    Intent intent = new Intent(getActivity().getApplicationContext(), CommunityAddCommentActivity.class);
                     startActivity(intent);
                 } else {
                     // display dialog
@@ -232,6 +232,9 @@ public class CommunityDetailFragment extends Fragment {
         //TODO:mGoodNumとmGoodTappedをデータベースに保存
         private void addGood() {
             if (!mGoodTapped) {
+                if(mBadTapped){
+                    addBad();
+                }
                 mGoodNum++;
                 mCommentGoodTextView.setText(String.valueOf(mGoodNum));
                 DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
@@ -246,6 +249,9 @@ public class CommunityDetailFragment extends Fragment {
 
         private void addBad() {
             if (!mBadTapped) {
+                if(mGoodTapped){
+                    addGood();
+                }
                 mBadNum++;
                 mCommentBadTextView.setText(String.valueOf(mBadNum));
                 DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
