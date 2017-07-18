@@ -17,9 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="UserRegistrationActivity"/>
         <activity android:name=".Quiz.QuizActivity" />
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Progress.ProgressActivity" />
+        <activity android:name=".Community.GoogleSignInActivity"/>
         <activity android:name=".Community.CommunityAddCommentActivity" />
         <activity android:name=".SettingListActivity" />
         <activity
