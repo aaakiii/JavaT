@@ -104,7 +104,7 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
                 fragmentClass = CommunityListFragment.class;
                 break;
             case R.id.nav_setting:
-                fragmentClass = QuizSectionFragment.class;
+                fragmentClass = SettingListFragment.class;
                 break;
             case R.id.nav_pp:
                 fragmentClass = PrivacyPolicyFragment.class;
