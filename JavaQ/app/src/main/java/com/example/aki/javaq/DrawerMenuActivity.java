@@ -1,10 +1,8 @@
 package com.example.aki.javaq;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -28,8 +26,8 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    private int mActionLayoutID;
-    private int mFragmentContainerID;
+    private int mActionLayoutID =0 ;
+    private int mFragmentContainerID = 0;
 
     public DrawerMenuActivity(int layoutId, int fragmentContainerId) {
         this.mActionLayoutID = layoutId;
@@ -39,6 +37,11 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //TODO:fragment_containerに統一
+        if (mFragmentContainerID == 0) {
+            mFragmentContainerID = R.id.fragment_container;
+            mActionLayoutID = R.layout.activity_with_drawermenu;
+        }
         setContentView(mActionLayoutID);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(mFragmentContainerID);
@@ -90,7 +93,7 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
         // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = null;
         Class fragmentClass;
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_quiz:
                 fragmentClass = QuizSectionFragment.class;
                 break;
@@ -99,6 +102,15 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
                 break;
             case R.id.nav_community:
                 fragmentClass = CommunityListFragment.class;
+                break;
+            case R.id.nav_setting:
+                fragmentClass = SettingListFragment.class;
+                break;
+            case R.id.nav_pp:
+                fragmentClass = PrivacyPolicyFragment.class;
+                break;
+            case R.id.nav_feedback:
+                fragmentClass = PrivacyPolicyFragment.class;
                 break;
             default:
                 fragmentClass = QuizSectionFragment.class;
@@ -114,6 +126,7 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
 //        fragmentManager.beginTransaction().replace(R.id.quiz_list_fragment_container, fragment).commit();
+
         fragmentManager.beginTransaction().replace(mFragmentContainerID, fragment).commit();
 
         // Highlight the selected item has been done by NavigationView

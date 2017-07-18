@@ -23,4 +23,9 @@
         <item>Oops..</item>
         <item>Incorrect</item>
     </string-array>
+    <string-array name="setting_list">
+        <item>Profile</item>
+        <item>Notification</item>
+        <item>Logout</item>
+    </string-array>
 </resources>
