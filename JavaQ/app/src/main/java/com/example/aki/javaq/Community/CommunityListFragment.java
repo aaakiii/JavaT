@@ -30,9 +30,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import com.example.aki.javaq.R;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.appindexing.FirebaseAppIndex;
@@ -228,11 +225,9 @@ public class CommunityListFragment extends Fragment {
 
                 if (mFirebaseUser == null) {
                     // Not signed in, launch the Sign In activity
-                    //TODO:DialogFragmentにするのか確認
                     FragmentManager manager = getActivity().getSupportFragmentManager();
                     LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityListFragment.this, REQUEST_CODE_LOGIN);
                     dialog.show(manager, LOGIN_DIALOG);
-
 
                 } else {
 

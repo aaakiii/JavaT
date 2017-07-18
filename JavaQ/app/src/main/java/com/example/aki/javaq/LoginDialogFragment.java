@@ -1,9 +1,6 @@
 package com.example.aki.javaq;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aki.javaq.Community.CommunityPostActivity;
-import com.example.aki.javaq.Community.GoogleSignInActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,8 +72,6 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
 
         // Initialize FirebaseAuth
         mFirebaseAuth = FirebaseAuth.getInstance();
-
-
         mLaterTextView = (TextView) view.findViewById(R.id.close_dialog);
         mLaterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,12 +103,12 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
                 return;
         }
     }
-
-
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -151,7 +145,6 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
                                     Toast.LENGTH_SHORT).show();
 
                         } else {
-
                             startActivity(new Intent(getActivity(), CommunityPostActivity.class));
                             getActivity().finish();
 
@@ -166,5 +159,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(getActivity(), "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
+
+
 
 }

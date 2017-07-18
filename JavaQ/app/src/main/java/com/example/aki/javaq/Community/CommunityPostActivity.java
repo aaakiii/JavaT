@@ -42,7 +42,6 @@ import java.util.Map;
 
 public class CommunityPostActivity extends AppCompatActivity {
 
-    public static final String ANONYMOUS = "anonymous";
     public static final String MESSAGES_CHILD = "messages";
     private static final String TAG = "CommunityPostActivity";
     private static final String MESSAGE_SENT_EVENT = "message_sent";
@@ -112,7 +111,6 @@ public class CommunityPostActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(CommunityPostActivity.this, CommunityListActivity.class);
                 startActivity(intent);
-
 
             }
         });
@@ -212,7 +210,6 @@ public class CommunityPostActivity extends AppCompatActivity {
 
         return messageToIndex;
     }
-
 
     private void applyRetrievedLengthLimit() {
         Long friendly_msg_length = mFirebaseRemoteConfig.getLong("friendly_msg_length");
