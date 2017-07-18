@@ -109,12 +109,12 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 invalidateOptionsMenu();
 
                 //Detect inputed user name
-                if(s.toString() == null){
+                if (s.toString() == null) {
                     mTappable = false;
                 } else {
                     if (s.toString().length() < 2 || hasSpecialSymbol(s.toString())) {
                         mTappable = false;
-                    } else if(mUserName.equals(s.toString())){
+                    } else if (mUserName.equals(s.toString())) {
                         mTappable = false;
                     } else {
                         mTappable = true;
@@ -259,7 +259,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 //Todo:"保存しました!"みたいなトースト投げる
                 Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
-
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
