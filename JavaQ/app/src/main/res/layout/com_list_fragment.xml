@@ -21,14 +21,13 @@
         android:id="@+id/new_post_button"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_gravity="center_vertical|left"
-        app:backgroundTint="@color/main_color"
-        android:tint="@color/white"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:scaleType="center"
         android:src="@android:drawable/ic_menu_edit"
+        android:tint="@color/white"
+        app:backgroundTint="@color/main_color"
         app:layout_anchor="@+id/com_list_recycler_view"
-        app:layout_anchorGravity="bottom|right"
-        app:useCompatPadding="true" />
+        app:layout_anchorGravity="bottom|end" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -33,6 +33,8 @@ public class CommunityDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         setContentView(R.layout.com_detail_activity);
 
 

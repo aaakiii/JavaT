@@ -17,9 +17,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 
 import com.example.aki.javaq.R;
@@ -123,12 +126,28 @@ public class CommunityListFragment extends Fragment {
             if (mFirebaseUser.getPhotoUrl() != null) {
 
             }
-
         }
+
 
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setStackFromEnd(true);
+        mComRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mComRecyclerView.setAdapter(mFirebaseAdapter);
+
+        //For the issue floating action button unexpected anchor gravity change
+        mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                mComRecyclerView.removeOnLayoutChangeListener(this);
+
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mNewPostButton.getLayoutParams();
+                lp.anchorGravity = Gravity.BOTTOM | GravityCompat.END;
+                lp.setMargins(0, 0, 32, 32);
+                mNewPostButton.setLayoutParams(lp);
+            }
+        });
+//        mComRecyclerView.getAdapter().notifyDataSetChanged();
 
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -216,8 +235,6 @@ public class CommunityListFragment extends Fragment {
             }
         });
 
-        mComRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mComRecyclerView.setAdapter(mFirebaseAdapter);
 
         // FloatingActionButton
         mNewPostButton = (FloatingActionButton) view.findViewById(R.id.new_post_button);
@@ -248,5 +265,6 @@ public class CommunityListFragment extends Fragment {
 
         return view;
     }
+
 
 }
