@@ -57,9 +57,9 @@ public class SettingListFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
-                //TODO: switch で分岐
                 switch (position) {
                     case 0:
+                        //TODO: 未ログインだったらダイアログ表示
                         intent = new Intent(getActivity(), UserRegistrationActivity.class);
                         break;
                     case 1:

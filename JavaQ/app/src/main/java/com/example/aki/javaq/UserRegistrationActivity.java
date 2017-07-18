@@ -93,7 +93,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
 
-        //For who already set name
+        //For people who already set name
         if (mUserName != null) {
             mAddUserNameTextView.setText(mUserName);
         }
@@ -108,7 +108,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 invalidateOptionsMenu();
 
-                //Detect inputed user name
+                //Detect inputted user name
                 if (s.toString() == null) {
                     mTappable = false;
                 } else {
