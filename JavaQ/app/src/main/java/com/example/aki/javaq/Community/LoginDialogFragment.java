@@ -1,4 +1,4 @@
-package com.example.aki.javaq;
+package com.example.aki.javaq.Community;
 
 
 import android.content.Intent;
@@ -10,11 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aki.javaq.Community.CommunityPostActivity;
+import com.example.aki.javaq.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -22,6 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -29,10 +30,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by MinaFujisawa on 2017/06/13.
@@ -46,9 +43,10 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     private static final int REQUEST_CODE_LOGIN = 1;
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
-    private FirebaseAuth mFirebaseAuth;
+    private static FirebaseAuth mFirebaseAuth;
     private SignInButton mSignInButton;
-    private GoogleApiClient mGoogleApiClient;
+    private static GoogleApiClient mGoogleApiClient;
+    private static FirebaseUser mFirebaseUser;
 
     public static LoginDialogFragment newInstance(Fragment target, int requestCode) {
         LoginDialogFragment fragment = new LoginDialogFragment();
@@ -57,26 +55,27 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     }
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.google_sign_in_activity, null);
         mSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
         mSignInButton.setOnClickListener(this);
-        // Configure Google Sign In
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+        // Configure Google Sign In
 
-        // Initialize FirebaseAuth
-        mFirebaseAuth = FirebaseAuth.getInstance();
+
         mLaterTextView = (TextView) view.findViewById(R.id.close_dialog);
         mLaterTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                getDialog().dismiss();
             }
         });
         return view;
@@ -108,6 +107,16 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    public static void signOut(){
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth.signOut();
+            //TODO: Google sign-outの検討
+            // Google sign out
+//            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -128,6 +137,8 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        // Initialize FirebaseAuth
+        mFirebaseAuth = FirebaseAuth.getInstance();
         Log.d(TAG, "firebaseAuthWithGooogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(credential)

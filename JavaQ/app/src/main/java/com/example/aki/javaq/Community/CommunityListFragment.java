@@ -3,30 +3,23 @@ package com.example.aki.javaq.Community;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.example.aki.javaq.LoginDialogFragment;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 
 import com.example.aki.javaq.R;
@@ -41,10 +34,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -179,6 +168,7 @@ public class CommunityListFragment extends Fragment {
 //                    viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
                     viewHolder.mPostText.setVisibility(TextView.GONE);
                 }
+
                 viewHolder.mPostUserName.setText(postMainContents.getName());
                 if (postMainContents.getImageUrl() == null) {
 //                    viewHolder.mUserIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
@@ -188,13 +178,14 @@ public class CommunityListFragment extends Fragment {
                             .load(postMainContents.getImageUrl())
                             .into(viewHolder.mUserIcon);
                 }
-                if (postMainContents.getText() != null) {
-                    // write this message to the on-device index
-                    FirebaseAppIndex.getInstance().update(CommunityPostActivity.getMeesageIndexable(postMainContents));
-                }
 
-                // log a view action on it
-                FirebaseUserActions.getInstance().end(CommunityPostActivity.getMessageViewAction(postMainContents));
+//                if (postMainContents.getText() != null) {
+//                    // write this message to the on-device index
+//                    FirebaseAppIndex.getInstance().update(CommunityPostActivity.getMessageIndexable(postMainContents));
+//                }
+//
+//                // log a view action on it
+//                FirebaseUserActions.getInstance().end(CommunityPostActivity.getMessageViewAction(postMainContents));
 
             }
         };

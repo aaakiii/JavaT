@@ -13,15 +13,23 @@
         <activity android:name=".Community.CommunityListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="friendlychat.firebase.google.com"
+                    android:scheme="http"
+                    android:pathPrefix="/message"
+                    />
             </intent-filter>
         </activity>
         <activity android:name="UserRegistrationActivity"/>
         <activity android:name=".Quiz.QuizActivity" />
         <activity android:name=".Quiz.QuizResultActivity" />
         <activity android:name=".Progress.ProgressActivity" />
-        <activity android:name=".Community.GoogleSignInActivity"/>
         <activity android:name=".Community.CommunityAddCommentActivity" />
         <activity android:name=".SettingListActivity" />
         <activity

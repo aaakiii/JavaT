@@ -16,10 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aki.javaq.Community.CommunityPostActivity;
+import com.example.aki.javaq.Community.LoginDialogFragment;
 import com.example.aki.javaq.Quiz.Badge;
 import com.example.aki.javaq.Quiz.QuizActivity;
 import com.example.aki.javaq.Quiz.QuizFragment;
 import com.example.aki.javaq.Quiz.QuizResultFragment;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -37,6 +40,7 @@ public class SettingListFragment extends Fragment {
     TextView mListTextView;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +80,7 @@ public class SettingListFragment extends Fragment {
                         mFirebaseAuth = FirebaseAuth.getInstance();
                         mFirebaseUser = mFirebaseAuth.getCurrentUser();
                         if(mFirebaseUser != null){
-                            mFirebaseAuth.signOut();
+                            LoginDialogFragment.signOut();
                             Toast.makeText(getActivity(), "Sign out completed", Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getActivity(), "You're already signed out", Toast.LENGTH_SHORT).show();
