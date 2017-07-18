@@ -71,13 +71,6 @@ public class CommunityPostActivity extends AppCompatActivity {
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-//        mTextView = (TextView) findViewById(R.id.test);
-
-
-        // Initialize Firebase Auth
-
-
-
 
 
 
