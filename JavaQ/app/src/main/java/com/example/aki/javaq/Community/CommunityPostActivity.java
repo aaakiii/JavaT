@@ -60,7 +60,7 @@ public class CommunityPostActivity extends AppCompatActivity {
     public DatabaseReference mFirebaseDatabaseReference;
     private static String mPhotoUrl;
 
-    private TextView mTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
