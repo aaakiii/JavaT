@@ -8,6 +8,9 @@
     <style name="mMainText.mUserName">
         <item name="android:textColor">@color/sub_color_text</item>
     </style>
+    <style name="mMainText.mErrorText">
+        <item name="android:textColor">@color/red</item>
+    </style>
 
     <style name="mSubText">
         <item name="android:textSize">@dimen/text_sub</item>

@@ -31,10 +31,11 @@
     
     <string name="comment">Comment</string>
     <string name="add_comment_ph">Write a comment</string>
-    <string name="add_picture">Add profile picture</string>
+    <string name="edit_picture">Edit profile picture</string>
     <string name="user_name">User name</string>
     <string name="save">Save</string>
     <string name="post">Post</string>
+    <string name="error_user_name">Names cannot contain special symbols or emoji characters.</string>
 
     <string name="whoops">Whoops!</string>
     <string name="login_text">You mush register to do this</string>
@@ -42,7 +43,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_comunity_main">ComunityMainActivity</string>
+    <string name="title_activity_community_main">CommunityMainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_community_detail">CommunityDetailActivity</string>
     <string name="title_activity_community_post">CommunityPostActivity</string>

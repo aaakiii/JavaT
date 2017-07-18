@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +36,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,22 +47,24 @@ import static android.content.ContentValues.TAG;
  * Created by MinaFujisawa on 2017/07/13.
  */
 
-public class UserRegistrationActivity extends AppCompatActivity implements View.OnClickListener{
+public class UserRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
     private View mParentLayout;
-    private CircleImageView mMyIcon;
-    private TextView mAddIconText;
-    private EditText mAddUserName;
-    private ActionBar mActionBar;
+    private CircleImageView mMyIconImageView;
+    private TextView mEditIconTextView;
+    private EditText mAddUserNameTextView;
+    private TextView mErrorTextView;
+    private MenuItem mSaveButton;
     private File mPhotoFile;
     private String mPicturePath;
     private String mUserName;
     private int mIconViewWith;
     private int mIconViewHeight;
+    private boolean mTappable;
 
     public static final int RESULT_LOAD_IMAGE = 1;
-    private final int REQUEST_PERMISSION_PHONE_STATE=1;
+    private final int REQUEST_PERMISSION_PHONE_STATE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +77,28 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         ab.setDisplayHomeAsUpEnabled(true);
 
 
-        mMyIcon = (CircleImageView) findViewById(R.id.add_user_icon);
-        mMyIcon.setOnClickListener(this);
-        mAddIconText = (TextView) findViewById(R.id.add_icon_text);
-        mAddIconText.setOnClickListener(this);
-        mAddUserName = (EditText) findViewById(R.id.add_user_name);
-        mAddUserName.addTextChangedListener(new TextWatcher() {
+        mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
+
+        //TODO:Googleから取得したプロフィール画像をセット
+//        mPicturePath = google
+        updatePhotoView();
+        mMyIconImageView.setOnClickListener(this);
+
+        mEditIconTextView = (TextView) findViewById(R.id.add_icon_text);
+        mEditIconTextView.setOnClickListener(this);
+
+        //TODO:ユーザー名データベースから取得（編集時用）
+        mUserName = "Taro"; //ダミー
+
+        mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
+        mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+
+        //For who already set name
+        if (mUserName != null) {
+            mAddUserNameTextView.setText(mUserName);
+        }
+
+        mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //
@@ -85,7 +106,29 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUserName = s.toString();
+                invalidateOptionsMenu();
+
+                //Detect inputed user name
+                if(s.toString() == null){
+                    mTappable = false;
+                } else {
+                    if (s.toString().length() < 2 || hasSpecialSymbol(s.toString())) {
+                        mTappable = false;
+                    } else if(mUserName.equals(s.toString())){
+                        mTappable = false;
+                    } else {
+                        mTappable = true;
+                        mUserName = s.toString();
+                    }
+                }
+
+
+                //For error
+                if (hasSpecialSymbol(mUserName)) {
+                    mErrorTextView.setText(R.string.error_user_name);
+                } else {
+                    mErrorTextView.setText("");
+                }
             }
 
             @Override
@@ -94,22 +137,24 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             }
         });
 
+        mErrorTextView = (TextView) findViewById(R.id.error_text);
+
         mParentLayout = getWindow().getDecorView().getRootView();
         mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                mIconViewWith = mMyIcon.getWidth();
-                mIconViewHeight = mMyIcon.getHeight();
+                mIconViewWith = mMyIconImageView.getWidth();
+                mIconViewHeight = mMyIconImageView.getHeight();
                 removeOnGlobalLayoutListener(mParentLayout.getViewTreeObserver(), mGlobalLayoutListener);
             }
         };
         mParentLayout.getViewTreeObserver().addOnGlobalLayoutListener(mGlobalLayoutListener);
-        updatePhotoView();
 
     }
+
     private static void removeOnGlobalLayoutListener(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener listener) {
         if (observer == null) {
-            return ;
+            return;
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             observer.removeGlobalOnLayoutListener(listener);
@@ -120,7 +165,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
     @Override
     public void onClick(View v) {
-        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, RESULT_LOAD_IMAGE);
         showPermission();
     }
@@ -179,8 +224,8 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
             cursor.moveToFirst();
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
             mPicturePath = cursor.getString(columnIndex);
@@ -191,10 +236,10 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
     private void updatePhotoView() {
         if (mPicturePath == null) {
-            mMyIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.image_user_default));
+            mMyIconImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.image_user_default));
         } else {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPicturePath, mIconViewWith, mIconViewHeight);
-            mMyIcon.setImageBitmap(bitmap);
+            mMyIconImageView.setImageBitmap(bitmap);
         }
     }
 
@@ -210,12 +255,36 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                //mUserNameとmPicturePathをset
+                //TODO:mUserNameとmPicturePathをデータベスにset
+                Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        mSaveButton = menu.findItem(R.id.action_save);
+        mSaveButton.setEnabled(false);
+
+        if (mTappable) {
+            mSaveButton.setEnabled(true);
+        } else {
+            mSaveButton.setEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean hasSpecialSymbol(String input) {
+        String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
+        Pattern p1 = Pattern.compile("[^a-z] | [\uD83C-\uDBFF\uDC00-\uDFFF]+", Pattern.CASE_INSENSITIVE);
+        Pattern p2 = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
+        boolean b = p1.matcher(input).matches() || p2.matcher(input).matches();
+
+        return (b) ? true : false;
     }
 
 
