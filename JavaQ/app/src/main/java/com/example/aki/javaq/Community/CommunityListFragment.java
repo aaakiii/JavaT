@@ -118,12 +118,8 @@ public class CommunityListFragment extends Fragment {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        if (mFirebaseUser == null) {
-            startActivity(new Intent(getActivity(), GoogleSignInActivity.class));
-
-        } else {
+        if (mFirebaseUser != null) {
             mUsername = mFirebaseUser.getDisplayName();
-
             if (mFirebaseUser.getPhotoUrl() != null) {
 
             }
