@@ -81,6 +81,13 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
     private void handleFirebaseAuthResult(AuthResult authResult) {
         if (authResult != null) {
             // Welcome the user
