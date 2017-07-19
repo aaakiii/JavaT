@@ -1,10 +1,13 @@
 package com.example.aki.javaq;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +44,6 @@ public class SettingListFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class SettingListFragment extends Fragment {
         mSettingArrayList = new ArrayList<>();
         mSettingList = getResources().getStringArray(R.array.setting_list);
 
+        //TODO:未ログインだったら.length -1（logout非表示）
         for (int i = 0; i < mSettingList.length; i++) {
             mSettingArrayList.add(mSettingList[i]);
         }
@@ -76,17 +79,9 @@ public class SettingListFragment extends Fragment {
                         startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
                         break;
                     case 2:
-                        //TODO: log-outに設定
-                        mFirebaseAuth = FirebaseAuth.getInstance();
-                        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                        if(mFirebaseUser != null){
-                            LoginDialogFragment.signOut();
-                            Toast.makeText(getActivity(), "Sign out completed", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getActivity(), "You're already signed out", Toast.LENGTH_SHORT).show();
-
-                        }
-
+                        //TODO:showDialogを有効にする
+//                        showDialog(getActivity());
+                        logout();
                         break;
                     default:
                         startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
@@ -128,6 +123,45 @@ public class SettingListFragment extends Fragment {
             return view;
         }
     }
+
+    private void showDialog(Context context){
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(context);
+        }
+
+        builder.setMessage("Are you sure?");
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                logout();
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.create().show();
+    }
+
+    private void logout(){
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        if(mFirebaseUser != null){
+            LoginDialogFragment.signOut();
+            Toast.makeText(getActivity(), "Sign out completed", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getActivity(), "You're already signed out", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
 
 }
