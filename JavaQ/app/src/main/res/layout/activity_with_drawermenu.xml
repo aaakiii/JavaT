@@ -25,6 +25,17 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
+    <!-- The navigation drawer that comes from the left -->
+    <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nvView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        app:itemBackground="@drawable/drawer_selected_item"
+        app:menu="@menu/drawer_view" />
+
 </android.support.v4.widget.DrawerLayout>
 
 

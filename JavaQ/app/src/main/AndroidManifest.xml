@@ -29,6 +29,7 @@
         <activity android:name=".Presentation.UserRegistrationActivity"/>
         <activity android:name=".Presentation.Quiz.QuizActivity" />
         <activity android:name=".Presentation.Quiz.QuizResultActivity" />
+        <activity android:name=".Presentation.Quiz.QuizSectionActivity" />
         <activity android:name=".Presentation.Progress.ProgressActivity" />
         <activity android:name=".Presentation.Community.CommunityAddCommentActivity" />
         <activity android:name=".Presentation.Setting.SettingListActivity" />

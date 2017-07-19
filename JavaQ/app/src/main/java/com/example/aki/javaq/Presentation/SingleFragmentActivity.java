@@ -1,4 +1,4 @@
-package com.example.aki.javaq.Presentation.Quiz;
+package com.example.aki.javaq.Presentation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,14 +11,14 @@ import com.example.aki.javaq.R;
  * Created by AKI on 2017-06-07.
  */
 
-public  abstract class QuizSingleFragmentActivity extends AppCompatActivity {
+public  abstract class SingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.quiz_activity);
+        setContentView(R.layout.activity_normal);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);

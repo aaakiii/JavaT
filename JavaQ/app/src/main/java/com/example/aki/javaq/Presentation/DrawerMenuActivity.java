@@ -29,22 +29,21 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    private int mActionLayoutID =0 ;
-    private int mFragmentContainerID = 0;
+    private int mActionLayoutID;
+    private int mFragmentContainerID ;
 
-    public DrawerMenuActivity(int layoutId, int fragmentContainerId) {
-        this.mActionLayoutID = layoutId;
-        this.mFragmentContainerID = fragmentContainerId;
-    }
+//    public DrawerMenuActivity(int layoutId, int fragmentContainerId) {
+//        this.mActionLayoutID = layoutId;
+//        this.mFragmentContainerID = fragmentContainerId;
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO:fragment_containerに統一
-        if (mFragmentContainerID == 0) {
-            mFragmentContainerID = R.id.fragment_container;
-            mActionLayoutID = R.layout.activity_with_drawermenu;
-        }
+        mFragmentContainerID = R.id.fragment_container;
+        mActionLayoutID = R.layout.activity_with_drawermenu;
+
         setContentView(mActionLayoutID);
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(mFragmentContainerID);
