@@ -1,10 +1,8 @@
 package com.example.aki.javaq;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -21,27 +18,19 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by MinaFujisawa on 2017/07/13.
@@ -257,6 +246,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             case R.id.action_save:
                 //TODO:mUserNameとmPicturePathをデータベスにset
                 //Todo:"保存しました!"みたいなトースト投げる
+                new Loading(this).showLoadingDialog();
                 Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
