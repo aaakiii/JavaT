@@ -35,6 +35,9 @@ public class FirebaseLab {
     private static FirebaseRemoteConfig mFirebaseRemoteConfig;
     private static FirebaseAnalytics mFirebaseAnalytics;
     private static final String TAG = "CommunityPostActivity";
+    public FirebaseLab(){
+
+    }
 
     public static FirebaseAuth getFirebaseAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -61,37 +64,7 @@ public class FirebaseLab {
         return mFirebaseAnalytics;
     }
 
-    public FirebaseLab(Context context){
-//        mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-//        // Initialize Firebase Measurement.
-//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-//
-//        // Initialize Firebase Remote Config.
-//        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
-        // Define Firebase Remote Config Settings.
-//        FirebaseRemoteConfigSettings firebaseRemoteConfigSettings =
-//                new FirebaseRemoteConfigSettings.Builder()
-//                        .setDeveloperModeEnabled(true)
-//                        .build();
-
-        // Define default config values. Defaults are used when fetched config values are not
-        // available. Eg: if an error occurred fetching values from the server.
-//        Map<String, Object> defaultConfigMap = new HashMap<>();
-//        defaultConfigMap.put("friendly_msg_length", 10L);
-        // Apply config settings and default values.
-//        mFirebaseRemoteConfig.setConfigSettings(firebaseRemoteConfigSettings);
-//        mFirebaseRemoteConfig.setDefaults(defaultConfigMap);
-
-        // Fetch remote config.
-//        fetchConfig();
-
-        // Fetch the config to determine the allowed length of messages.
-
-
-    }
 
     public static void SetConfig(){
         // Define Firebase Remote Config Settings.
