@@ -13,11 +13,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.aki.javaq.Community.CommunityPostActivity;
+import com.example.aki.javaq.Community.LoginDialogFragment;
 import com.example.aki.javaq.Quiz.Badge;
 import com.example.aki.javaq.Quiz.QuizActivity;
 import com.example.aki.javaq.Quiz.QuizFragment;
 import com.example.aki.javaq.Quiz.QuizResultFragment;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +38,9 @@ public class SettingListFragment extends Fragment {
     List<String> mSettingArrayList;
     String[] mSettingList;
     TextView mListTextView;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,25 +66,32 @@ public class SettingListFragment extends Fragment {
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent;
                 switch (position) {
                     case 0:
                         //TODO: 未ログインだったらダイアログ表示
-                        intent = new Intent(getActivity(), UserRegistrationActivity.class);
+                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
                         break;
                     case 1:
                         //TODO: notificationに設定
-                        intent = new Intent(getActivity(), UserRegistrationActivity.class);
+                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
                         break;
                     case 2:
                         //TODO: log-outに設定
-                        intent = new Intent(getActivity(), UserRegistrationActivity.class);
+                        mFirebaseAuth = FirebaseAuth.getInstance();
+                        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                        if(mFirebaseUser != null){
+                            LoginDialogFragment.signOut();
+                            Toast.makeText(getActivity(), "Sign out completed", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getActivity(), "You're already signed out", Toast.LENGTH_SHORT).show();
+
+                        }
+
                         break;
                     default:
-                        intent = new Intent(getActivity(), UserRegistrationActivity.class);
+                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
                         break;
                 }
-                startActivity(intent);
             }
         });
         return view;
