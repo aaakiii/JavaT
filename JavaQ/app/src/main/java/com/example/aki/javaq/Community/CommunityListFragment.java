@@ -13,7 +13,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,8 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -49,30 +46,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A placeholder fragment containing a simple view.
  */
 public class CommunityListFragment extends Fragment {
-
-    public static class PostViewHolder extends RecyclerView.ViewHolder {
-        //implements View.OnClickListener
-        private TextView mPostUserName;
-        private TextView mPostText;
-        private TextView mPostDate;
-        private TextView mCommentsNum;
-        public static CircleImageView mUserIcon;
-//        private Post mPost;
-
-        public PostViewHolder(View v) {
-            super(v);
-
-//            itemView.setOnClickListener(this);
-            mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
-            mPostText = (TextView) itemView.findViewById(R.id.post_text);
-            mPostDate = (TextView) itemView.findViewById(R.id.post_date);
-            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
-            mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
-
-
-        }
-    }
-
 
     private static final String TAG = "CommunityListFragment";
     private View view;
@@ -115,14 +88,14 @@ public class CommunityListFragment extends Fragment {
             if (mFirebaseUser.getPhotoUrl() != null) {
 
             }
-        }
 
+        }
 
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setStackFromEnd(true);
-        mComRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mComRecyclerView.setAdapter(mFirebaseAdapter);
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
 
         //For the issue floating action button unexpected anchor gravity change
         mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -226,6 +199,23 @@ public class CommunityListFragment extends Fragment {
             }
         });
 
+        mComRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mComRecyclerView.setAdapter(mFirebaseAdapter);
+
+        //For the issue floating action button unexpected anchor gravity change
+        mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                mComRecyclerView.removeOnLayoutChangeListener(this);
+
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mNewPostButton.getLayoutParams();
+                lp.anchorGravity = Gravity.BOTTOM | GravityCompat.END;
+                lp.setMargins(0, 0, 32, 32);
+                mNewPostButton.setLayoutParams(lp);
+            }
+        });
+//        mComRecyclerView.getAdapter().notifyDataSetChanged();
+
 
         // FloatingActionButton
         mNewPostButton = (FloatingActionButton) view.findViewById(R.id.new_post_button);
@@ -254,5 +244,30 @@ public class CommunityListFragment extends Fragment {
 
         return view;
     }
+
+    public static class PostViewHolder extends RecyclerView.ViewHolder {
+        //implements View.OnClickListener
+        private TextView mPostUserName;
+        private TextView mPostText;
+        private TextView mPostDate;
+        private TextView mCommentsNum;
+        public static CircleImageView mUserIcon;
+//        private Post mPost;
+
+        public PostViewHolder(View v) {
+            super(v);
+
+//            itemView.setOnClickListener(this);
+            mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
+            mPostText = (TextView) itemView.findViewById(R.id.post_text);
+            mPostDate = (TextView) itemView.findViewById(R.id.post_date);
+            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
+            mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
+
+
+        }
+    }
+
+
 
 }
