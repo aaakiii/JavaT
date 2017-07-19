@@ -28,11 +28,6 @@
 
 
     <!-- gray tool bar -->
-    <style name="MyGrayToolbar">
-        <item name="android:maxHeight">@dimen/abc_action_bar_default_height_material</item>
-        <item name="android:background">@color/light_gray</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-    </style>
 
     <!-- ToolBar -->
     <style name="mToolBar">
@@ -42,15 +37,6 @@
     </style>
 
     <!-- AlertDialog -->
-    <style name="mAlertDialogTheme">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-        <item name="android:windowMinWidthMajor">@android:dimen/dialog_min_width_major</item>
-        <item name="android:windowMinWidthMinor">@android:dimen/dialog_min_width_minor</item>
-        <item name="android:textColor">@color/main_text</item>
-    </style>
 
 
     <style name="CustomActionBarTheme" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
