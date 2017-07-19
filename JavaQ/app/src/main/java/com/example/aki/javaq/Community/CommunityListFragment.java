@@ -80,8 +80,8 @@ public class CommunityListFragment extends Fragment {
         view = inflater.inflate(R.layout.com_list_fragment, container, false);
         Intent intent = getActivity().getIntent();
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+        mFirebaseUser = FirebaseLab.getFirebaseUser();
 
         if (mFirebaseUser != null) {
             mUsername = mFirebaseUser.getDisplayName();
@@ -112,7 +112,7 @@ public class CommunityListFragment extends Fragment {
 //        mComRecyclerView.getAdapter().notifyDataSetChanged();
 
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<PostMainContents, PostViewHolder>(
                 PostMainContents.class,
                 R.layout.com_list_item,
@@ -231,10 +231,8 @@ public class CommunityListFragment extends Fragment {
                     dialog.show(manager, LOGIN_DIALOG);
 
                 } else {
-
                     Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
                     startActivity(intent);
-
                 }
 
 

@@ -34,9 +34,14 @@ public class FirebaseLab {
     public static DatabaseReference mFirebaseDatabaseReference;
     private static FirebaseRemoteConfig mFirebaseRemoteConfig;
     private static FirebaseAnalytics mFirebaseAnalytics;
+    private static boolean mFirebaseLogIned;
     private static final String TAG = "CommunityPostActivity";
     public FirebaseLab(){
 
+    }
+
+    public static boolean isFirebaseLogIned() {
+        return mFirebaseLogIned;
     }
 
     public static FirebaseAuth getFirebaseAuth() {
@@ -96,7 +101,6 @@ public class FirebaseLab {
                         // Make the fetched config available via
                         // FirebaseRemoteConfig get<type> calls.
                         mFirebaseRemoteConfig.activateFetched();
-//                        applyRetrievedLengthLimit();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -105,16 +109,9 @@ public class FirebaseLab {
                         // There has been an error fetching the config
                         Log.w(TAG, "Error fetching config: " +
                                 e.getMessage());
-//                        applyRetrievedLengthLimit();
                     }
                 });
 
     }
 
-
-//    private void applyRetrievedLengthLimit() {
-//        Long friendly_msg_length = mFirebaseRemoteConfig.getLong("friendly_msg_length");
-//        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(friendly_msg_length.intValue())});
-//        Log.d(TAG, "FML is: " + friendly_msg_length);
-//    }
 }

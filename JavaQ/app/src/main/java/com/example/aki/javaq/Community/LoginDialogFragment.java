@@ -46,7 +46,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     private static FirebaseAuth mFirebaseAuth;
     private SignInButton mSignInButton;
     private static GoogleApiClient mGoogleApiClient;
-    private static FirebaseUser mFirebaseUser;
+
 
     public static LoginDialogFragment newInstance(Fragment target, int requestCode) {
         LoginDialogFragment fragment = new LoginDialogFragment();
@@ -109,7 +109,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
 
     public static void signOut(){
 
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         mFirebaseAuth.signOut();
             //TODO: Google sign-outの検討
             // Google sign out
@@ -138,7 +138,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         // Initialize FirebaseAuth
-        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         Log.d(TAG, "firebaseAuthWithGooogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mFirebaseAuth.signInWithCredential(credential)

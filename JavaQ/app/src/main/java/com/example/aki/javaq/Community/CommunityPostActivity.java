@@ -240,12 +240,4 @@ public class CommunityPostActivity extends AppCompatActivity {
                 });
     }
 
-
-    private void applyRetrievedLengthLimit() {
-        Long friendly_msg_length = mFirebaseRemoteConfig.getLong("friendly_msg_length");
-        mEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(friendly_msg_length.intValue())});
-        Log.d(TAG, "FML is: " + friendly_msg_length);
-
-    }
-
 }
