@@ -38,7 +38,7 @@
     <string name="error_user_name">Names cannot contain special symbols or emoji characters.</string>
 
     <string name="whoops">Whoops!</string>
-    <string name="login_text">You mush register to do this</string>
+    <string name="login_text">You must register to do this</string>
     <string name="later">Later</string>
 
     <!-- TODO: Remove or change this placeholder text -->
