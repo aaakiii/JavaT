@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Usecase.SignInLab;
 import com.example.aki.javaq.Presentation.Community.LoginDialogFragment;
 import com.example.aki.javaq.R;
@@ -75,7 +76,13 @@ public class SettingListFragment extends Fragment {
                     case 2:
                         //TODO:showDialogを有効にする
 //                        showDialog(getActivity());
-                        SignInLab.signOut();
+                        mFirebaseUser = FirebaseLab.getFirebaseUser();
+                        if(mFirebaseUser != null){
+                            SignInLab.signOut();
+                            Toast.makeText(getActivity(), "Sign out", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "already ..", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     default:
                         startActivity(new Intent(getActivity(), UserRegistrationActivity.class));

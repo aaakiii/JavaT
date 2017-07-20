@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Usecase.SignInLab;
+import com.example.aki.javaq.Presentation.UserRegistrationActivity;
 import com.example.aki.javaq.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -89,7 +90,19 @@ public class LoginDialogFragment extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mSignInLab.authenticate(requestCode, data);
+        if(mSignInLab.isAuthenticateSuccess(requestCode, data)){
+            Toast.makeText(getActivity(), "login success", Toast.LENGTH_SHORT).show();
+
+            //TODO: 新規かどうか取得
+            boolean isNewUser = true;
+            if(isNewUser){
+                Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                startActivity(intent);
+            } else {
+                dismiss();
+            }
+        }
+
     }
 
 

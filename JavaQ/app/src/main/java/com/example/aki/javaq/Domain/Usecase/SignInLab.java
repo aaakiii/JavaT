@@ -75,7 +75,7 @@ public class SignInLab extends AppCompatActivity implements GoogleApiClient.OnCo
     }
 
     public void disconnect() {
-        mGoogleApiClient.stopAutoManage(mFragmentActivity);
+        mGoogleApiClient.stopAutoManage(new CommunityPostActivity());
         mGoogleApiClient.disconnect();
     }
 
@@ -88,18 +88,20 @@ public class SignInLab extends AppCompatActivity implements GoogleApiClient.OnCo
     }
 
     // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    public void authenticate(int requestCode, Intent data) {
+    public boolean isAuthenticateSuccess(int requestCode, Intent data) {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign-In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 SignInLab.firebaseAuthWithGoogle(account, mActivity);
+                return true;
             } else {
                 // Google Sign-In failed
                 Log.e(TAG, "Google Sign-In failed.");
+                return false;
             }
-        }
+        } return false;
     }
 
 

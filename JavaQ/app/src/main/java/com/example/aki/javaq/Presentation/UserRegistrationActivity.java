@@ -27,8 +27,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aki.javaq.Domain.Entity.User;
+import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Usecase.Loading;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
+import com.example.aki.javaq.Domain.Usecase.UserLab;
+import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
+import com.example.aki.javaq.Presentation.Community.CommunityListFragment;
 import com.example.aki.javaq.R;
 
 import java.io.File;
@@ -55,6 +60,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private int mIconViewWith;
     private int mIconViewHeight;
     private boolean mTappable;
+    private UserLab mUserLab;
 
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
@@ -69,6 +75,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        mUserLab = new UserLab();
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
 
@@ -248,9 +255,21 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
+
                 //TODO:mUserNameとmPicturePathをデータベスにset
-                //Todo:"保存しました!"みたいなトースト投げる
-                new Loading(this).showLoadingDialog();
+//                mUserLab.newChild();
+
+                User mUser = new User(mUserName, mPicturePath);
+//                mUserLab.addNewUser(mUser);
+
+
+                //Todo:読み込み終わったらLoading非表示
+//                new Loading(this).showLoadingDialog();
+
+                //TODO:理想はコメントから来た人はdetailページからコメント入力画面に遷移
+                Intent intent = new Intent(this,CommunityListActivity.class);
+                startActivity(intent);
+
                 Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
