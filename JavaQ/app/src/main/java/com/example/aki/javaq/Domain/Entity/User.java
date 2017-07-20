@@ -1,26 +1,28 @@
 package com.example.aki.javaq.Domain.Entity;
 
+import java.util.UUID;
+
 /**
  * Created by AKI on 2017-07-11.
  */
 
 public class User {
-    private String mUserId;
+    private UUID mUserId;
     private String mUserName;
     private String mUserIcon;
 
 
-    public User(String mUserId, String mUserName, String mUserIcon) {
-        this.mUserId = mUserId;
+    public User(String mUserName, String mUserIcon) {
         this.mUserName = mUserName;
         this.mUserIcon = mUserIcon;
+        mUserId = UUID.randomUUID();
     }
 
-    public String getmUserId() {
+    public UUID getmUserId() {
         return mUserId;
     }
 
-    public void setmUserId(String mUserId) {
+    public void setmUserId(UUID mUserId) {
         this.mUserId = mUserId;
     }
 
