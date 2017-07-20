@@ -142,78 +142,79 @@ public class CommunityPostActivity extends AppCompatActivity {
             }
         });
     }
+    //TODO:いるか確認
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
+//
+//
+//        if (requestCode == REQUEST_IMAGE) {
+//            if (resultCode == RESULT_OK) {
+//                if (data != null) {
+//                    final Uri uri = data.getData();
+//                    Log.d(TAG, "Uri: " + uri.toString());
+//
+//                    PostMainContents tempMessage = new PostMainContents(null, mUsername, false, LOADING_IMAGE_URL);
+//                    mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
+//                            .setValue(tempMessage, new DatabaseReference.CompletionListener() {
+//                                @Override
+//                                public void onComplete(DatabaseError databaseError,
+//                                                       DatabaseReference databaseReference) {
+//                                    if (databaseError == null) {
+//                                        String key = databaseReference.getKey();
+//                                        StorageReference storageReference =
+//                                                FirebaseStorage.getInstance()
+//                                                        .getReference(mFirebaseUser.getUid())
+//                                                        .child(key)
+//                                                        .child(uri.getLastPathSegment());
+//
+//                                        putImageInStorage(storageReference, uri, key);
+//                                    } else {
+//                                        Log.w(TAG, "Unable to write message to database.",
+//                                                databaseError.toException());
+//                                    }
+//                                }
+//                            });
+//                }
+//            }
+//        } else if (requestCode == REQUEST_INVITE) {
+//            if (resultCode == RESULT_OK) {
+//                // Use Firebase Measurement to log that invitation was sent.
+//                Bundle payload = new Bundle();
+//                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_sent");
+//
+//                // Check how many invitations were sent and log.
+//                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+//                Log.d(TAG, "Invitations sent: " + ids.length);
+//            } else {
+//                // Use Firebase Measurement to log that invitation was not sent
+//                Bundle payload = new Bundle();
+//                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_not_sent");
+//                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, payload);
+//
+//                // Sending failed or it was canceled, show failure message to the user
+//                Log.d(TAG, "Failed to send invitation.");
+//            }
+//        }
+//
+//    }
 
-
-        if (requestCode == REQUEST_IMAGE) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    final Uri uri = data.getData();
-                    Log.d(TAG, "Uri: " + uri.toString());
-
-                    PostMainContents tempMessage = new PostMainContents(null, mUsername, false, LOADING_IMAGE_URL);
-                    mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
-                            .setValue(tempMessage, new DatabaseReference.CompletionListener() {
-                                @Override
-                                public void onComplete(DatabaseError databaseError,
-                                                       DatabaseReference databaseReference) {
-                                    if (databaseError == null) {
-                                        String key = databaseReference.getKey();
-                                        StorageReference storageReference =
-                                                FirebaseStorage.getInstance()
-                                                        .getReference(mFirebaseUser.getUid())
-                                                        .child(key)
-                                                        .child(uri.getLastPathSegment());
-
-                                        putImageInStorage(storageReference, uri, key);
-                                    } else {
-                                        Log.w(TAG, "Unable to write message to database.",
-                                                databaseError.toException());
-                                    }
-                                }
-                            });
-                }
-            }
-        } else if (requestCode == REQUEST_INVITE) {
-            if (resultCode == RESULT_OK) {
-                // Use Firebase Measurement to log that invitation was sent.
-                Bundle payload = new Bundle();
-                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_sent");
-
-                // Check how many invitations were sent and log.
-                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-                Log.d(TAG, "Invitations sent: " + ids.length);
-            } else {
-                // Use Firebase Measurement to log that invitation was not sent
-                Bundle payload = new Bundle();
-                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_not_sent");
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, payload);
-
-                // Sending failed or it was canceled, show failure message to the user
-                Log.d(TAG, "Failed to send invitation.");
-            }
-        }
-
-    }
-
-    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
-        storageReference.putFile(uri).addOnCompleteListener(CommunityPostActivity.this,
-                new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-//                            PostMainContents postMainContents = new PostMainContents(null, mUsername, true, task.getResult().getMetadata().getDownloadUrl().toString());
-//                            mFirebaseDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(postMainContents);
-                        } else {
-                            Log.w(TAG, "Image upload task was not successful.", task.getException());
-                        }
-                    }
-                });
-    }
+//    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
+//        storageReference.putFile(uri).addOnCompleteListener(CommunityPostActivity.this,
+//                new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                        if (task.isSuccessful()) {
+////                            PostMainContents postMainContents = new PostMainContents(null, mUsername, true, task.getResult().getMetadata().getDownloadUrl().toString());
+////                            mFirebaseDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(postMainContents);
+//                        } else {
+//                            Log.w(TAG, "Image upload task was not successful.", task.getException());
+//                        }
+//                    }
+//                });
+//    }
 
 
     @Override
