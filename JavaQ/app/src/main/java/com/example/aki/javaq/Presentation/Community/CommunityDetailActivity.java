@@ -22,6 +22,15 @@ public class CommunityDetailActivity extends SingleFragmentActivity {
     }
 
     public static final String EXTRA_POST_ID = "extra_crime_id";
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (savedInstanceState == null){
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(android.R.id.content, new CommunityDetailFragment ()).commit();
+//        }
+//
+//    }
 
     public static Intent newIntent(Context context, UUID postId) {
         Intent intent = new Intent(context, CommunityDetailActivity.class);

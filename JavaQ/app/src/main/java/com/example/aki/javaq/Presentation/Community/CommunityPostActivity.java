@@ -82,6 +82,8 @@ public class CommunityPostActivity extends AppCompatActivity {
     public static final String MESSAGES_CHILD = "messages";
     private static final String TAG = "CommunityPostActivity";
     private static final String MESSAGE_SENT_EVENT = "message_sent";
+    private String mPostDate;
+    private int mCommentNum;
 
 
     @Override
@@ -156,7 +158,7 @@ public class CommunityPostActivity extends AppCompatActivity {
                     final Uri uri = data.getData();
                     Log.d(TAG, "Uri: " + uri.toString());
 
-                    PostMainContents tempMessage = new PostMainContents(null, mUsername, false, LOADING_IMAGE_URL);
+                    PostMainContents tempMessage = new PostMainContents(null, mUsername, false, LOADING_IMAGE_URL, mPostDate, mCommentNum);
                     mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
                             .setValue(tempMessage, new DatabaseReference.CompletionListener() {
                                 @Override
@@ -228,7 +230,7 @@ public class CommunityPostActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_post:
-                PostMainContents postMainContents = new PostMainContents(mEditTextView.getText().toString(), mUsername, false, mPhotoUrl);
+                PostMainContents postMainContents = new PostMainContents(mEditTextView.getText().toString(), mUsername, false, mPhotoUrl, mPostDate, mCommentNum);
                 mFirebaseDatabaseReference.child(MESSAGES_CHILD).push().setValue(postMainContents);
                 mEditTextView.setText("");
                 mFirebaseAnalytics.logEvent(MESSAGE_SENT_EVENT, null);

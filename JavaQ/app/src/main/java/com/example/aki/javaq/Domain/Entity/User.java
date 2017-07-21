@@ -10,7 +10,7 @@ public class User {
     private UUID mUserId;
     private String mUserName;
     private String mUserIcon;
-///Test
+
 
     public User(String mUserName, String mUserIcon) {
         this.mUserName = mUserName;

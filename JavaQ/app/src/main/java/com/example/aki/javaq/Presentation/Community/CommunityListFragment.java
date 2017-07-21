@@ -1,5 +1,6 @@
 package com.example.aki.javaq.Presentation.Community;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -49,7 +51,6 @@ public class CommunityListFragment extends Fragment {
     private static final String TAG = "CommunityListFragment";
     private View view;
     private RecyclerView mComRecyclerView;
-    private int mLastAdapterClickedPosition = -1;
     private SharedPreferences mSharedPreferences;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -60,9 +61,12 @@ public class CommunityListFragment extends Fragment {
     private String mPhotoUrl;
     private static final int REQUEST_CODE_LOGIN = 1;
     private static final String LOGIN_DIALOG = "login_dialog";
+    private static int mLastAdapterClickedPosition = -1;
 
     private String mUsername;
     private FirebaseRecyclerAdapter<PostMainContents, PostViewHolder> mFirebaseAdapter;
+
+
 
 
     private int mCommentsNumInt = 18; //ダミー
@@ -182,6 +186,25 @@ public class CommunityListFragment extends Fragment {
 //                FirebaseUserActions.getInstance().end(CommunityPostActivity.getMessageViewAction(postMainContents));
 
             }
+
+
+            @Override
+            public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                PostViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                viewHolder.setOnClickListener(new PostViewHolder.ClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "Item clicked at " + position, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), CommunityDetailActivity.class);
+                        startActivity(intent);
+                    }
+
+                });
+                return viewHolder;
+            }
+
+
+
         };
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -242,27 +265,52 @@ public class CommunityListFragment extends Fragment {
         return view;
     }
 
+
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         //implements View.OnClickListener
         private TextView mPostUserName;
         private TextView mPostText;
         private TextView mPostDate;
         private TextView mCommentsNum;
-        public static CircleImageView mUserIcon;
-//        private Post mPost;
+        private CircleImageView mUserIcon;
+        private PostViewHolder.ClickListener mClickListener;
+
+
+
+        private PostMainContents mPostMainContents;
 
         public PostViewHolder(View v) {
             super(v);
 
-//            itemView.setOnClickListener(this);
             mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostText = (TextView) itemView.findViewById(R.id.post_text);
             mPostDate = (TextView) itemView.findViewById(R.id.post_date);
             mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
             mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
 
+            v.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onItemClick(v, getAdapterPosition());
+                }
+            });
 
         }
+
+        //Interface to send callbacks...
+        public interface ClickListener{
+            public void onItemClick(View view, int position);
+        }
+
+        public void setOnClickListener(PostViewHolder.ClickListener clickListener){
+            mClickListener = clickListener;
+        }
+
+
+
+
+
+
     }
 
 

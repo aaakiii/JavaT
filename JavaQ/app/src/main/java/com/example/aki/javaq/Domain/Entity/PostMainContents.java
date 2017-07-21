@@ -1,27 +1,67 @@
 package com.example.aki.javaq.Domain.Entity;
 
+import java.util.UUID;
+
 /**
  * Created by AKI on 2017-07-11.
  */
 
 public class PostMainContents {
-    private String mComId;
+    private UUID mComId;
     private String mComText;
     private String mUserName;
     private boolean mComIsFavod;
     private String mImageUrl;
+    private String mComDate;
+    private int mCommentsNum;
+    private String mId;
 
 
     public PostMainContents(){
+        this(UUID.randomUUID());
 
     }
+    public PostMainContents(UUID id){
+        mComId = id;
+    }
 
-    public PostMainContents(String text, String name, boolean isFavoed, String imageUrl){
+    public PostMainContents(String text, String name, boolean isFavoed, String imageUrl,String date, int commentsNum){
+//        , String date, int commentsNum
         mComText = text;
         mUserName = name;
         mComIsFavod = isFavoed;
         mImageUrl = imageUrl;
+        mComDate = date;
+        mCommentsNum = commentsNum;
 
+    }
+
+    public String getId() {
+        return mId;
+    }
+
+    public void setId(String mId) {
+        this.mId = mId;
+    }
+
+    public int getCommentsNum() {
+        return mCommentsNum;
+    }
+
+
+    public UUID getUUId() {
+        return mComId;
+    }
+    public void setCommentsNum(int mCommentsNum) {
+        this.mCommentsNum = mCommentsNum;
+    }
+
+    public String getDate() {
+        return mComDate;
+    }
+
+    public void setDate(String mComDate) {
+        this.mComDate = mComDate;
     }
 
     public String getImageUrl() {
@@ -32,13 +72,7 @@ public class PostMainContents {
         this.mImageUrl = mImageUrl;
     }
 
-    public String getId() {
-        return mComId;
-    }
 
-    public void setId(String id) {
-        mComId = id;
-    }
 
     public String getText() {
         return mComText;

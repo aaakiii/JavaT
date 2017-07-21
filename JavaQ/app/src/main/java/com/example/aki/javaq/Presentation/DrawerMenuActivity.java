@@ -48,6 +48,8 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(mFragmentContainerID);
 
+
+
         if (fragment == null) {
             fragment = new CommunityListFragment();
             fm.beginTransaction().add(mFragmentContainerID, fragment).commit();
