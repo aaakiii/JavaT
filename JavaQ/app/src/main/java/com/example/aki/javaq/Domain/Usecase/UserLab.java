@@ -34,7 +34,6 @@ public class UserLab {
 
 
     public UserLab() {
-//        mDatabase = FirebaseLab.getFirebaseDatabaseReference();
     }
 
     public void updateProfile(String mUserName, Uri mUserIconUri) {
@@ -44,60 +43,20 @@ public class UserLab {
                 .setDisplayName(mUserName)
                 .setPhotoUri(mUserIconUri)
                 .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User profile updated.");
+        if (mUserIconUri != null) {
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "User profile updated.");
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
     }
 
-//    public String getUserName(){
-//        String name ="";
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null) {
-//            for (UserInfo profile : user.getProviderData()) {
-//                name = profile.getDisplayName();
-//            };
-//        }
-//        return name;
-//    }
-
-    private void fetchUser() {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.getCurrentUser()
-                .reload()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mUser = auth.getCurrentUser();
-                        mUserName = mUser.getDisplayName();
-                    }
-                });
-    }
-
-    public String getUserName() {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.getCurrentUser()
-                .reload()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        mUser = auth.getCurrentUser();
-                        mUserName = mUser.getDisplayName();
-                    }
-                });
-        return mUserName;
-    }
-
-//    public String getUserName(){
-//        fetchUser();
-//        return mUserName;
-//    }
 
 
 }

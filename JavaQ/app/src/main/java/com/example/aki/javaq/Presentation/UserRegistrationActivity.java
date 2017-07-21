@@ -81,20 +81,22 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_registration_activity);
 
+        Intent i = getIntent();
+        isFromSignIn = i.getBooleanExtra(NEW_USER, false);
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_with_button);
         setSupportActionBar(myToolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        if(!isFromSignIn) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
 
         mUserLab = new UserLab();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
 
-        Intent i = getIntent();
-        isFromSignIn = i.getBooleanExtra(NEW_USER, true);
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
-        //TODO:Googleから取得したプロフィール画像をセット
-//        mPicturePath = google
         updatePhotoView();
         mMyIconImageView.setOnClickListener(this);
 
@@ -112,14 +114,23 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
-                            mUserName = mUser.getDisplayName();
+                            FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                            mUserName = mFirebaseUser.getDisplayName();
                             mAddUserNameTextView.setText(mUserName);
                             Glide.with(getApplicationContext())
-                                    .load(mUser.getPhotoUrl())
+                                    .load(mFirebaseUser.getPhotoUrl())
                                     .into(mMyIconImageView);
                         }
                     });
+        } else {
+            //TODO:セットできない…。userがnullになるのは読み込みが遅いから？
+            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+            mFirebaseUser = FirebaseLab.getFirebaseUser();
+            if (mFirebaseUser != null) {
+                Glide.with(getApplicationContext())
+                        .load(mFirebaseUser.getPhotoUrl())
+                        .into(mMyIconImageView);
+            }
         }
 
 
@@ -274,7 +285,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
-                mPictureUri = Uri.fromFile(new File(mPicturePath));
+                if(mPictureUri != null){
+                    mPictureUri = Uri.fromFile(new File(mPicturePath));
+                }
                 mUserLab.updateProfile(mUserName, mPictureUri);
 
 
