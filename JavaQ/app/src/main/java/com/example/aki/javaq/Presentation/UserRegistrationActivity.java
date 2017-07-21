@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Usecase.Loading;
@@ -35,8 +37,13 @@ import com.example.aki.javaq.Domain.Usecase.UserLab;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
 import com.example.aki.javaq.Presentation.Community.CommunityListFragment;
 import com.example.aki.javaq.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -54,13 +61,15 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private EditText mAddUserNameTextView;
     private TextView mErrorTextView;
     private MenuItem mSaveButton;
-    private File mPhotoFile;
     private String mPicturePath;
+    private Uri mPictureUri;
     private String mUserName;
     private int mIconViewWith;
     private int mIconViewHeight;
     private boolean mTappable;
     private UserLab mUserLab;
+    private FirebaseUser mFirebaseUser;
+    private FirebaseAuth mFirebaseAuth;
 
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
@@ -76,9 +85,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         ab.setDisplayHomeAsUpEnabled(true);
 
         mUserLab = new UserLab();
+        mFirebaseUser = FirebaseLab.getFirebaseUser();
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
-
         //TODO:Googleから取得したプロフィール画像をセット
 //        mPicturePath = google
         updatePhotoView();
@@ -87,16 +96,26 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mEditIconTextView = (TextView) findViewById(R.id.add_icon_text);
         mEditIconTextView.setOnClickListener(this);
 
-        //TODO:ユーザー名データベースから取得（編集時用）
-        mUserName = "Taro"; //ダミー
 
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
 
-        //For people who already set name
-        if (mUserName != null) {
-            mAddUserNameTextView.setText(mUserName);
-        }
+//        mUserName = mUserLab.getUserName();
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+        mFirebaseAuth.getCurrentUser()
+                .reload()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
+                        mUserName = mUser.getDisplayName();
+                        mAddUserNameTextView.setText(mUserName);
+                        Glide.with(getApplicationContext())
+                                .load(mUser.getPhotoUrl())
+                                .into(mMyIconImageView);
+                    }
+                });
+
 
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -109,22 +128,15 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 invalidateOptionsMenu();
 
                 //Detect inputted user name
-                if (s.toString() == null) {
-                    mTappable = false;
+                if (s.toString().trim().length() > 0 || hasSpecialSymbol(s.toString())) {
+                    mTappable = true;
+                    mUserName = s.toString();
                 } else {
-                    if (s.toString().length() < 2 || hasSpecialSymbol(s.toString())) {
-                        mTappable = false;
-                    } else if (mUserName.equals(s.toString())) {
-                        mTappable = false;
-                    } else {
-                        mTappable = true;
-                        mUserName = s.toString();
-                    }
+                    mTappable = false;
                 }
 
-
                 //For error
-                if (hasSpecialSymbol(mUserName)) {
+                if (hasSpecialSymbol(s.toString().trim())) {
                     mErrorTextView.setText(R.string.error_user_name);
                 } else {
                     mErrorTextView.setText("");
@@ -256,21 +268,26 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
-                //TODO:mUserNameとmPicturePathをデータベスにset
-//                mUserLab.newChild();
+                // Get the data from an ImageView as bytes
+                mMyIconImageView.setDrawingCacheEnabled(true);
+                mMyIconImageView.buildDrawingCache();
+                Bitmap bitmap = mMyIconImageView.getDrawingCache();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
 
-                User mUser = new User(mUserName, mPicturePath);
-//                mUserLab.addNewUser(mUser);
+
+                mPictureUri = Uri.fromFile(new File(mPicturePath));
+                mUserLab.updateProfile(mUserName, mPictureUri);
 
 
                 //Todo:読み込み終わったらLoading非表示
 //                new Loading(this).showLoadingDialog();
 
                 //TODO:理想はコメントから来た人はdetailページからコメント入力画面に遷移
-                Intent intent = new Intent(this,CommunityListActivity.class);
+                Intent intent = new Intent(this, CommunityListActivity.class);
                 startActivity(intent);
 
-                Toast.makeText(this, "success!", Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 onBackPressed();
