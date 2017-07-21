@@ -70,9 +70,11 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private UserLab mUserLab;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
+    private boolean isFromSignIn = false;
 
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
+    public static final String NEW_USER = "new_user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mUserLab = new UserLab();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
 
+        Intent i = getIntent();
+        isFromSignIn = i.getBooleanExtra(NEW_USER, true);
+
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
         //TODO:Googleから取得したプロフィール画像をセット
 //        mPicturePath = google
@@ -100,21 +105,22 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
 
-//        mUserName = mUserLab.getUserName();
-        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-        mFirebaseAuth.getCurrentUser()
-                .reload()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
-                        mUserName = mUser.getDisplayName();
-                        mAddUserNameTextView.setText(mUserName);
-                        Glide.with(getApplicationContext())
-                                .load(mUser.getPhotoUrl())
-                                .into(mMyIconImageView);
-                    }
-                });
+        if (!isFromSignIn) {
+            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+            mFirebaseAuth.getCurrentUser()
+                    .reload()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            FirebaseUser mUser = mFirebaseAuth.getCurrentUser();
+                            mUserName = mUser.getDisplayName();
+                            mAddUserNameTextView.setText(mUserName);
+                            Glide.with(getApplicationContext())
+                                    .load(mUser.getPhotoUrl())
+                                    .into(mMyIconImageView);
+                        }
+                    });
+        }
 
 
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
@@ -267,15 +273,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-
-                // Get the data from an ImageView as bytes
-                mMyIconImageView.setDrawingCacheEnabled(true);
-                mMyIconImageView.buildDrawingCache();
-                Bitmap bitmap = mMyIconImageView.getDrawingCache();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
-
 
                 mPictureUri = Uri.fromFile(new File(mPicturePath));
                 mUserLab.updateProfile(mUserName, mPictureUri);

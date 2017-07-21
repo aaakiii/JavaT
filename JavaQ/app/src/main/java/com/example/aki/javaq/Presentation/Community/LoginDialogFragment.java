@@ -97,6 +97,7 @@ public class LoginDialogFragment extends DialogFragment {
             boolean isNewUser = true;
             if(isNewUser){
                 Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                intent.putExtra(UserRegistrationActivity.NEW_USER, true);
                 startActivity(intent);
             } else {
                 dismiss();

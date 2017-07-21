@@ -67,7 +67,9 @@ public class SettingListFragment extends Fragment {
                 switch (position) {
                     case 0:
                         //TODO: 未ログインだったらダイアログ表示
-                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
+                        Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                        intent.putExtra(UserRegistrationActivity.NEW_USER, false);
+                        startActivity(intent);
                         break;
                     case 1:
                         //TODO: notificationに設定
