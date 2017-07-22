@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.PostMainContents;
+import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
+import com.example.aki.javaq.Domain.Helper.TimeUtils;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
@@ -35,17 +38,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-
-/**
- * A placeholder fragment containing a simple view.
- */
 public class CommunityListFragment extends Fragment {
 
     private static final String TAG = "CommunityListFragment";
@@ -55,18 +56,18 @@ public class CommunityListFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private FloatingActionButton mNewPostButton;
-    public static final String MESSAGES_CHILD = "messages";
     public DatabaseReference mFirebaseDatabaseReference;
     private LinearLayoutManager mLinearLayoutManager;
-    private String mPhotoUrl;
     private static final int REQUEST_CODE_LOGIN = 1;
     private static final String LOGIN_DIALOG = "login_dialog";
+    private FirebaseRecyclerAdapter<PostMain, PostViewHolder> mFirebaseAdapter;
+
     private static int mLastAdapterClickedPosition = -1;
-
+    private PostMain mPostMain;
     private String mUsername;
-    private FirebaseRecyclerAdapter<PostMainContents, PostViewHolder> mFirebaseAdapter;
-
-
+    private String mPostBody;
+    private Uri mPhotoUrl;
+    private String mPostTimeAgo;
 
 
     private int mCommentsNumInt = 18; //ダミー
@@ -81,18 +82,9 @@ public class CommunityListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.com_list_fragment, container, false);
-        Intent intent = getActivity().getIntent();
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-        mFirebaseUser = FirebaseLab.getFirebaseUser();
+//        Intent intent = getActivity().getIntent();
+//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        if (mFirebaseUser != null) {
-            mUsername = mFirebaseUser.getDisplayName();
-            if (mFirebaseUser.getPhotoUrl() != null) {
-
-            }
-
-        }
 
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -100,111 +92,48 @@ public class CommunityListFragment extends Fragment {
         mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
 
-        //For the issue floating action button unexpected anchor gravity change
-        mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                mComRecyclerView.removeOnLayoutChangeListener(this);
 
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) mNewPostButton.getLayoutParams();
-                lp.anchorGravity = Gravity.BOTTOM | GravityCompat.END;
-                lp.setMargins(0, 0, 32, 32);
-                mNewPostButton.setLayoutParams(lp);
-            }
-        });
-//        mComRecyclerView.getAdapter().notifyDataSetChanged();
-
+        //get user info
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+        mFirebaseUser = FirebaseLab.getFirebaseUser();
+        if (mFirebaseUser != null) {
+            mUsername = mFirebaseUser.getDisplayName();
+            mPhotoUrl = mFirebaseUser.getPhotoUrl();
+        }
 
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<PostMainContents, PostViewHolder>(
-                PostMainContents.class,
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<PostMain, PostViewHolder>(
+                PostMain.class,
                 R.layout.com_list_item,
                 PostViewHolder.class,
-                mFirebaseDatabaseReference.child(MESSAGES_CHILD)) {
-
-            @Override
-            protected PostMainContents parseSnapshot(DataSnapshot snapshot) {
-                PostMainContents postMainContents = super.parseSnapshot(snapshot);
-                if (postMainContents != null) {
-                    postMainContents.setId(snapshot.getKey());
-                }
-                return postMainContents;
-            }
-
-            @Override
-            protected void populateViewHolder(final PostViewHolder viewHolder,
-                                              PostMainContents postMainContents, int position) {
-                if (postMainContents.getText() != null) {
-                    viewHolder.mPostText.setText(postMainContents.getText());
-                    viewHolder.mPostText.setVisibility(TextView.VISIBLE);
-//                    viewHolder.m.setVisibility(ImageView.GONE);
-                } else {
-                    String imageUrl = postMainContents.getImageUrl();
-                    if (imageUrl.startsWith("gs://")) {
-                        StorageReference storageReference = FirebaseStorage.getInstance()
-                                .getReferenceFromUrl(imageUrl);
-                        storageReference.getDownloadUrl().addOnCompleteListener(
-                                new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> task) {
-                                        if (task.isSuccessful()) {
-                                            String downloadUrl = task.getResult().toString();
-//                                            Glide.with(viewHolder.messageImageView.getContext())
-//                                                    .load(downloadUrl)
-//                                                    .into(viewHolder.messageImageView);
-                                        } else {
-                                            Log.w(TAG, "Getting download url was not successful.",
-                                                    task.getException());
-                                        }
-                                    }
-                                });
-                    } else {
-//                        Glide.with(viewHolder.messageImageView.getContext())
-//                                .load(friendlyMessage.getImageUrl())
-//                                .into(viewHolder.messageImageView);
-                    }
-//                    viewHolder.messageImageView.setVisibility(ImageView.VISIBLE);
-                    viewHolder.mPostText.setVisibility(TextView.GONE);
-                }
-
-                viewHolder.mPostUserName.setText(postMainContents.getName());
-                if (postMainContents.getImageUrl() == null) {
-//                    viewHolder.mUserIcon.setImageDrawable(ContextCompat.getDrawable(getActivity(),
-//                            R.drawable.ic_account_circle_black_36dp));
-                } else {
-                    Glide.with(getActivity())
-                            .load(postMainContents.getImageUrl())
-                            .into(viewHolder.mUserIcon);
-                }
-
-//                if (postMainContents.getText() != null) {
-//                    // write this message to the on-device index
-//                    FirebaseAppIndex.getInstance().update(CommunityPostActivity.getMessageIndexable(postMainContents));
-//                }
-//
-//                // log a view action on it
-//                FirebaseUserActions.getInstance().end(CommunityPostActivity.getMessageViewAction(postMainContents));
-
-            }
-
-
-            @Override
-            public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                PostViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
-                viewHolder.setOnClickListener(new PostViewHolder.ClickListener() {
+                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD)) {
+            protected void populateViewHolder(final PostViewHolder viewHolder, PostMain PostMain, int position) {
+                mPostMain = PostMain;
+                String key = this.getRef(position).getKey();
+                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
-                        Toast.makeText(getActivity(), "Item clicked at " + position, Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), CommunityDetailActivity.class);
-                        startActivity(intent);
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        //Set values
+                        mPostBody = dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString();
+                        viewHolder.mPostBodyTextView.setText(mPostBody);
+                        long timestamp = (long) dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue();
+                        mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
+                        viewHolder.mPostTimeTextView.setText(mPostTimeAgo);
+                        String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+                        viewHolder.mCommentsNumTextView.setText(mCommentsNum);
+                        viewHolder.mUserNameTextView.setText(mUsername);
+                        Glide.with(getActivity())
+                                .load(mPhotoUrl)
+                                .into(viewHolder.mUserIconImageView);
                     }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
                 });
-                return viewHolder;
             }
-
-
-
         };
 
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
@@ -236,7 +165,6 @@ public class CommunityListFragment extends Fragment {
                 mNewPostButton.setLayoutParams(lp);
             }
         });
-//        mComRecyclerView.getAdapter().notifyDataSetChanged();
 
 
         // FloatingActionButton
@@ -244,7 +172,6 @@ public class CommunityListFragment extends Fragment {
         mNewPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // New Post画面へ遷移
 
                 if (mFirebaseUser == null) {
                     // Not signed in, launch the Sign In activity
@@ -256,8 +183,6 @@ public class CommunityListFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), CommunityPostActivity.class);
                     startActivity(intent);
                 }
-
-
             }
         });
 
@@ -268,27 +193,25 @@ public class CommunityListFragment extends Fragment {
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         //implements View.OnClickListener
-        private TextView mPostUserName;
-        private TextView mPostText;
-        private TextView mPostDate;
-        private TextView mCommentsNum;
-        private CircleImageView mUserIcon;
+        private TextView mUserNameTextView;
+        private TextView mPostBodyTextView;
+        private TextView mPostTimeTextView;
+        private TextView mCommentsNumTextView;
+        private CircleImageView mUserIconImageView;
         private PostViewHolder.ClickListener mClickListener;
 
 
 
-        private PostMainContents mPostMainContents;
-
         public PostViewHolder(View v) {
             super(v);
 
-            mPostUserName = (TextView) itemView.findViewById(R.id.post_user_name);
-            mPostText = (TextView) itemView.findViewById(R.id.post_text);
-            mPostDate = (TextView) itemView.findViewById(R.id.post_date);
-            mCommentsNum = (TextView) itemView.findViewById(R.id.post_comment_num);
-            mUserIcon = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
+            mUserNameTextView = (TextView) itemView.findViewById(R.id.post_user_name);
+            mPostBodyTextView = (TextView) itemView.findViewById(R.id.post_text);
+            mPostTimeTextView = (TextView) itemView.findViewById(R.id.post_date);
+            mCommentsNumTextView = (TextView) itemView.findViewById(R.id.post_comment_num);
+            mUserIconImageView = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
 
-            v.setOnClickListener(new View.OnClickListener(){
+            v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
@@ -298,21 +221,16 @@ public class CommunityListFragment extends Fragment {
         }
 
         //Interface to send callbacks...
-        public interface ClickListener{
+        public interface ClickListener {
             public void onItemClick(View view, int position);
         }
 
-        public void setOnClickListener(PostViewHolder.ClickListener clickListener){
+        public void setOnClickListener(PostViewHolder.ClickListener clickListener) {
             mClickListener = clickListener;
         }
 
 
-
-
-
-
     }
-
 
 
 }
