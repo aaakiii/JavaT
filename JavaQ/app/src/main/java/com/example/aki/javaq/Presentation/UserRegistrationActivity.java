@@ -40,8 +40,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -98,6 +100,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         mUserLab = new UserLab();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
+        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
 
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
@@ -113,19 +116,38 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         if (!isFromSignIn) {
             mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-            mFirebaseAuth.getCurrentUser()
-                    .reload()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                            mUserName = mFirebaseUser.getDisplayName();
-                            mAddUserNameTextView.setText(mUserName);
-                            Glide.with(getApplicationContext())
-                                    .load(mFirebaseUser.getPhotoUrl())
-                                    .into(mMyIconImageView);
-                        }
-                    });
+            mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
+                    .child(mFirebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+
+                    mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
+                    mAddUserNameTextView.setText(mUserName);
+                        mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
+
+                    //TODO:画像がないときはデフォルト画像をセット
+                        Glide.with(getApplicationContext())
+                                .load(Uri.parse(mPictureUri))
+                                .into(mMyIconImageView);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+
+//            mFirebaseAuth.getCurrentUser()
+//                    .reload()
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
+//                            mUserName = mFirebaseUser.getDisplayName();
+//                            mAddUserNameTextView.setText(mUserName);
+//                            Glide.with(getApplicationContext())
+//                                    .load(mFirebaseUser.getPhotoUrl())
+//                                    .into(mMyIconImageView);
+//                        }
+            });
         } else {
             //TODO:セットできない…。userがnullになるのは読み込みが遅いから？
             mFirebaseAuth = FirebaseLab.getFirebaseAuth();
@@ -293,10 +315,10 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 }
                 mUserName = mAddUserNameTextView.getText().toString();
 
-                mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
 
-                User user = new User(mUserName, mPictureUri, mFirebaseAuth.getCurrentUser().getUid());
-                mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD).push().setValue(user);
+                User user = new User(mUserName, mPictureUri);
+                mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
+                        .child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
 
 //                mUserLab.updateProfile(mUserName, mPictureUri);
 
