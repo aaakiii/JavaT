@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.PostMainContents;
+import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Usecase.Loading;
@@ -83,7 +84,6 @@ public class CommunityPostActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE = 2;
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 30;
     private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-    public static final String POSTS_CHILD = "posts";
     private static final String TAG = "CommunityPostActivity";
     private static final String POST_SENT_EVENT = "post_sent";
     private long mPostTime;
@@ -150,79 +150,6 @@ public class CommunityPostActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult: requestCode=" + requestCode + ", resultCode=" + resultCode);
-//
-//
-//        if (requestCode == REQUEST_IMAGE) {
-//            if (resultCode == RESULT_OK) {
-//                if (data != null) {
-//                    final Uri uri = data.getData();
-//                    Log.d(TAG, "Uri: " + uri.toString());
-//
-//                    PostMain post = new PostMain(, mPostDate);
-//                    mFirebaseDatabaseReference.child(MESSAGES_CHILD).push()
-//                            .setValue(post, new DatabaseReference.CompletionListener() {
-//                                @Override
-//                                public void onComplete(DatabaseError databaseError,
-//                                                       DatabaseReference databaseReference) {
-//                                    if (databaseError == null) {
-//                                        String key = databaseReference.getKey();
-//                                        StorageReference storageReference =
-//                                                FirebaseStorage.getInstance()
-//                                                        .getReference(mFirebaseUser.getUid())
-//                                                        .child(key)
-//                                                        .child(uri.getLastPathSegment());
-//
-//                                        putImageInStorage(storageReference, uri, key);
-//                                    } else {
-//                                        Log.w(TAG, "Unable to write message to database.",
-//                                                databaseError.toException());
-//                                    }
-//                                }
-//                            });
-//                }
-//            }
-//        } else if (requestCode == REQUEST_INVITE) {
-//            if (resultCode == RESULT_OK) {
-//                // Use Firebase Measurement to log that invitation was sent.
-//                Bundle payload = new Bundle();
-//                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_sent");
-//
-//                // Check how many invitations were sent and log.
-//                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-//                Log.d(TAG, "Invitations sent: " + ids.length);
-//            } else {
-//                // Use Firebase Measurement to log that invitation was not sent
-//                Bundle payload = new Bundle();
-//                payload.putString(FirebaseAnalytics.Param.VALUE, "inv_not_sent");
-//                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, payload);
-//
-//                // Sending failed or it was canceled, show failure message to the user
-//                Log.d(TAG, "Failed to send invitation.");
-//            }
-//        }
-//
-//    }
-
-//    private void putImageInStorage(StorageReference storageReference, Uri uri, final String key) {
-//        storageReference.putFile(uri).addOnCompleteListener(CommunityPostActivity.this,
-//                new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                        if (task.isSuccessful()) {
-////                            PostMainContents postMainContents = new PostMainContents(null, mUsername, true, task.getResult().getMetadata().getDownloadUrl().toString());
-////                            mFirebaseDatabaseReference.child(MESSAGES_CHILD).child(key).setValue(postMainContents);
-//                        } else {
-//                            Log.w(TAG, "Image upload task was not successful.", task.getException());
-//                        }
-//                    }
-//                });
-//    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -238,7 +165,7 @@ public class CommunityPostActivity extends AppCompatActivity {
                 mUserId = mFirebaseUser.getUid();
                 mPostTime = System.currentTimeMillis();
                 PostMain post = new PostMain(mPostBody, mUserId, mPostTime);
-                mFirebaseDatabaseReference.child(POSTS_CHILD).push().setValue(post);
+                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).push().setValue(post);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 
                 Intent intent = new Intent(CommunityPostActivity.this, CommunityListActivity.class);

@@ -1,36 +1,22 @@
 package com.example.aki.javaq.Domain.Entity;
 
-import android.net.Uri;
-
-import java.net.URI;
-import java.net.URL;
-import java.util.UUID;
-
 /**
  * Created by AKI on 2017-07-11.
  */
 
 public class User {
-//    private UUID mUserId;
     private String mUserName;
-    private Uri mUserIcon;
+    private String mUserPicUri;
+    private String mUid;
 
     public User() {
     }
 
-    public User(String mUserName, Uri mUserIcon) {
+    public User(String mUserName, String mUserPicUri, String mUid) {
         this.mUserName = mUserName;
-        this.mUserIcon = mUserIcon;
-//        this.mUserId = mUserId;
+        this.mUserPicUri = mUserPicUri;
+        this.mUid = mUid;
     }
-//
-//    public UUID getmUserId() {
-//        return mUserId;
-//    }
-//
-//    public void setmUserId(UUID mUserId) {
-//        this.mUserId = mUserId;
-//    }
 
     public String getmUserName() {
         return mUserName;
@@ -40,12 +26,19 @@ public class User {
         this.mUserName = mUserName;
     }
 
-//    public String getmUserIcon() {
-//        return "IMG_" + getmUserId().toString() + ".jpg";
-//    }
+    public String getmUserPicUri() {
+        return mUserPicUri;
+    }
 
-//    public void setmUserIcon(URL mUserIcon) {
-//        this.mUserIcon = mUserIcon;
-//    }
+    public void setmUserPicUri(String mUserPicUri) {
+        this.mUserPicUri = mUserPicUri;
+    }
 
+    public String getmUid() {
+        return mUid;
+    }
+
+    public void setmUid(String mUid) {
+        this.mUid = mUid;
+    }
 }

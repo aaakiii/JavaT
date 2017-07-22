@@ -9,10 +9,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,20 +29,24 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.User;
+import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
-import com.example.aki.javaq.Domain.Usecase.Loading;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
 import com.example.aki.javaq.Domain.Usecase.UserLab;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
-import com.example.aki.javaq.Presentation.Community.CommunityListFragment;
 import com.example.aki.javaq.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,7 +65,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private TextView mErrorTextView;
     private MenuItem mSaveButton;
     private String mPicturePath;
-    private Uri mPictureUri;
+    private String mPictureUri;
     private String mUserName;
     private int mIconViewWith;
     private int mIconViewHeight;
@@ -70,6 +73,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private UserLab mUserLab;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
+    public DatabaseReference mFirebaseDatabaseReference;
     private boolean isFromSignIn = false;
 
     public static final int RESULT_LOAD_IMAGE = 1;
@@ -86,7 +90,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_with_button);
         setSupportActionBar(myToolbar);
-        if(!isFromSignIn) {
+        if (!isFromSignIn) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } else {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
@@ -147,7 +151,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 //Detect inputted user name
                 if (s.toString().trim().length() > 0 || hasSpecialSymbol(s.toString())) {
                     mTappable = true;
-                    mUserName = s.toString();
                 } else {
                     mTappable = false;
                 }
@@ -285,10 +288,17 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
-                if(mPictureUri != null){
-                    mPictureUri = Uri.fromFile(new File(mPicturePath));
+                if (mPicturePath != null) {
+                    mPictureUri = Uri.fromFile(new File(mPicturePath)).toString();
                 }
-                mUserLab.updateProfile(mUserName, mPictureUri);
+                mUserName = mAddUserNameTextView.getText().toString();
+
+                mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+
+                User user = new User(mUserName, mPictureUri, mFirebaseAuth.getCurrentUser().getUid());
+                mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD).push().setValue(user);
+
+//                mUserLab.updateProfile(mUserName, mPictureUri);
 
 
                 //Todo:読み込み終わったらLoading非表示
@@ -320,6 +330,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         }
         return true;
     }
+
 
     private boolean hasSpecialSymbol(String input) {
         String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
