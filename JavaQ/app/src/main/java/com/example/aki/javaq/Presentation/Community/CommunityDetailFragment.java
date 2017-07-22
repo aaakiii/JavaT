@@ -48,13 +48,15 @@ public class CommunityDetailFragment extends Fragment {
     private boolean mBadTapped;
 
     private static final int REQUEST_CODE_LOGIN = 1;
-    public static final String ARG_POST_ID = "arg_post_id";
+    public static final String ARG_POST_KEY = "arg_post_key";
     private static final String LOGIN_DIALOG = "login_dialog";
 
 
-    public static CommunityDetailFragment newInstance(UUID postID) {
+
+
+    public static CommunityDetailFragment newInstance(String postKey) {
         Bundle args = new Bundle();
-        args.putSerializable(ARG_POST_ID, postID);
+        args.putString(ARG_POST_KEY, postKey);
         CommunityDetailFragment fragment = new CommunityDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -91,10 +93,9 @@ public class CommunityDetailFragment extends Fragment {
 
 
         //For Refresh
-        // SwipeRefreshLayoutの設定
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
-        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
-        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
+//        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+//        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+//        mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.main_color));
 
         //For Post
         mUserNameTextView = (TextView) view.findViewById(R.id.post_user_name);

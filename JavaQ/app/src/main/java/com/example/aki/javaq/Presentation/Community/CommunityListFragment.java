@@ -68,6 +68,7 @@ public class CommunityListFragment extends Fragment {
     private String mPostBody;
     private Uri mPhotoUrl;
     private String mPostTimeAgo;
+    private String mPostKey;
 
 
     private int mCommentsNumInt = 18; //ダミー
@@ -109,8 +110,8 @@ public class CommunityListFragment extends Fragment {
                 mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD)) {
             protected void populateViewHolder(final PostViewHolder viewHolder, PostMain PostMain, int position) {
                 mPostMain = PostMain;
-                String key = this.getRef(position).getKey();
-                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+                mPostKey = this.getRef(position).getKey();
+                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -133,6 +134,21 @@ public class CommunityListFragment extends Fragment {
 
                     }
                 });
+            }
+
+            @Override
+            public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                PostViewHolder viewHolder = super.onCreateViewHolder(parent, viewType);
+                viewHolder.setOnClickListener(new PostViewHolder.ClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Toast.makeText(getActivity(), "Item clicked at " + position, Toast.LENGTH_SHORT).show();
+                        Intent intent = CommunityDetailActivity.newIntent(getActivity(), mPostKey);
+//                        Intent intent = new Intent(getActivity(), CommunityDetailActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                return viewHolder;
             }
         };
 
@@ -191,7 +207,7 @@ public class CommunityListFragment extends Fragment {
     }
 
 
-    public static class PostViewHolder extends RecyclerView.ViewHolder {
+    public static class PostViewHolder extends RecyclerView.ViewHolder{
         //implements View.OnClickListener
         private TextView mUserNameTextView;
         private TextView mPostBodyTextView;
@@ -202,8 +218,8 @@ public class CommunityListFragment extends Fragment {
 
 
 
-        public PostViewHolder(View v) {
-            super(v);
+        public PostViewHolder(View itemView) {
+            super(itemView);
 
             mUserNameTextView = (TextView) itemView.findViewById(R.id.post_user_name);
             mPostBodyTextView = (TextView) itemView.findViewById(R.id.post_text);
@@ -211,10 +227,12 @@ public class CommunityListFragment extends Fragment {
             mCommentsNumTextView = (TextView) itemView.findViewById(R.id.post_comment_num);
             mUserIconImageView = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
 
-            v.setOnClickListener(new View.OnClickListener() {
+            //listener set on ENTIRE ROW, you may set on individual components within a row.
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mClickListener.onItemClick(v, getAdapterPosition());
+
                 }
             });
 

@@ -16,25 +16,24 @@ import java.util.UUID;
 
 public class CommunityDetailActivity extends SingleFragmentActivity {
 
-    @Override
-    protected Fragment createFragment() {
-        return new CommunityDetailFragment();
-    }
+    public static final String EXTRA_POST_KEY = "com.example.aki.javaq.extra_post_key";
 
-    public static final String EXTRA_POST_ID = "extra_crime_id";
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (savedInstanceState == null){
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(android.R.id.content, new CommunityDetailFragment ()).commit();
-//        }
-//
-//    }
 
-    public static Intent newIntent(Context context, UUID postId) {
+    public static Intent newIntent(Context context, String postKey) {
         Intent intent = new Intent(context, CommunityDetailActivity.class);
-        intent.putExtra(EXTRA_POST_ID, postId);
+        intent.putExtra(EXTRA_POST_KEY, postKey);
         return intent;
     }
+
+    @Override
+    protected Fragment createFragment() {
+        String postKey = (String) getIntent().getSerializableExtra(EXTRA_POST_KEY);
+        return CommunityDetailFragment.newInstance(postKey);
+    }
+
+//    @Override
+//    protected Fragment createFragment() {
+//        String postKey = (String) getIntent().getSerializableExtra(EXTRA_POST_KEY);
+//        return CommunityDetailFragment.newInstance(postKey);
+//    }
 }

@@ -34,10 +34,7 @@
         <activity android:name=".Presentation.Community.CommunityAddCommentActivity" />
         <activity android:name=".Presentation.Setting.SettingListActivity" />
         <activity android:name=".Presentation.Community.CommunityPostActivity" />
-        <activity
-            android:name=".Presentation.Community.CommunityDetailActivity"
-            android:label="@string/title_activity_community_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Presentation.Community.CommunityDetailActivity" />
         <activity android:name=".Presentation.UserRegistrationActivity" />
 
     </application>
