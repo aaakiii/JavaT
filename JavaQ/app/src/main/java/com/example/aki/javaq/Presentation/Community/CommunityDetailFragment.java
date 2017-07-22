@@ -17,8 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
+import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
 import com.example.aki.javaq.Domain.Helper.TimeUtils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +52,9 @@ public class CommunityDetailFragment extends Fragment {
     private int mBadNum;
     private boolean mGoodTapped;
     private boolean mBadTapped;
+    private DatabaseReference mFirebaseDatabaseReference;
+    private String mPostKey;
+
 
     private static final int REQUEST_CODE_LOGIN = 1;
     public static final String ARG_POST_KEY = "arg_post_key";
@@ -65,10 +74,7 @@ public class CommunityDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-//            mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
-        }
-
+        mPostKey = getArguments().getString(ARG_POST_KEY);
     }
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -103,9 +109,21 @@ public class CommunityDetailFragment extends Fragment {
         mPostTextView = (TextView) view.findViewById(R.id.post_text);
         mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
-        mUserNameTextView.setText("Post Name");
-        mPostTextView.setText("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic");
-        mPostDateTextView.setText("5h");
+
+        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+        mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                mPostTextView.setText(snapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
+                mUserNameTextView.setText("Post Name");
+                mPostDateTextView.setText("5h");
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+
 
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);

@@ -30,10 +30,4 @@ public class CommunityDetailActivity extends SingleFragmentActivity {
         String postKey = (String) getIntent().getSerializableExtra(EXTRA_POST_KEY);
         return CommunityDetailFragment.newInstance(postKey);
     }
-
-//    @Override
-//    protected Fragment createFragment() {
-//        String postKey = (String) getIntent().getSerializableExtra(EXTRA_POST_KEY);
-//        return CommunityDetailFragment.newInstance(postKey);
-//    }
 }
