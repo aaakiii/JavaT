@@ -7,15 +7,14 @@ package com.example.aki.javaq.Domain.Entity;
 public class User {
     private String mUserName;
     private String mUserPicUri;
-    private String mUid;
+//    private String mUid;
 
     public User() {
     }
 
-    public User(String mUserName, String mUserPicUri, String mUid) {
+    public User(String mUserName, String mUserPicUri) {
         this.mUserName = mUserName;
         this.mUserPicUri = mUserPicUri;
-        this.mUid = mUid;
     }
 
     public String getmUserName() {
@@ -32,13 +31,5 @@ public class User {
 
     public void setmUserPicUri(String mUserPicUri) {
         this.mUserPicUri = mUserPicUri;
-    }
-
-    public String getmUid() {
-        return mUid;
-    }
-
-    public void setmUid(String mUid) {
-        this.mUid = mUid;
     }
 }

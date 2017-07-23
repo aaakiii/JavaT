@@ -306,8 +306,8 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 mUserName = mAddUserNameTextView.getText().toString();
 
 
+                User user = new User(mUserName, mPictureUri);
                 String key = mFirebaseAuth.getCurrentUser().getUid();
-                User user = new User(mUserName, mPictureUri, key);
                 mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
                         .child(key).setValue(user);
 

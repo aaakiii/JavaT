@@ -140,7 +140,7 @@ public class CommunityListFragment extends Fragment {
 
     public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         ArrayList<PostMain> mPostMainList = new ArrayList<>();
-        ArrayList<User> mUserList = new ArrayList<>();
+        HashMap<String, User> mUserMap = new HashMap<>();
 
         public PostAdapter(DatabaseReference post_ref, DatabaseReference user_ref) {
             post_ref.addValueEventListener(new ValueEventListener() {
@@ -159,11 +159,11 @@ public class CommunityListFragment extends Fragment {
 
             user_ref.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
-                    mUserList.clear();
+                    mUserMap.clear();
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         User user = postSnapshot.getValue(User.class);
-                        String key = user.getmUid();
-                        mUserList.add(user);
+                        String key = postSnapshot.getKey();
+                        mUserMap.put(key, user);
                     }
                     notifyDataSetChanged();
                 }
@@ -182,11 +182,10 @@ public class CommunityListFragment extends Fragment {
         public void onBindViewHolder(PostViewHolder viewHolder, int position) {
             PostMain mPostMain = mPostMainList.get(position);
             viewHolder.mPostBodyTextView.setText(mPostMain.getmPostBody());
-            for (int i = 0; i < mUserList.size(); i++) {
-                User mUser = mUserList.get(i);
-                if (mPostMain.getmUserId().equals(mUser.getmUid())) {
-                    viewHolder.mUserNameTextView.setText(mUser.getmUserName());
-                }
+
+            if (mUserMap.containsKey(mPostMain.getmUserId().toString())) {
+                User mUser = mUserMap.get(mPostMain.getmUserId().toString());
+                viewHolder.mUserNameTextView.setText(mUser.getmUserName());
             }
         }
 
