@@ -3,9 +3,11 @@ package com.example.aki.javaq.Presentation.Community;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
+import com.example.aki.javaq.Domain.Helper.TimeUtils;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 
 import android.net.Uri;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aki.javaq.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +49,7 @@ public class CommunityListFragment extends Fragment {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private FloatingActionButton mNewPostButton;
+    public DatabaseReference mFirebaseDatabaseReference;
     public DatabaseReference mPostsRef;
     public DatabaseReference mUsersRef;
     private LinearLayoutManager mLinearLayoutManager;
@@ -55,16 +59,12 @@ public class CommunityListFragment extends Fragment {
     private PostAdapter mPostAdapter;
 
     private static int mLastAdapterClickedPosition = -1;
-    private PostMain mPostMain;
     private String mUsername;
     private String mPostBody;
     private Uri mPhotoUrl;
     private String mPostTimeAgo;
     private String mPostKey;
     private String mUserId;
-
-
-    private int mCommentsNumInt = 18; //ダミー
 
 
     @Override
@@ -76,9 +76,6 @@ public class CommunityListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.com_list_fragment, container, false);
-//        Intent intent = getActivity().getIntent();
-//        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setReverseLayout(true);
@@ -87,6 +84,7 @@ public class CommunityListFragment extends Fragment {
         mComRecyclerView = (RecyclerView) view.findViewById(R.id.com_list_recycler_view);
         mComRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
         mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostMain.POSTS_CHILD);
         mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
 
@@ -100,7 +98,6 @@ public class CommunityListFragment extends Fragment {
         mFirebaseUser = FirebaseLab.getFirebaseUser();
 
 
-//
         //For the issue floating action button unexpected anchor gravity change
         mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -141,6 +138,8 @@ public class CommunityListFragment extends Fragment {
     public class PostAdapter extends RecyclerView.Adapter<PostViewHolder> {
         ArrayList<PostMain> mPostMainList = new ArrayList<>();
         HashMap<String, User> mUserMap = new HashMap<>();
+        private PostMain mPostMain;
+
 
         public PostAdapter(DatabaseReference post_ref, DatabaseReference user_ref) {
             post_ref.addValueEventListener(new ValueEventListener() {
@@ -173,6 +172,7 @@ public class CommunityListFragment extends Fragment {
             });
         }
 
+        @Override
         public PostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.com_list_item, parent, false);
             return new PostViewHolder(view);
@@ -180,12 +180,34 @@ public class CommunityListFragment extends Fragment {
 
 
         public void onBindViewHolder(PostViewHolder viewHolder, int position) {
-            PostMain mPostMain = mPostMainList.get(position);
+            mPostMain = mPostMainList.get(position);
+            PostMain post = mPostMainList.get(position);
+            viewHolder.bind(post);
+
+            //Body text
             viewHolder.mPostBodyTextView.setText(mPostMain.getmPostBody());
 
+            //Time
+            long timestamp = mPostMain.getmPostTime();
+            mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
+            viewHolder.mPostTimeTextView.setText(mPostTimeAgo);
+
+            //Comment num
+            //TODO:comments nodeから取得
+            int mCommentsNumInt = 18; //ダミー
+            String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            viewHolder.mCommentsNumTextView.setText(mCommentsNum);
+
             if (mUserMap.containsKey(mPostMain.getmUserId().toString())) {
+                //User name
                 User mUser = mUserMap.get(mPostMain.getmUserId().toString());
                 viewHolder.mUserNameTextView.setText(mUser.getmUserName());
+
+                //User Picture
+                //TODO:set user picture
+//                Glide.with(getActivity())
+//                        .load(mPhotoUrl)
+//                        .into(viewHolder.mUserIconImageView);
             }
         }
 
@@ -194,16 +216,14 @@ public class CommunityListFragment extends Fragment {
         }
     }
 
-    ;
 
     public class PostViewHolder extends RecyclerView.ViewHolder {
-        //implements View.OnClickListener
         private TextView mUserNameTextView;
         private TextView mPostBodyTextView;
         private TextView mPostTimeTextView;
         private TextView mCommentsNumTextView;
         private CircleImageView mUserIconImageView;
-//        private PostViewHolder.ClickListener mClickListener;
+        private PostMain mPostMain;
 
 
         public PostViewHolder(View itemView) {
@@ -219,23 +239,15 @@ public class CommunityListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    mClickListener.onItemClick(v, getAdapterPosition());
-
+                    Intent intent = CommunityDetailActivity.newIntent(getActivity(), mPostMain.getmPostId());
+                    startActivity(intent);
                 }
             });
-
         }
-//
-//            //Interface to send callbacks...
-//            public interface ClickListener {
-//                public void onItemClick(View view, int position);
-//            }
-//
-//            public void setOnClickListener(PostViewHolder.ClickListener clickListener) {
-//                mClickListener = clickListener;
-//            }
 
-
+        public void bind(PostMain post) {
+            mPostMain = post;
+        }
     }
 
 

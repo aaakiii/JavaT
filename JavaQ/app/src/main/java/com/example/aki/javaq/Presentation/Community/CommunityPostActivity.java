@@ -131,8 +131,12 @@ public class CommunityPostActivity extends AppCompatActivity {
                 mPostBody = mEditTextView.getText().toString();
                 mUserId = mFirebaseUser.getUid();
                 mPostTime = System.currentTimeMillis();
-                PostMain post = new PostMain(mPostBody, mUserId, mPostTime);
-                mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).push().setValue(post);
+
+                //Save post to the Firebase
+                DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
+                String key = ref.push().getKey();
+                PostMain post = new PostMain(key, mUserId, mPostTime, mPostBody, null);
+                ref.child(key).setValue(post);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 
                 Intent intent = new Intent(CommunityPostActivity.this, CommunityListActivity.class);
