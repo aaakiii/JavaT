@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -32,21 +31,14 @@ import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
-import com.example.aki.javaq.Domain.Usecase.UserLab;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
 import com.example.aki.javaq.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -72,7 +64,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private int mIconViewWith;
     private int mIconViewHeight;
     private boolean mTappable;
-    private UserLab mUserLab;
     private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
     public DatabaseReference mFirebaseDatabaseReference;
@@ -98,7 +89,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        mUserLab = new UserLab();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
 
@@ -123,12 +113,12 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
                     mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
                     mAddUserNameTextView.setText(mUserName);
-                        mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
+                    mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
 
                     //TODO:画像がないときはデフォルト画像をセット
-                        Glide.with(getApplicationContext())
-                                .load(Uri.parse(mPictureUri))
-                                .into(mMyIconImageView);
+                    Glide.with(getApplicationContext())
+                            .load(Uri.parse(mPictureUri))
+                            .into(mMyIconImageView);
                 }
 
                 @Override
@@ -316,9 +306,10 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 mUserName = mAddUserNameTextView.getText().toString();
 
 
-                User user = new User(mUserName, mPictureUri);
+                String key = mFirebaseAuth.getCurrentUser().getUid();
+                User user = new User(mUserName, mPictureUri, key);
                 mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
-                        .child(mFirebaseAuth.getCurrentUser().getUid()).setValue(user);
+                        .child(key).setValue(user);
 
 //                mUserLab.updateProfile(mUserName, mPictureUri);
 
