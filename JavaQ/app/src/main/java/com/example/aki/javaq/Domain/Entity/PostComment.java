@@ -4,18 +4,18 @@ package com.example.aki.javaq.Domain.Entity;
  * Created by AKI on 2017-07-13.
  */
 
-public class PostCommentContents {
+public class PostComment {
     private String mComId;
     private String mComComment;
     private String mUserName;
     private int mComLike;
     private int mComUnlike;
 
-    public PostCommentContents(){
+    public PostComment(){
 
     }
 
-    public PostCommentContents(String comment, String name, int like, int unLike){
+    public PostComment(String comment, String name, int like, int unLike){
         mComComment = comment;
         mUserName = name;
         mComLike = like;
