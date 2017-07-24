@@ -37,22 +37,21 @@ import com.google.firebase.auth.GoogleAuthProvider;
  * Created by MinaFujisawa on 2017/06/13.
  */
 
-// TODO: ログインボタン
-public class LoginDialogFragment extends DialogFragment {
+public class LoginDialogFragment extends DialogFragment implements GoogleApiClient.OnConnectionFailedListener {
     private TextView mLaterTextView;
     //Fragment target, int requestCode
 
     private static final int REQUEST_CODE_LOGIN = 1;
-
     private static final String TAG = "SignInActivity";
+    private static final int RC_SIGN_IN = 9001;
     private static FirebaseAuth mFirebaseAuth;
     private SignInButton mSignInButton;
-    private SignInLab mSignInLab;
+    private static GoogleApiClient mGoogleApiClient;
 
 
     public static LoginDialogFragment newInstance(Fragment target, int requestCode) {
         LoginDialogFragment fragment = new LoginDialogFragment();
-        fragment.setTargetFragment(fragment, REQUEST_CODE_LOGIN);
+        fragment.setTargetFragment(fragment,REQUEST_CODE_LOGIN);
         return fragment;
     }
 
@@ -60,13 +59,19 @@ public class LoginDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.google_sign_in_activity, null);
 
-        mSignInLab = new SignInLab(getActivity(), getActivity(), getActivity());
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        // Configure Google Sign In
 
         mSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSignInButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                startActivityForResult(mSignInLab.getSignInIntent(), SignInLab.RC_SIGN_IN);
+                signIn();
             }
         });
 
@@ -83,28 +88,56 @@ public class LoginDialogFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSignInLab.disconnect();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
+
+    public void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(mSignInLab.isAuthenticateSuccess(requestCode, data)){
-            Toast.makeText(getActivity(), "login success", Toast.LENGTH_SHORT).show();
 
-            //TODO: 新規かどうか取得
-            boolean isNewUser = true;
-            if(isNewUser){
-                Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
-                intent.putExtra(UserRegistrationActivity.NEW_USER, true);
-                startActivity(intent);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign-In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                SignInLab.firebaseAuthWithGoogle(account, getActivity());
+
+                //TODO: 新規かどうか取得
+                boolean isNewUser = true;
+
+                if(isNewUser){
+                    Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                    intent.putExtra(UserRegistrationActivity.NEW_USER, true);
+                    startActivity(intent);
+                } else {
+                    dismiss();
+                }
             } else {
-                dismiss();
+                // Google Sign-In failed
+                Log.e(TAG, "Google Sign-In failed.");
             }
         }
-
     }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        Toast.makeText(getActivity(), "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+
+
 
 
 }

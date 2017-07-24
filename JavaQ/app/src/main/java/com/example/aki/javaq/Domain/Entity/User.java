@@ -6,15 +6,14 @@ package com.example.aki.javaq.Domain.Entity;
 
 public class User {
     private String mUserName;
-    private String mUserPicUri;
-//    private String mUid;
+    private String mUserId;
 
     public User() {
     }
 
-    public User(String mUserName, String mUserPicUri) {
+    public User(String mUserName, String mUserId) {
         this.mUserName = mUserName;
-        this.mUserPicUri = mUserPicUri;
+        this.mUserId = mUserId;
     }
 
     public String getmUserName() {
@@ -25,11 +24,11 @@ public class User {
         this.mUserName = mUserName;
     }
 
-    public String getmUserPicUri() {
-        return mUserPicUri;
+    public String getmUserId() {
+        return mUserId;
     }
 
-    public void setmUserPicUri(String mUserPicUri) {
-        this.mUserPicUri = mUserPicUri;
+    public void setmUserId(String mUserId) {
+        this.mUserId = mUserId;
     }
 }

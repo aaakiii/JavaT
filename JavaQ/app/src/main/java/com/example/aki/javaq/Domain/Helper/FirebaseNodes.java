@@ -13,6 +13,10 @@ public class FirebaseNodes {
         public static final String USER_ID = "mUid";
     }
 
+    public static final class UserPicture {
+        public static final String USER_PIC_CHILD = "user_pictures";
+    }
+
     public static final class PostMain {
         public static final String POSTS_CHILD = "posts";
         public static final String POST_BODY = "mPostBody";
