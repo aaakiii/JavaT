@@ -56,7 +56,6 @@ public class CommunityDetailFragment extends Fragment {
     private TextView mPostCommentsNumTextView;
     private EditText mAddCommentsEditTextView;
     private CircleImageView mMyIconImageView;
-    private RecyclerView mCommentsRecyclerView;
     private CommentsAdapter mAdapter;
     private int mCommentsNumInt = 18; //ダミー
     private Date mCommentDate;
@@ -71,7 +70,7 @@ public class CommunityDetailFragment extends Fragment {
     public DatabaseReference mPostsRef;
     public DatabaseReference mUsersRef;
     private CommentsAdapter mCommentsAdapter;
-    private RecyclerView mComRecyclerView;
+    private RecyclerView mCommentsRecyclerView;
     private String mPostTimeAgo;
     private static final int REQUEST_CODE_LOGIN = 1;
     public static final String ARG_POST_KEY = "arg_post_key";
@@ -133,27 +132,27 @@ public class CommunityDetailFragment extends Fragment {
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
 
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-        mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
-
-//                    mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
-                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
-                for(DataSnapshot post : dataSnapshot.getChildren() ){
-                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(post.child(FirebaseNodes.User.USER_ID))){
-                        Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
-                        mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
-                    } else{
-                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
-                        mUserNameTextView.setText("UserName");
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+//        mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
+//
+////                    mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
+//                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
+//                for(DataSnapshot post : dataSnapshot.getChildren() ){
+//                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(post.child(FirebaseNodes.User.USER_ID))){
+//                        Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
+//                        mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
+//                    } else{
+//                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
+//                        mUserNameTextView.setText("UserName");
+//                    }
+//                }
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//            }
+//        });
 
         mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
         mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
@@ -244,7 +243,7 @@ public class CommunityDetailFragment extends Fragment {
         @Override
         public CommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 //            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.com_list_item, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.com_detail_comment_item, parent, false);
             return new CommentsViewHolder(view);
         }
 
@@ -256,6 +255,7 @@ public class CommunityDetailFragment extends Fragment {
 
             //Display Body text
             viewHolder.mCommentTextView.setText(mPostComment.getComBody());
+
 
 
 

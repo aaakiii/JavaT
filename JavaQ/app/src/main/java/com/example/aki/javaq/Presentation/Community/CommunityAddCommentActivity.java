@@ -141,6 +141,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 PostCommentContents comment = new PostCommentContents(mPostComBody, mUserId, mPostTime, 0, 0);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
+//                finish();
 
                 Intent intent = new Intent(CommunityAddCommentActivity.this, CommunityDetailActivity.class);
                 startActivity(intent);
