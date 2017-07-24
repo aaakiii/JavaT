@@ -328,16 +328,11 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
-                mCurrentUser = FirebaseLab.getFirebaseUser();
-
-
-                if (mPicturePath != null) {
-                    mPictureUri = Uri.fromFile(new File(mPicturePath)).toString();
-                }
+//                mCurrentUser = FirebaseLab.getFirebaseUser();
                 mUserName = mAddUserNameTextView.getText().toString();
 
                 //Save name to the database
-                User user = new User(mUserName, mPictureUri);
+                User user = new User(mUserName);
                 mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
                         .child(mCurrentUser.getUid()).setValue(user);
 //
