@@ -1,5 +1,6 @@
 package com.example.aki.javaq.Presentation;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -191,12 +192,10 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 rootRef.child(mCurrentUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        setUserPicFromStorage(uri);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        setUserPicFromAuth();
+                        //If there's a picture in the storage, set the picture
+                        Glide.with(getApplicationContext())
+                                .load(uri)
+                                .into(mMyIconImageView);
                     }
                 });
             }
@@ -207,20 +206,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         });
     }
 
-
-    private void setUserPicFromStorage(Uri uri) {
-        Glide.with(getApplicationContext())
-                .load(uri)
-                .into(mMyIconImageView);
-    }
-
-    private void setUserPicFromAuth() {
-        Uri uri = mCurrentUser.getPhotoUrl();
-        mCurrentUser = FirebaseLab.getFirebaseUser();
-        Glide.with(getApplicationContext())
-                .load(uri)
-                .into(mMyIconImageView);
-    }
 
 
     private static void removeOnGlobalLayoutListener(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener listener) {
@@ -328,15 +313,16 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
-//                mCurrentUser = FirebaseLab.getFirebaseUser();
+                mCurrentUser = FirebaseLab.getFirebaseUser();
+
                 mUserName = mAddUserNameTextView.getText().toString();
 
                 //Save name to the database
                 User user = new User(mUserName, mCurrentUser.getUid());
                 mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
                         .child(mCurrentUser.getUid()).setValue(user);
-//
-                //Save picture to the storage
+
+                //Save picture to the storage if only user set the local image
                 if (mPicturePath != null) {
                     Uri file = Uri.fromFile(new File(mPicturePath));
                     StorageReference picRef = mUserPicReference.child(FirebaseNodes.UserPicture.USER_PIC_CHILD)

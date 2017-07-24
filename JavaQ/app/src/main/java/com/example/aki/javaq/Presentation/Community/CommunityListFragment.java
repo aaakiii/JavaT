@@ -1,5 +1,6 @@
 package com.example.aki.javaq.Presentation.Community;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
@@ -215,8 +216,22 @@ public class CommunityListFragment extends Fragment {
                 rootRef.child(mUser.getmUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        //If there's a picture in the storage, set the picture
                         Glide.with(getActivity())
                                 .load(uri)
+                                .into(viewHolder.mUserIconImageView);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //If not, set the default picture
+                        int id = R.drawable.image_user_default;
+                        Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                "://" + getResources().getResourcePackageName(id)
+                                + '/' + getResources().getResourceTypeName(id)
+                                + '/' + getResources().getResourceEntryName(id));
+                        Glide.with(getActivity())
+                                .load(mPictureDefaultUri)
                                 .into(viewHolder.mUserIconImageView);
                     }
                 });
