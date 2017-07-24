@@ -332,7 +332,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 mUserName = mAddUserNameTextView.getText().toString();
 
                 //Save name to the database
-                User user = new User(mUserName);
+                User user = new User(mUserName, mCurrentUser.getUid());
                 mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
                         .child(mCurrentUser.getUid()).setValue(user);
 //

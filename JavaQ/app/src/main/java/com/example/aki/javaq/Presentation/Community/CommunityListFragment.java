@@ -11,6 +11,7 @@ import com.example.aki.javaq.Domain.Helper.TimeUtils;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -27,12 +28,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aki.javaq.R;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.ArrayList;
@@ -179,7 +184,7 @@ public class CommunityListFragment extends Fragment {
         }
 
 
-        public void onBindViewHolder(PostViewHolder viewHolder, int position) {
+        public void onBindViewHolder(final PostViewHolder viewHolder, int position) {
             mPostMain = mPostMainList.get(position);
             PostMain post = mPostMainList.get(position);
             viewHolder.bind(post);
@@ -198,16 +203,31 @@ public class CommunityListFragment extends Fragment {
             String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
 
+
             if (mUserMap.containsKey(mPostMain.getmUserId().toString())) {
-                //User name
+
+                //Display User name
                 User mUser = mUserMap.get(mPostMain.getmUserId().toString());
                 viewHolder.mUserNameTextView.setText(mUser.getmUserName());
 
-                //User Picture
-                //TODO:set user picture
-//                Glide.with(getActivity())
-//                        .load(mPhotoUrl)
-//                        .into(viewHolder.mUserIconImageView);
+                //Display User picture
+                StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                rootRef.child(mUser.getmUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(getActivity())
+                                .load(uri)
+                                .into(viewHolder.mUserIconImageView);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        Uri uri = FirebaseLab.getFirebaseUser().getPhotoUrl();
+                        Glide.with(getActivity())
+                                .load(uri)
+                                .into(viewHolder.mUserIconImageView);
+                    }
+                });
             }
         }
 
@@ -235,7 +255,6 @@ public class CommunityListFragment extends Fragment {
             mCommentsNumTextView = (TextView) itemView.findViewById(R.id.post_comment_num);
             mUserIconImageView = (CircleImageView) itemView.findViewById(R.id.post_user_icon);
 
-            //listener set on ENTIRE ROW, you may set on individual components within a row.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
