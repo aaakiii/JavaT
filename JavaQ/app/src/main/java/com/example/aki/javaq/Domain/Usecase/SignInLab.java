@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.aki.javaq.Presentation.Community.CommunityPostActivity;
 import com.example.aki.javaq.Presentation.Community.LoginDialogFragment;
+import com.example.aki.javaq.Presentation.UserRegistrationActivity;
 import com.example.aki.javaq.R;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -88,21 +89,31 @@ public class SignInLab extends AppCompatActivity implements GoogleApiClient.OnCo
     }
 
     // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-    public boolean isAuthenticateSuccess(int requestCode, Intent data) {
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                // Google Sign-In was successful, authenticate with Firebase
-                GoogleSignInAccount account = result.getSignInAccount();
-                SignInLab.firebaseAuthWithGoogle(account, mActivity);
-                return true;
-            } else {
-                // Google Sign-In failed
-                Log.e(TAG, "Google Sign-In failed.");
-                return false;
-            }
-        } return false;
-    }
+//    public boolean isAuthenticateSuccess(int requestCode, Intent data) {
+//        if (requestCode == RC_SIGN_IN) {
+//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            if (result.isSuccess()) {
+//                // Google Sign-In was successful, authenticate with Firebase
+//                GoogleSignInAccount account = result.getSignInAccount();
+//                firebaseAuthWithGoogle(account, mActivity);
+//
+//                //call method for UserRegistrationActivity
+//                if (FirebaseLab.getFirebaseUser() != null) {
+//                    UserRegistrationActivity activity = new UserRegistrationActivity();
+//                    activity.onLoginFinished();
+//                }
+//
+//                return true;
+//            } else {
+//                // Google Sign-In failed
+//                Log.e(TAG, "Google Sign-In failed.");
+//                return false;
+//            }
+//
+//
+//        }
+//        return false;
+//    }
 
 
     public static void signOut() {
