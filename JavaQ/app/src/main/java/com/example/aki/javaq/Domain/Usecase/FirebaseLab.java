@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -37,7 +38,6 @@ public class FirebaseLab {
     private static boolean mFirebaseLogIned;
     private static final String TAG = "CommunityPostActivity";
     public FirebaseLab(){
-
     }
 
     public static boolean isFirebaseLogIned() {
@@ -67,6 +67,11 @@ public class FirebaseLab {
     public static FirebaseAnalytics getFirebaseAnalytics(Context context) {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         return mFirebaseAnalytics;
+    }
+
+    public static StorageReference getStorageReference(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        return storage.getReferenceFromUrl("gs://javaq-86467.appspot.com");
     }
 
 

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,18 +29,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
 import com.example.aki.javaq.R;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -64,23 +72,42 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private int mIconViewWith;
     private int mIconViewHeight;
     private boolean mTappable;
-    private FirebaseUser mFirebaseUser;
+    private FirebaseUser mCurrentUser;
     private FirebaseAuth mFirebaseAuth;
-    public DatabaseReference mFirebaseDatabaseReference;
+    private DatabaseReference mDatabaseReference;
+    private StorageReference mUserPicReference;
+    private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean isFromSignIn = false;
 
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
     public static final String NEW_USER = "new_user";
+    public static final String TAG = "tag";
+
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart");
+//        FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
         setContentView(R.layout.user_registration_activity);
 
         Intent i = getIntent();
         isFromSignIn = i.getBooleanExtra(NEW_USER, false);
 
+        //Toolbar
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar_with_button);
         setSupportActionBar(myToolbar);
         if (!isFromSignIn) {
@@ -89,8 +116,28 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
 
-        mFirebaseUser = FirebaseLab.getFirebaseUser();
-        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+        mDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+        mUserPicReference = FirebaseLab.getStorageReference();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                Log.i(TAG, "mAuthListener");
+
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mCurrentUser = FirebaseLab.getFirebaseUser();
+                    setView();
+
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+            }
+        };
+        FirebaseLab.getFirebaseAuth().addAuthStateListener(mAuthListener);
 
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
@@ -99,57 +146,8 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         mEditIconTextView = (TextView) findViewById(R.id.add_icon_text);
         mEditIconTextView.setOnClickListener(this);
-
-
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-
-        if (!isFromSignIn) {
-            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-            mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
-                    .child(mFirebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-
-                    mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
-                    mAddUserNameTextView.setText(mUserName);
-                    mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
-
-                    //TODO:画像がないときはデフォルト画像をセット
-                    Glide.with(getApplicationContext())
-                            .load(Uri.parse(mPictureUri))
-                            .into(mMyIconImageView);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-
-//            mFirebaseAuth.getCurrentUser()
-//                    .reload()
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//                            mUserName = mFirebaseUser.getDisplayName();
-//                            mAddUserNameTextView.setText(mUserName);
-//                            Glide.with(getApplicationContext())
-//                                    .load(mFirebaseUser.getPhotoUrl())
-//                                    .into(mMyIconImageView);
-//                        }
-            });
-        } else {
-            //TODO:セットできない…。userがnullになるのは読み込みが遅いから？
-            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-            mFirebaseUser = FirebaseLab.getFirebaseUser();
-            if (mFirebaseUser != null) {
-                Glide.with(getApplicationContext())
-                        .load(mFirebaseUser.getPhotoUrl())
-                        .into(mMyIconImageView);
-            }
-        }
-
-
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,6 +191,49 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             }
         };
         mParentLayout.getViewTreeObserver().addOnGlobalLayoutListener(mGlobalLayoutListener);
+
+    }
+
+    private void setView(){
+        if (!isFromSignIn) {
+            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+            mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
+                    .child(mCurrentUser.getUid()).addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    User mUser = snapshot.getValue(User.class);
+//                    mUserName = mUser.getmUserName();
+                    mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
+                    mAddUserNameTextView.setText(mUserName);
+//                    mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
+//
+//                    //TODO:画像がないときはデフォルト画像をセット
+                    StorageReference storageReference = mUserPicReference.child(FirebaseNodes.UserPicture.USER_PIC_CHILD)
+                            .child(mCurrentUser.getUid());
+                    Glide.with(getApplicationContext())
+                            .using(new FirebaseImageLoader())
+                            .load(storageReference)
+                            .into(mMyIconImageView);
+
+//                    Glide.with(getApplicationContext())
+//                            .load(Uri.parse(mPictureUri))
+//                            .into(mMyIconImageView);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+        } else {
+            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+            mCurrentUser = FirebaseLab.getFirebaseUser();
+            if (mCurrentUser != null) {
+                Glide.with(getApplicationContext())
+                        .load(mCurrentUser.getPhotoUrl())
+                        .into(mMyIconImageView);
+            }
+        }
 
     }
 
@@ -297,21 +338,42 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected");
         switch (item.getItemId()) {
             case R.id.action_save:
+
+                mCurrentUser = FirebaseLab.getFirebaseUser();
+
 
                 if (mPicturePath != null) {
                     mPictureUri = Uri.fromFile(new File(mPicturePath)).toString();
                 }
                 mUserName = mAddUserNameTextView.getText().toString();
 
-
+                //Save name
                 User user = new User(mUserName, mPictureUri);
-                String key = mFirebaseAuth.getCurrentUser().getUid();
-                mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
-                        .child(key).setValue(user);
+//                String key = mFirebaseAuth.getCurrentUser().getUid();
+                mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
+                        .child(mCurrentUser.getUid()).setValue(user);
+//
+                //Save Picture
+                if(mPicturePath!=null){
+                    Uri file = Uri.fromFile(new File(mPicturePath));
+                    StorageReference picRef = mUserPicReference.child(FirebaseNodes.UserPicture.USER_PIC_CHILD)
+                            .child(mCurrentUser.getUid());
+                    UploadTask uploadTask = picRef.putFile(file);
 
-//                mUserLab.updateProfile(mUserName, mPictureUri);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Toast.makeText(getApplicationContext(), R.string.failure, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
+                }
 
 
                 //Todo:読み込み終わったらLoading非表示
