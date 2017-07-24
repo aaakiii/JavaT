@@ -224,6 +224,7 @@ public class CommunityListFragment extends Fragment {
         private TextView mCommentsNumTextView;
         private CircleImageView mUserIconImageView;
         private PostMain mPostMain;
+        private User mUser;
 
 
         public PostViewHolder(View itemView) {

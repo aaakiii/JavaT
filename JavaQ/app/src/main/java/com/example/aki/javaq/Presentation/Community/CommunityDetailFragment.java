@@ -16,7 +16,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.aki.javaq.Domain.Entity.PostMain;
+import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
@@ -24,6 +27,7 @@ import com.example.aki.javaq.Domain.Helper.TimeUtils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -113,16 +117,25 @@ public class CommunityDetailFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
         mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                mPostTextView.setText(snapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
-                mUserNameTextView.setText("Post Name");
-                mPostDateTextView.setText("5h");
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
+
+//                    mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
+                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
+                for(DataSnapshot post : dataSnapshot.getChildren() ){
+                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(post.child(FirebaseNodes.User.USER_ID))){
+                        Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
+                        mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
+                    } else{
+                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
+                        mUserNameTextView.setText("UserName");
+                    }
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
 
 
         //For Add a comment

@@ -12,6 +12,7 @@ import com.example.aki.javaq.Presentation.SingleFragmentActivity;
 import com.example.aki.javaq.R;
 
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class CommunityDetailActivity extends SingleFragmentActivity {
