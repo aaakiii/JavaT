@@ -84,24 +84,10 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     public static final String NEW_USER = "new_user";
     public static final String TAG = "tag";
 
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart");
-//        FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
         setContentView(R.layout.user_registration_activity);
 
         Intent i = getIntent();
@@ -122,18 +108,11 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                Log.i(TAG, "mAuthListener");
-
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     mCurrentUser = FirebaseLab.getFirebaseUser();
                     setView();
-
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
             }
         };
@@ -151,20 +130,22 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 invalidateOptionsMenu();
 
+                //TODO:編集してなかったらfalse
                 //Detect inputted user name
-                if (s.toString().trim().length() > 0 || hasSpecialSymbol(s.toString())) {
+                if (s.toString().trim().length() > 0)  {
                     mTappable = true;
                 } else {
+                    hasSpecialSymbol(s.toString());
                     mTappable = false;
                 }
 
+                //TODO:記号なしをやめて最大文字数を設定する
                 //For error
                 if (hasSpecialSymbol(s.toString().trim())) {
                     mErrorTextView.setText(R.string.error_user_name);
@@ -175,7 +156,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
             @Override
             public void afterTextChanged(Editable s) {
-                //
             }
         });
 
@@ -194,48 +174,54 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
     }
 
-    private void setView(){
-        if (!isFromSignIn) {
-            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-            mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
-                    .child(mCurrentUser.getUid()).addValueEventListener(new ValueEventListener() {
+    private void setView() {
+        mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
+                .child(mCurrentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
 
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    User mUser = snapshot.getValue(User.class);
-//                    mUserName = mUser.getmUserName();
+                //Display User name
+                if (!isFromSignIn) {
                     mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
                     mAddUserNameTextView.setText(mUserName);
-//                    mPictureUri = snapshot.child(FirebaseNodes.User.USER_PIC_URI).getValue().toString();
-//
-//                    //TODO:画像がないときはデフォルト画像をセット
-                    StorageReference storageReference = mUserPicReference.child(FirebaseNodes.UserPicture.USER_PIC_CHILD)
-                            .child(mCurrentUser.getUid());
-                    Glide.with(getApplicationContext())
-                            .using(new FirebaseImageLoader())
-                            .load(storageReference)
-                            .into(mMyIconImageView);
-
-//                    Glide.with(getApplicationContext())
-//                            .load(Uri.parse(mPictureUri))
-//                            .into(mMyIconImageView);
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-        } else {
-            mFirebaseAuth = FirebaseLab.getFirebaseAuth();
-            mCurrentUser = FirebaseLab.getFirebaseUser();
-            if (mCurrentUser != null) {
-                Glide.with(getApplicationContext())
-                        .load(mCurrentUser.getPhotoUrl())
-                        .into(mMyIconImageView);
+                //Display User picture
+                StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                rootRef.child(mCurrentUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        setUserPicFromStorage(uri);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        setUserPicFromAuth();
+                    }
+                });
             }
-        }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
+
+
+    private void setUserPicFromStorage(Uri uri) {
+        Glide.with(getApplicationContext())
+                .load(uri)
+                .into(mMyIconImageView);
+    }
+
+    private void setUserPicFromAuth() {
+        Uri uri = mCurrentUser.getPhotoUrl();
+        mCurrentUser = FirebaseLab.getFirebaseUser();
+        Glide.with(getApplicationContext())
+                .load(uri)
+                .into(mMyIconImageView);
+    }
+
 
     private static void removeOnGlobalLayoutListener(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener listener) {
         if (observer == null) {
@@ -350,14 +336,13 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 }
                 mUserName = mAddUserNameTextView.getText().toString();
 
-                //Save name
+                //Save name to the database
                 User user = new User(mUserName, mPictureUri);
-//                String key = mFirebaseAuth.getCurrentUser().getUid();
                 mDatabaseReference.child(FirebaseNodes.User.USER_CHILD)
                         .child(mCurrentUser.getUid()).setValue(user);
 //
-                //Save Picture
-                if(mPicturePath!=null){
+                //Save picture to the storage
+                if (mPicturePath != null) {
                     Uri file = Uri.fromFile(new File(mPicturePath));
                     StorageReference picRef = mUserPicReference.child(FirebaseNodes.UserPicture.USER_PIC_CHILD)
                             .child(mCurrentUser.getUid());
@@ -414,6 +399,14 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         boolean b = p1.matcher(input).matches() || p2.matcher(input).matches();
 
         return (b) ? true : false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
+        }
     }
 
 
