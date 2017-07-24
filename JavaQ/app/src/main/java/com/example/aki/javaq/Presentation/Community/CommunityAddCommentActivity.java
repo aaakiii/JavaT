@@ -1,11 +1,15 @@
 package com.example.aki.javaq.Presentation.Community;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -15,7 +19,17 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.aki.javaq.Domain.Entity.PostCommentContents;
+import com.example.aki.javaq.Domain.Entity.PostMain;
+import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
+import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
+import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 /**
  * Created by MinaFujisawa on 2017/07/13.
@@ -26,6 +40,19 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     private EditText mCommentEditTextView;
     private String mCommentText;
     private MenuItem mPostButton;
+    private SharedPreferences mSharedPreferences;
+    private static FirebaseAuth mFirebaseAuth;
+    private static FirebaseUser mFirebaseUser;
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    public DatabaseReference mFirebaseDatabaseReference;
+    public static final int DEFAULT_MSG_LENGTH_LIMIT = 30;
+    public static String mUsername;
+    private String mPostComBody;
+    private String mUserId;
+    private long mPostTime;
+    private static String mPhotoUrl;
+    private static final String POST_SENT_EVENT = "post_sent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +67,26 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         //TODO: drawableにclose iconいれてそれにセットする
         ab.setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
 
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        //New Child entries
+        mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+        mFirebaseAnalytics = FirebaseLab.getFirebaseAnalytics(this);
+        mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
+        FirebaseLab.SetConfig();
+        FirebaseLab.fetchConfig();
+
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+        mFirebaseUser = FirebaseLab.getFirebaseUser();
+        mUsername = mFirebaseUser.getDisplayName();
+        if (mFirebaseUser.getPhotoUrl() != null) {
+            mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+        }
 
         mCommentEditTextView = (EditText) findViewById(R.id.edit_post);
-        mCommentEditTextView.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
-        mCommentEditTextView.setHint(R.string.add_comment_ph);
-        //show keyboard
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mCommentEditTextView, InputMethodManager.SHOW_IMPLICIT);
-//        if (!(imm == null))
-//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
-
+        mCommentEditTextView.setFilters(new InputFilter[]{new InputFilter
+                .LengthFilter(mSharedPreferences
+                .getInt(JavaQPreferences
+                        .FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
 
         mCommentEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
@@ -68,6 +105,16 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 //
             }
         });
+        mCommentEditTextView.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
+        mCommentEditTextView.setHint(R.string.add_comment_ph);
+        //show keyboard
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(mCommentEditTextView, InputMethodManager.SHOW_IMPLICIT);
+//        if (!(imm == null))
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
+
+
+
 
     }
 
@@ -78,6 +125,35 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         return true;
     }
 
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_post:
+                //TODO: mCommentTextをデータベースにセット
+                mPostComBody = mCommentEditTextView.getText().toString();
+                mUserId = mFirebaseUser.getUid();
+                mPostTime = System.currentTimeMillis();
+                //Save post to the Firebase
+                DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+                String key = ref.push().getKey();
+                PostCommentContents comment = new PostCommentContents(mPostComBody, mUserId, mPostTime, 0, 0);
+                ref.child(key).setValue(comment);
+                mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
+
+                Intent intent = new Intent(CommunityAddCommentActivity.this, CommunityDetailActivity.class);
+                startActivity(intent);
+                Toast.makeText(this, "enable", Toast.LENGTH_SHORT).show();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
@@ -97,19 +173,6 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         return true;
     }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_post:
-                //TODO: mCommentTextをデータベースにセット
-                Toast.makeText(this, "enable", Toast.LENGTH_SHORT).show();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

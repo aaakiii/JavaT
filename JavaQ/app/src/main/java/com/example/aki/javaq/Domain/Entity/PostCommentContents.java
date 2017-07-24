@@ -5,46 +5,49 @@ package com.example.aki.javaq.Domain.Entity;
  */
 
 public class PostCommentContents {
-    private String mComId;
-    private String mComComment;
-    private String mUserName;
+    private String mPostId;
+    private String mComBody;
     private int mComLike;
     private int mComUnlike;
+    private String mUserId;
+    private long mPostTime;
 
     public PostCommentContents(){
 
     }
 
-    public PostCommentContents(String comment, String name, int like, int unLike){
-        mComComment = comment;
-        mUserName = name;
+    public PostCommentContents(String mComBody, String mUserId,long mPostTime, int like, int unLike){
+        this.mComBody = mComBody;
+        this.mUserId = mUserId;
         mComLike = like;
         mComUnlike = unLike;
+        this.mPostTime = mPostTime;
 
     }
 
-    public String getComId() {
-        return mComId;
+
+
+    public String getComBody() {
+        return mComBody;
     }
 
-    public void setComId(String mComId) {
-        this.mComId = mComId;
+    public void setComBody(String mComBody) {
+        this.mComBody = mComBody;
     }
 
-    public String getComComment() {
-        return mComComment;
+    public String getUserId() {
+        return mUserId;
     }
 
-    public void setComComment(String mComComment) {
-        this.mComComment = mComComment;
+    public void setUserId(String mUserName) {
+        this.mUserId = mUserId;
+    }
+    public long getmPostTime() {
+        return mPostTime;
     }
 
-    public String getUserName() {
-        return mUserName;
-    }
-
-    public void setUserName(String mUserName) {
-        this.mUserName = mUserName;
+    public void setmPostTime(long mPostTime) {
+        this.mPostTime = mPostTime;
     }
 
     public int getComLike() {

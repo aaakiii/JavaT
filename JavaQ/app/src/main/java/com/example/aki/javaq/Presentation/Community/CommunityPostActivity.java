@@ -32,7 +32,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 public class CommunityPostActivity extends AppCompatActivity {
 
-    private MenuItem mSaveButton;
+    private MenuItem mPostButton;
     private boolean mTappable;
     private SharedPreferences mSharedPreferences;
     private EditText mEditTextView;
@@ -153,13 +153,13 @@ public class CommunityPostActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        mSaveButton = menu.findItem(R.id.action_post);
-        mSaveButton.setEnabled(false);
+        mPostButton = menu.findItem(R.id.action_post);
+        mPostButton.setEnabled(false);
 
         if (mTappable) {
-            mSaveButton.setEnabled(true);
+            mPostButton.setEnabled(true);
         } else {
-            mSaveButton.setEnabled(false);
+            mPostButton.setEnabled(false);
         }
         return true;
     }
