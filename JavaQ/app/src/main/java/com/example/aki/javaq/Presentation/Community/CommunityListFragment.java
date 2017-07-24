@@ -189,20 +189,19 @@ public class CommunityListFragment extends Fragment {
             PostMain post = mPostMainList.get(position);
             viewHolder.bind(post);
 
-            //Body text
+            //Display Body text
             viewHolder.mPostBodyTextView.setText(mPostMain.getmPostBody());
 
-            //Time
+            //Display Time
             long timestamp = mPostMain.getmPostTime();
             mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
             viewHolder.mPostTimeTextView.setText(mPostTimeAgo);
 
-            //Comment num
+            //Display Comment num
             //TODO:comments nodeから取得
             int mCommentsNumInt = 18; //ダミー
             String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
-
 
             if (mUserMap.containsKey(mPostMain.getmUserId().toString())) {
 
@@ -211,18 +210,11 @@ public class CommunityListFragment extends Fragment {
                 viewHolder.mUserNameTextView.setText(mUser.getmUserName());
 
                 //Display User picture
+                //TODO:googleの画像もStorageにいれてそこからセット
                 StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
                 rootRef.child(mUser.getmUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Glide.with(getActivity())
-                                .load(uri)
-                                .into(viewHolder.mUserIconImageView);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Uri uri = FirebaseLab.getFirebaseUser().getPhotoUrl();
                         Glide.with(getActivity())
                                 .load(uri)
                                 .into(viewHolder.mUserIconImageView);
