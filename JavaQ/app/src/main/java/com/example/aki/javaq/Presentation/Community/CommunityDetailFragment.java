@@ -13,18 +13,15 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.aki.javaq.Domain.Entity.PostCommentContents;
-import com.example.aki.javaq.Domain.Entity.PostMain;
+import com.example.aki.javaq.Domain.Entity.PostComment;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
@@ -37,14 +34,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -210,16 +205,16 @@ public class CommunityDetailFragment extends Fragment {
 
 
     public class CommentsAdapter extends RecyclerView.Adapter<CommentsViewHolder> {
-        ArrayList<PostCommentContents> mPostCommentsList = new ArrayList<>();
+        ArrayList<PostComment> mPostCommentsList = new ArrayList<>();
         HashMap<String, User> mUserMap = new HashMap<>();
-        private PostCommentContents mPostComment;
+        private PostComment mPostComment;
 
         public CommentsAdapter(DatabaseReference comment_ref, DatabaseReference user_ref) {
             comment_ref.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
                     mPostCommentsList.clear();
                     for (DataSnapshot commentsSnapshot : snapshot.getChildren()) {
-                        PostCommentContents mPostComment = commentsSnapshot.getValue(PostCommentContents.class);
+                        PostComment mPostComment = commentsSnapshot.getValue(PostComment.class);
                         mPostCommentsList.add(mPostComment);
                     }
                     notifyDataSetChanged();
@@ -253,7 +248,7 @@ public class CommunityDetailFragment extends Fragment {
         @Override
         public void onBindViewHolder(final CommentsViewHolder viewHolder, int position) {
             mPostComment = mPostCommentsList.get(position);
-            PostCommentContents post = mPostCommentsList.get(position);
+            PostComment post = mPostCommentsList.get(position);
             viewHolder.bind(post);
 
             //Display Body text
@@ -323,7 +318,7 @@ public class CommunityDetailFragment extends Fragment {
         private ImageButton mCommentBadButton;
         private TextView mCommentGoodTextView;
         private TextView mCommentBadTextView;
-        private PostCommentContents mPostComment;
+        private PostComment mPostComment;
         private User mUser;
 
         public CommentsViewHolder(View itemView) {
@@ -346,7 +341,7 @@ public class CommunityDetailFragment extends Fragment {
             mBadTapped = false;
         }
 
-        public void bind(PostCommentContents post) {
+        public void bind(PostComment post) {
             mPostComment = post;
             //全部ダミー
 //            mCommentUserNameTextView.setText("getCommentUserName");

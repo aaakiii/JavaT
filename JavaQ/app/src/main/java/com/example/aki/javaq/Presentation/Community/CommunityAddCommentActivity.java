@@ -19,8 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.aki.javaq.Domain.Entity.PostCommentContents;
-import com.example.aki.javaq.Domain.Entity.PostMain;
+import com.example.aki.javaq.Domain.Entity.PostComment;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
@@ -55,7 +54,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     private static final String POST_SENT_EVENT = "post_sent";
     public static final String POST_KEY = "post_key";
     private static String mPostKey;
-    private PostCommentContents mPostCommentContentes;
+    private PostComment mPostCommentContentes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +144,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 //Save post to the Firebase
                 DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
                 String key = ref.push().getKey();
-                PostCommentContents comment = new PostCommentContents(mPostKey, mPostComBody, mUserId, mPostTime, 0, 0);
+                PostComment comment = new PostComment(mPostKey, mPostComBody, mUserId, mPostTime, 0, 0);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();

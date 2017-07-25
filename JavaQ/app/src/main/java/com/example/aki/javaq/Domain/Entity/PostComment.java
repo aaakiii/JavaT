@@ -4,7 +4,7 @@ package com.example.aki.javaq.Domain.Entity;
  * Created by AKI on 2017-07-13.
  */
 
-public class PostCommentContents {
+public class PostComment {
     private String mPostId;
     private String mComBody;
     private int mComLike;
@@ -12,11 +12,11 @@ public class PostCommentContents {
     private String mUserId;
     private long mPostTime;
 
-    public PostCommentContents(){
+    public PostComment(){
 
     }
 
-    public PostCommentContents(String mPostId, String mComBody, String mUserId,long mPostTime, int like, int unLike){
+    public PostComment(String mPostId, String mComBody, String mUserId, long mPostTime, int like, int unLike){
         this.mPostId = mPostId;
         this.mComBody = mComBody;
         this.mUserId = mUserId;
