@@ -88,10 +88,10 @@ public class CommunityPostActivity extends AppCompatActivity {
 
 
         mEditTextView = (EditText) findViewById(R.id.edit_post);
-        mEditTextView.setFilters(new InputFilter[]{new InputFilter
-                .LengthFilter(mSharedPreferences
-                .getInt(JavaQPreferences
-                        .FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
+//        mEditTextView.setFilters(new InputFilter[]{new InputFilter
+//                .LengthFilter(mSharedPreferences
+//                .getInt(JavaQPreferences
+//                        .FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
         mEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
