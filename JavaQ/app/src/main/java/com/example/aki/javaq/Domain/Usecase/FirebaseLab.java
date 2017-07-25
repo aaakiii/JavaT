@@ -35,14 +35,10 @@ public class FirebaseLab {
     public static DatabaseReference mFirebaseDatabaseReference;
     private static FirebaseRemoteConfig mFirebaseRemoteConfig;
     private static FirebaseAnalytics mFirebaseAnalytics;
-    private static boolean mFirebaseLogIned;
     private static final String TAG = "CommunityPostActivity";
     public FirebaseLab(){
     }
 
-    public static boolean isFirebaseLogIned() {
-        return mFirebaseLogIned;
-    }
 
     public static FirebaseAuth getFirebaseAuth() {
         mFirebaseAuth = FirebaseAuth.getInstance();

@@ -139,7 +139,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
                 //TODO:編集してなかったらfalse
                 //Detect inputted user name
-                if (s.toString().trim().length() > 0)  {
+                if (s.toString().trim().length() > 0) {
                     mTappable = true;
                 } else {
                     hasSpecialSymbol(s.toString());
@@ -182,10 +182,8 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             public void onDataChange(DataSnapshot snapshot) {
 
                 //Display User name
-                if (!isFromSignIn) {
-                    mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
-                    mAddUserNameTextView.setText(mUserName);
-                }
+                mUserName = snapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString();
+                mAddUserNameTextView.setText(mUserName);
 
                 //Display User picture
                 StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
@@ -205,7 +203,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             }
         });
     }
-
 
 
     private static void removeOnGlobalLayoutListener(ViewTreeObserver observer, ViewTreeObserver.OnGlobalLayoutListener listener) {
