@@ -49,9 +49,9 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     private static GoogleApiClient mGoogleApiClient;
 
 
-    public static LoginDialogFragment newInstance(Fragment target, int requestCode) {
+    public static LoginDialogFragment newInstance() {
         LoginDialogFragment fragment = new LoginDialogFragment();
-        fragment.setTargetFragment(fragment,REQUEST_CODE_LOGIN);
+        fragment.setTargetFragment(fragment, REQUEST_CODE_LOGIN);
         return fragment;
     }
 
@@ -68,7 +68,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
         // Configure Google Sign In
 
         mSignInButton = (SignInButton) view.findViewById(R.id.sign_in_button);
-        mSignInButton.setOnClickListener(new View.OnClickListener(){
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signIn();
@@ -111,16 +111,10 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
                 GoogleSignInAccount account = result.getSignInAccount();
                 SignInLab.firebaseAuthWithGoogle(account, getActivity());
 
-                //TODO: 新規かどうか取得
-                boolean isNewUser = true;
+                Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                intent.putExtra(UserRegistrationActivity.NEW_USER, true);
+                startActivity(intent);
 
-                if(isNewUser){
-                    Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
-                    intent.putExtra(UserRegistrationActivity.NEW_USER, true);
-                    startActivity(intent);
-                } else {
-                    dismiss();
-                }
             } else {
                 // Google Sign-In failed
                 Log.e(TAG, "Google Sign-In failed.");
@@ -135,9 +129,6 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
         Toast.makeText(getActivity(), "Google Play Services error.", Toast.LENGTH_SHORT).show();
     }
-
-
-
 
 
 }

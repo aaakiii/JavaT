@@ -197,7 +197,7 @@ public class CommunityDetailFragment extends Fragment {
                 } else {
                     // display dialog
                     FragmentManager manager = getActivity().getSupportFragmentManager();
-                    LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityDetailFragment.this, REQUEST_CODE_LOGIN);
+                    LoginDialogFragment dialog = LoginDialogFragment.newInstance();
                     dialog.show(manager, LOGIN_DIALOG);
                 }
             }
