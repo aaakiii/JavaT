@@ -53,10 +53,15 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     private long mPostTime;
     private static String mPhotoUrl;
     private static final String POST_SENT_EVENT = "post_sent";
+    public static final String POST_KEY = "post_key";
+    private static String mPostKey;
+    private PostCommentContents mPostCommentContentes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        mPostKey = intent.getStringExtra(POST_KEY);
         setContentView(R.layout.com_post_activity);
 
         //Toolbar
@@ -74,6 +79,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
         FirebaseLab.SetConfig();
         FirebaseLab.fetchConfig();
+//        mPostCommentContentes.setPostId(mPostKey);
 
         mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
@@ -107,6 +113,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         });
         mCommentEditTextView.setInputType(InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE);
         mCommentEditTextView.setHint(R.string.add_comment_ph);
+
         //show keyboard
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(mCommentEditTextView, InputMethodManager.SHOW_IMPLICIT);
@@ -138,14 +145,14 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 //Save post to the Firebase
                 DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
                 String key = ref.push().getKey();
-                PostCommentContents comment = new PostCommentContents(mPostComBody, mUserId, mPostTime, 0, 0);
+                PostCommentContents comment = new PostCommentContents(mPostKey, mPostComBody, mUserId, mPostTime, 0, 0);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();
-
-                Intent intent = new Intent(CommunityAddCommentActivity.this, CommunityDetailActivity.class);
+                Intent intent = CommunityDetailActivity.newIntent(this, mPostKey);
                 startActivity(intent);
-                Toast.makeText(this, "enable", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(this, mPostKey, Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 onBackPressed();

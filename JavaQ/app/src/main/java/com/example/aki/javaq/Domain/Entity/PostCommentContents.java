@@ -16,7 +16,8 @@ public class PostCommentContents {
 
     }
 
-    public PostCommentContents(String mComBody, String mUserId,long mPostTime, int like, int unLike){
+    public PostCommentContents(String mPostId, String mComBody, String mUserId,long mPostTime, int like, int unLike){
+        this.mPostId = mPostId;
         this.mComBody = mComBody;
         this.mUserId = mUserId;
         mComLike = like;
@@ -25,7 +26,13 @@ public class PostCommentContents {
 
     }
 
+    public String getPostId() {
+        return mPostId;
+    }
 
+    public void setPostId(String mPostId) {
+        this.mPostId = mPostId;
+    }
 
     public String getComBody() {
         return mComBody;
@@ -35,17 +42,17 @@ public class PostCommentContents {
         this.mComBody = mComBody;
     }
 
+
+    public long getPostTime() {
+        return mPostTime;
+    }
     public String getUserId() {
         return mUserId;
     }
 
-    public void setUserId(String mUserName) {
+    public void setUserId(String mUserId) {
         this.mUserId = mUserId;
     }
-    public long getPostTime() {
-        return mPostTime;
-    }
-
     public void setPostTime(long mPostTime) {
         this.mPostTime = mPostTime;
     }

@@ -81,6 +81,9 @@ public class CommunityDetailFragment extends Fragment {
     private static final String LOGIN_DIALOG = "login_dialog";
     private View view;
     private LinearLayoutManager mLinearLayoutManager;
+    public static final String POST_KEY = "post_key";
+
+
 
 
     public static CommunityDetailFragment newInstance(String postKey) {
@@ -95,6 +98,8 @@ public class CommunityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPostKey = getArguments().getString(ARG_POST_KEY);
+//        Intent intent = getActivity().getIntent();
+//        String mPostKey = intent.getStringExtra(POST_KEY);
     }
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -117,7 +122,6 @@ public class CommunityDetailFragment extends Fragment {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
-
         mCommentsRecyclerView = (RecyclerView) view.findViewById(R.id.com_comments_recycler_view);
         mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
 
@@ -135,29 +139,34 @@ public class CommunityDetailFragment extends Fragment {
         mPostTextView = (TextView) view.findViewById(R.id.post_text);
         mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
-
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-//        mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
+
+
+
+        mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
 //
-////                    mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
+//                if(mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_ID) == dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue()){
+//                    Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
+//                }
+////                mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
 //                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
-//                for(DataSnapshot post : dataSnapshot.getChildren() ){
-//                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(post.child(FirebaseNodes.User.USER_ID))){
+//
+//                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(dataSnapshot.child(FirebaseNodes.User.USER_ID))){
 //                        Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
 //                        mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
 //                    } else{
-//                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
+////                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
 //                        mUserNameTextView.setText("UserName");
 //                    }
-//                }
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//            }
-//        });
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
 
         mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
@@ -183,6 +192,7 @@ public class CommunityDetailFragment extends Fragment {
                 boolean mLogined = true;
                 if (mLogined) {
                     Intent intent = new Intent(getActivity().getApplicationContext(), CommunityAddCommentActivity.class);
+                    intent.putExtra(POST_KEY, mPostKey);
                     startActivity(intent);
                 } else {
                     // display dialog
@@ -259,45 +269,59 @@ public class CommunityDetailFragment extends Fragment {
             viewHolder.bind(post);
 
             //Display Body text
-            viewHolder.mCommentTextView.setText(mPostComment.getComBody());
+            mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD).child(FirebaseNodes.PostComment.POSTS_MAIN_ID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (mPostComment.getPostId().equals(mPostKey)) {
 
+                    viewHolder.mCommentTextView.setText(mPostComment.getComBody());
 
-            //Display Time
-            long timestamp = mPostComment.getPostTime();
-            mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
-            viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
+                    //Display Time
+                    long timestamp = mPostComment.getPostTime();
+                    mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
+                    viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
-            if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
+                    if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
 
-                //Display User name
-                User mUser = mUserMap.get(mPostComment.getUserId().toString());
-                viewHolder.mCommentUserNameTextView.setText(mUser.getUserName());
+                        //Display User name
+                        User mUser = mUserMap.get(mPostComment.getUserId().toString());
+                        viewHolder.mCommentUserNameTextView.setText(mUser.getUserName());
 
-                //Display User picture
-                StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
-                rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        //If there's a picture in the storage, set the picture
-                        Glide.with(getActivity())
-                                .load(uri)
-                                .into(viewHolder.mCommentUserIconImageView);
+                        //Display User picture
+                        StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                        rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                //If there's a picture in the storage, set the picture
+                                Glide.with(getActivity())
+                                        .load(uri)
+                                        .into(viewHolder.mCommentUserIconImageView);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //If not, set the default picture
+                                int id = R.drawable.image_user_default;
+                                Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                        "://" + getResources().getResourcePackageName(id)
+                                        + '/' + getResources().getResourceTypeName(id)
+                                        + '/' + getResources().getResourceEntryName(id));
+                                Glide.with(getActivity())
+                                        .load(mPictureDefaultUri)
+                                        .into(viewHolder.mCommentUserIconImageView);
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        //If not, set the default picture
-                        int id = R.drawable.image_user_default;
-                        Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                                "://" + getResources().getResourcePackageName(id)
-                                + '/' + getResources().getResourceTypeName(id)
-                                + '/' + getResources().getResourceEntryName(id));
-                        Glide.with(getActivity())
-                                .load(mPictureDefaultUri)
-                                .into(viewHolder.mCommentUserIconImageView);
-                    }
-                });
-            }
+                 }
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+
+
         }
 
         public int getItemCount() {
