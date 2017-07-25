@@ -35,23 +35,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class SignInLab extends AppCompatActivity {
 
     private static final String TAG = "SignInActivity";
-    public static final int RC_SIGN_IN = 9001;
-
     private static FirebaseAuth mFirebaseAuth;
-    private static GoogleApiClient mGoogleApiClient;
-    private Activity mActivity;
-    private Context mContext;
-    private FragmentActivity mFragmentActivity;
-    private LoginDialogFragment mLoginDialogFragment;
-    android.content.res.Resources res;
-
-
-    public SignInLab(Activity mActivity, Context mContext, FragmentActivity mFragmentActivity) {
-        this.mActivity = mActivity;
-        this.mContext = mContext;
-        this.mFragmentActivity = mFragmentActivity;
-        res = mActivity.getResources();
-    }
 
 
     public static void signOut() {

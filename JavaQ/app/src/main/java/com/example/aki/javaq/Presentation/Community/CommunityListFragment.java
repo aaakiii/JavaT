@@ -127,7 +127,7 @@ public class CommunityListFragment extends Fragment {
                 if (mFirebaseUser == null) {
                     // Not signed in, launch the Sign In activity
                     FragmentManager manager = getActivity().getSupportFragmentManager();
-                    LoginDialogFragment dialog = LoginDialogFragment.newInstance(CommunityListFragment.this, REQUEST_CODE_LOGIN);
+                    LoginDialogFragment dialog = LoginDialogFragment.newInstance();
                     dialog.show(manager, LOGIN_DIALOG);
 
                 } else {
@@ -200,6 +200,10 @@ public class CommunityListFragment extends Fragment {
 
             //Display Comment num
             //TODO:comments nodeから取得
+            DatabaseReference comments_ref = FirebaseLab.getFirebaseDatabaseReference()
+                    .child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+
+
             int mCommentsNumInt = 18; //ダミー
             String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);

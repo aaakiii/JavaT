@@ -49,7 +49,7 @@ public class LoginDialogFragment extends DialogFragment implements GoogleApiClie
     private static GoogleApiClient mGoogleApiClient;
 
 
-    public static LoginDialogFragment newInstance(Fragment target, int requestCode) {
+    public static LoginDialogFragment newInstance() {
         LoginDialogFragment fragment = new LoginDialogFragment();
         fragment.setTargetFragment(fragment, REQUEST_CODE_LOGIN);
         return fragment;
