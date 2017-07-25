@@ -63,4 +63,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_community_detail">CommunityDetailActivity</string>
     <string name="title_activity_community_post">CommunityPostActivity</string>
+    <string name="failure">failure...</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.example.aki.javaq.Presentation.Community;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
 import com.example.aki.javaq.Domain.Helper.TimeUtils;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -116,6 +120,7 @@ public class CommunityDetailFragment extends Fragment {
 
         mCommentsRecyclerView = (RecyclerView) view.findViewById(R.id.com_comments_recycler_view);
         mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
+
 //        mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
@@ -154,6 +159,7 @@ public class CommunityDetailFragment extends Fragment {
 //            }
 //        });
 
+
         mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
         mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
 //        mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mPostsRef, mUsersRef);
@@ -164,9 +170,8 @@ public class CommunityDetailFragment extends Fragment {
         }
 
 
-
         //get user info
-        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+       . mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
@@ -207,15 +212,15 @@ public class CommunityDetailFragment extends Fragment {
         HashMap<String, User> mUserMap = new HashMap<>();
         private PostCommentContents mPostComment;
 
-
-        public CommentsAdapter(DatabaseReference post_ref, DatabaseReference user_ref) {
-            post_ref.addValueEventListener(new ValueEventListener() {
+        public CommentsAdapter(DatabaseReference comment_ref, DatabaseReference user_ref) {
+            comment_ref.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
                     mPostCommentsList.clear();
-                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        PostCommentContents mPostComment = postSnapshot.getValue(PostCommentContents.class);
+                    for (DataSnapshot commentsSnapshot : snapshot.getChildren()) {
+                        PostCommentContents mPostComment = commentsSnapshot.getValue(PostCommentContents.class);
                         mPostCommentsList.add(mPostComment);
                     }
+
                     notifyDataSetChanged();
                 }
 
@@ -257,10 +262,8 @@ public class CommunityDetailFragment extends Fragment {
             viewHolder.mCommentTextView.setText(mPostComment.getComBody());
 
 
-
-
             //Display Time
-            long timestamp = mPostComment.getmPostTime();
+            long timestamp = mPostComment.getPostTime();
             mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
             viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
@@ -268,16 +271,29 @@ public class CommunityDetailFragment extends Fragment {
 
                 //Display User name
                 User mUser = mUserMap.get(mPostComment.getUserId().toString());
-                viewHolder.mCommentUserNameTextView.setText(mUser.getmUserName());
+                viewHolder.mCommentUserNameTextView.setText(mUser.getUserName());
 
                 //Display User picture
-                //TODO:googleの画像もStorageにいれてそこからセット
                 StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
-                rootRef.child(mUser.getmUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        //If there's a picture in the storage, set the picture
                         Glide.with(getActivity())
                                 .load(uri)
+                                .into(viewHolder.mCommentUserIconImageView);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //If not, set the default picture
+                        int id = R.drawable.image_user_default;
+                        Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                "://" + getResources().getResourcePackageName(id)
+                                + '/' + getResources().getResourceTypeName(id)
+                                + '/' + getResources().getResourceEntryName(id));
+                        Glide.with(getActivity())
+                                .load(mPictureDefaultUri)
                                 .into(viewHolder.mCommentUserIconImageView);
                     }
                 });
@@ -289,6 +305,7 @@ public class CommunityDetailFragment extends Fragment {
         }
 
     }
+
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
         private TextView mCommentUserNameTextView;
         private CircleImageView mCommentUserIconImageView;
@@ -320,6 +337,7 @@ public class CommunityDetailFragment extends Fragment {
             mGoodTapped = false;
             mBadTapped = false;
         }
+
         public void bind(PostCommentContents post) {
             mPostComment = post;
             //全部ダミー

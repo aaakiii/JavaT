@@ -8,9 +8,9 @@ public class FirebaseNodes {
 
     public static final class User {
         public static final String USER_CHILD = "users";
-        public static final String USER_NAME = "mUserName";
-        public static final String USER_PIC_URI = "mUserPicUri";
-        public static final String USER_ID = "mUid";
+        public static final String USER_NAME = "userName";
+        public static final String USER_PIC_URI = "userPicUri";
+        public static final String USER_ID = "uid";
     }
 
     public static final class UserPicture {
@@ -19,16 +19,16 @@ public class FirebaseNodes {
 
     public static final class PostMain {
         public static final String POSTS_CHILD = "posts";
-        public static final String POST_BODY = "mPostBody";
-        public static final String USER_ID = "mUserId";
-        public static final String POST_TIME = "mPostTime";
+        public static final String POST_BODY = "postBody";
+        public static final String USER_ID = "userId";
+        public static final String POST_TIME = "postTime";
     }
 
     public static final class PostComment {
         public static final String POSTS_COM_CHILD = "postcomments";
-        public static final String POST_COM_BODY = "mPostCommentBody";
-        public static final String USER_ID = "mUserId";
-        public static final String POST_COM_TIME = "mPostComTime";
-        public static final String POSTS_MAIN_ID = "mPostMainId";
+        public static final String POST_COM_BODY = "postCommentBody";
+        public static final String USER_ID = "userId";
+        public static final String POST_COM_TIME = "postComTime";
+        public static final String POSTS_MAIN_ID = "postMainId";
     }
 }

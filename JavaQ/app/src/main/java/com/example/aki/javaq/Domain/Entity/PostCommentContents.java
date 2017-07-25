@@ -42,11 +42,11 @@ public class PostCommentContents {
     public void setUserId(String mUserName) {
         this.mUserId = mUserId;
     }
-    public long getmPostTime() {
+    public long getPostTime() {
         return mPostTime;
     }
 
-    public void setmPostTime(long mPostTime) {
+    public void setPostTime(long mPostTime) {
         this.mPostTime = mPostTime;
     }
 

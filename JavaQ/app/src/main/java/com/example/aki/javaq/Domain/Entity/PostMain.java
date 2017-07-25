@@ -25,35 +25,35 @@ public class PostMain {
         this.mCommentId = mCommentId;
     }
 
-    public String getmPostId() {
+    public String getPostId() {
         return mPostId;
     }
 
-    public void setmPostId(String mPostId) {
+    public void setPostId(String mPostId) {
         this.mPostId = mPostId;
     }
 
-    public String getmUserId() {
+    public String getUserId() {
         return mUserId;
     }
 
-    public void setmUserId(String mUserId) {
+    public void setUserId(String mUserId) {
         this.mUserId = mUserId;
     }
 
-    public long getmPostTime() {
+    public long getPostTime() {
         return mPostTime;
     }
 
-    public void setmPostTime(long mPostTime) {
+    public void setPostTime(long mPostTime) {
         this.mPostTime = mPostTime;
     }
 
-    public String getmPostBody() {
+    public String getPostBody() {
         return mPostBody;
     }
 
-    public void setmPostBody(String mPostBody) {
+    public void setPostBody(String mPostBody) {
         this.mPostBody = mPostBody;
     }
 

@@ -313,6 +313,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         switch (item.getItemId()) {
             case R.id.action_save:
 
+                //TODO: たまに取得できなくてエラーになる…
                 mCurrentUser = FirebaseLab.getFirebaseUser();
 
                 mUserName = mAddUserNameTextView.getText().toString();

@@ -191,10 +191,10 @@ public class CommunityListFragment extends Fragment {
             viewHolder.bind(post);
 
             //Display Body text
-            viewHolder.mPostBodyTextView.setText(mPostMain.getmPostBody());
+            viewHolder.mPostBodyTextView.setText(mPostMain.getPostBody());
 
             //Display Time
-            long timestamp = mPostMain.getmPostTime();
+            long timestamp = mPostMain.getPostTime();
             mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
             viewHolder.mPostTimeTextView.setText(mPostTimeAgo);
 
@@ -204,16 +204,15 @@ public class CommunityListFragment extends Fragment {
             String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
 
-            if (mUserMap.containsKey(mPostMain.getmUserId().toString())) {
+            if (mUserMap.containsKey(mPostMain.getUserId().toString())) {
 
                 //Display User name
-                User mUser = mUserMap.get(mPostMain.getmUserId().toString());
-                viewHolder.mUserNameTextView.setText(mUser.getmUserName());
+                User mUser = mUserMap.get(mPostMain.getUserId().toString());
+                viewHolder.mUserNameTextView.setText(mUser.getUserName());
 
                 //Display User picture
-                //TODO:googleの画像もStorageにいれてそこからセット
                 StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
-                rootRef.child(mUser.getmUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
                         //If there's a picture in the storage, set the picture
@@ -266,7 +265,7 @@ public class CommunityListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = CommunityDetailActivity.newIntent(getActivity(), mPostMain.getmPostId());
+                    Intent intent = CommunityDetailActivity.newIntent(getActivity(), mPostMain.getPostId());
                     startActivity(intent);
                 }
             });
