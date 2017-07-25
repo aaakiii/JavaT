@@ -19,12 +19,15 @@
 
     <TextView
         android:id="@+id/post_user_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="Mina"
+        android:ellipsize="end"
+        android:maxLines="1"
+        tools:text="MinaMinaMinaMinaMinaMinaMinaMinaMinaMina"
         style="@style/mMainText.mUserName"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toRightOf="@+id/post_user_icon"
+        app:layout_constraintRight_toLeftOf="@+id/post_date"
         app:layout_constraintTop_toTopOf="@+id/post_user_icon"
         app:layout_constraintBottom_toBottomOf="@+id/post_user_icon"
         android:layout_marginStart="8dp" />
