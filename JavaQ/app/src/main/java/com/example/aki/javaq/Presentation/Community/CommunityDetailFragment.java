@@ -171,7 +171,7 @@ public class CommunityDetailFragment extends Fragment {
 
 
         //get user info
-       . mFirebaseAuth = FirebaseLab.getFirebaseAuth();
+        mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
