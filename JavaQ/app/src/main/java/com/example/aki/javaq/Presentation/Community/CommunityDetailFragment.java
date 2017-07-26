@@ -139,9 +139,7 @@ public class CommunityDetailFragment extends Fragment {
                 mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot snapshot) {
-                        for (DataSnapshot objSnapshot: snapshot.getChildren()) {
                             mUserNameTextView.setText(snapshot.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).child(FirebaseNodes.User.USER_NAME).getValue().toString());
-
                             //Display User picture
                             StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
                             rootRef.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -167,7 +165,6 @@ public class CommunityDetailFragment extends Fragment {
                                 }
                             });
 
-                        }
                     }
 
                     @Override
