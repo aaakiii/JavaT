@@ -141,6 +141,32 @@ public class CommunityDetailFragment extends Fragment {
                     public void onDataChange(final DataSnapshot snapshot) {
                         for (DataSnapshot objSnapshot: snapshot.getChildren()) {
                             mUserNameTextView.setText(snapshot.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).child(FirebaseNodes.User.USER_NAME).getValue().toString());
+
+                            //Display User picture
+                            StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                            rootRef.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //If there's a picture in the storage, set the picture
+                                    Glide.with(getActivity())
+                                            .load(uri)
+                                            .into(mUserIconImageView);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    //If not, set the default picture
+                                    int id = R.drawable.image_user_default;
+                                    Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                            "://" + getResources().getResourcePackageName(id)
+                                            + '/' + getResources().getResourceTypeName(id)
+                                            + '/' + getResources().getResourceEntryName(id));
+                                    Glide.with(getActivity())
+                                            .load(mPictureDefaultUri)
+                                            .into(mUserIconImageView);
+                                }
+                            });
+
                         }
                     }
 
