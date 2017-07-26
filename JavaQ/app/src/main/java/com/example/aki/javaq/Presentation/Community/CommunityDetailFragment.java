@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.PostComment;
@@ -78,9 +79,6 @@ public class CommunityDetailFragment extends Fragment {
     private LinearLayoutManager mLinearLayoutManager;
     public static final String POST_KEY = "post_key";
 
-
-
-
     public static CommunityDetailFragment newInstance(String postKey) {
         Bundle args = new Bundle();
         args.putString(ARG_POST_KEY, postKey);
@@ -93,8 +91,6 @@ public class CommunityDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPostKey = getArguments().getString(ARG_POST_KEY);
-//        Intent intent = getActivity().getIntent();
-//        String mPostKey = intent.getStringExtra(POST_KEY);
     }
 
     private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
@@ -119,10 +115,6 @@ public class CommunityDetailFragment extends Fragment {
         mLinearLayoutManager.setStackFromEnd(true);
         mCommentsRecyclerView = (RecyclerView) view.findViewById(R.id.com_comments_recycler_view);
         mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
-
-//        mCommentsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
         //For Refresh
 //        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
 //        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
@@ -135,38 +127,58 @@ public class CommunityDetailFragment extends Fragment {
         mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+        mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+        mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
 
-
-
+        mFirebaseUser = FirebaseLab.getFirebaseUser();
         mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 mPostTextView.setText(dataSnapshot.child(FirebaseNodes.PostMain.POST_BODY).getValue().toString());
-//
-//                if(mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_ID) == dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue()){
-//                    Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
-//                }
-////                mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
-//                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
-//
-//                    if((dataSnapshot.child(FirebaseNodes.PostMain.USER_ID)).equals(dataSnapshot.child(FirebaseNodes.User.USER_ID))){
-//                        Toast.makeText(getActivity(), "Yes", Toast.LENGTH_SHORT).show();
-//                        mUserNameTextView.setText(dataSnapshot.child(FirebaseNodes.User.USER_NAME).getValue().toString());
-//                    } else{
-////                        Toast.makeText(getActivity(), "No", Toast.LENGTH_SHORT).show();
-//                        mUserNameTextView.setText("UserName");
-//                    }
 
+                mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot snapshot) {
+                            mUserNameTextView.setText(snapshot.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).child(FirebaseNodes.User.USER_NAME).getValue().toString());
+                            //Display User picture
+                            StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                            rootRef.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    //If there's a picture in the storage, set the picture
+                                    Glide.with(getActivity())
+                                            .load(uri)
+                                            .into(mUserIconImageView);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    //If not, set the default picture
+                                    int id = R.drawable.image_user_default;
+                                    Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                            "://" + getResources().getResourcePackageName(id)
+                                            + '/' + getResources().getResourceTypeName(id)
+                                            + '/' + getResources().getResourceEntryName(id));
+                                    Glide.with(getActivity())
+                                            .load(mPictureDefaultUri)
+                                            .into(mUserIconImageView);
+                                }
+                            });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
 
-
-        mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
-        mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
-//        mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mPostsRef, mUsersRef);
 
         if (mCommentsAdapter == null) {
             mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mPostsRef, mUsersRef);
@@ -248,8 +260,8 @@ public class CommunityDetailFragment extends Fragment {
         @Override
         public void onBindViewHolder(final CommentsViewHolder viewHolder, int position) {
             mPostComment = mPostCommentsList.get(position);
-            PostComment post = mPostCommentsList.get(position);
-            viewHolder.bind(post);
+            PostComment comment = mPostCommentsList.get(position);
+            viewHolder.bind(comment);
 
             //Display Body text
             mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD).child(FirebaseNodes.PostComment.POSTS_MAIN_ID).addValueEventListener(new ValueEventListener() {
@@ -343,11 +355,6 @@ public class CommunityDetailFragment extends Fragment {
 
         public void bind(PostComment post) {
             mPostComment = post;
-            //全部ダミー
-//            mCommentUserNameTextView.setText("getCommentUserName");
-//            mCommentTextView.setText("getCommentText");
-//            mCommentTimeTextView.setText(TimeUtils.getTimeAgo(mCommentDate.getTime()));
-
 
             // TO DO: 保留
             // Good button
