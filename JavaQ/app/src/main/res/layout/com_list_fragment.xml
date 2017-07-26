@@ -23,7 +23,7 @@
         android:layout_height="64dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:scaleType="center"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@drawable/ic_post"
         android:tint="@color/white"
         app:backgroundTint="@color/main_color"
         app:layout_anchor="@+id/com_list_recycler_view"

@@ -24,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
-        android:src="@android:drawable/ic_menu_report_image"
+        android:src="@drawable/ic_next"
+        android:tint="@color/sub_text"
         app:layout_constraintBottom_toBottomOf="@+id/list_text"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/list_text" />
