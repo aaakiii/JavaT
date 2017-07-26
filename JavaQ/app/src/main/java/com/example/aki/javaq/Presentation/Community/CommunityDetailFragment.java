@@ -2,8 +2,10 @@ package com.example.aki.javaq.Presentation.Community;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.PostComment;
+import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
@@ -30,12 +33,14 @@ import com.example.aki.javaq.R;
 import com.example.aki.javaq.Domain.Helper.TimeUtils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
@@ -64,6 +69,8 @@ public class CommunityDetailFragment extends Fragment {
     private boolean mGoodTapped;
     private boolean mBadTapped;
     private DatabaseReference mFirebaseDatabaseReference;
+    private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private FirebaseAnalytics mFirebaseAnalytics;
     private String mPostKey;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -78,6 +85,8 @@ public class CommunityDetailFragment extends Fragment {
     private View view;
     private LinearLayoutManager mLinearLayoutManager;
     public static final String POST_KEY = "post_key";
+    private SharedPreferences mSharedPreferences;
+    private static final String POST_SENT_EVENT = "post_sent";
 
     public static CommunityDetailFragment newInstance(String postKey) {
         Bundle args = new Bundle();
@@ -191,6 +200,31 @@ public class CommunityDetailFragment extends Fragment {
         mFirebaseUser = FirebaseLab.getFirebaseUser();
         //For Add a comment
         mMyIconImageView = (CircleImageView) view.findViewById(R.id.my_user_icon);
+        StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+        rootRef.child(mFirebaseUser.getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //If there's a picture in the storage, set the picture
+                Glide.with(getActivity())
+                        .load(uri)
+                        .into(mMyIconImageView);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                //If not, set the default picture
+                int id = R.drawable.image_user_default;
+                Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                        "://" + getResources().getResourcePackageName(id)
+                        + '/' + getResources().getResourceTypeName(id)
+                        + '/' + getResources().getResourceEntryName(id));
+                Glide.with(getActivity())
+                        .load(mPictureDefaultUri)
+                        .into(mMyIconImageView);
+            }
+        });
+
+
         mAddCommentsEditTextView = (EditText) view.findViewById(R.id.add_new_comment_text);
         mAddCommentsEditTextView.setFocusable(false);
         mAddCommentsEditTextView.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +243,7 @@ public class CommunityDetailFragment extends Fragment {
                 }
             }
         });
+
 
         String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
         mPostCommentsNumTextView.setText(comments);
@@ -345,9 +380,11 @@ public class CommunityDetailFragment extends Fragment {
             mCommentGoodButton = (ImageButton) itemView.findViewById(R.id.comment_button_good);
             mCommentBadButton = (ImageButton) itemView.findViewById(R.id.comment_button_bad);
 
+
             // TODO: データベースから取得
-            mGoodNum = 12;
-            mBadNum = 3;
+//            mGoodNum = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.COM_GOOD).hashCode();
+//            mGoodNum = 12;
+//            mBadNum = 3;
             mCommentDate = new Date(2017 - 1900, 6, 10, 22, 49, 00);
             mGoodTapped = false;
             mBadTapped = false;
@@ -355,6 +392,15 @@ public class CommunityDetailFragment extends Fragment {
 
         public void bind(PostComment post) {
             mPostComment = post;
+//            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//            mGoodNum = post.getComLike();
+//            mBadNum = post.getComUnlike();
+//            mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+//            mFirebaseAnalytics = FirebaseLab.getFirebaseAnalytics(getActivity());
+//            mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
+//            FirebaseLab.SetConfig();
+//            FirebaseLab.fetchConfig();
+
 
             // TO DO: 保留
             // Good button
@@ -387,16 +433,31 @@ public class CommunityDetailFragment extends Fragment {
 
         //TODO:mGoodNumとmGoodTappedをデータベースに保存
         private void addGood() {
+//            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//
+//            mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
+//            mFirebaseAnalytics = FirebaseLab.getFirebaseAnalytics(getActivity());
+//            mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
+//            FirebaseLab.SetConfig();
+//            FirebaseLab.fetchConfig();
             if (!mGoodTapped) {
                 if(mBadTapped){
                     addBad();
                 }
                 mGoodNum++;
+//
+//                DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+//                String key = ref.push().getKey();
+//                PostComment comment = new PostComment(key, null, null, 0, mGoodNum, mBadNum);
+//                ref.child(key).setValue(comment);
+//                mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
+                mPostComment.setComLike(mGoodNum);
                 mCommentGoodTextView.setText(String.valueOf(mGoodNum));
                 DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
                 mGoodTapped = true;
             } else {
                 mGoodNum--;
+                mPostComment.setComLike(mGoodNum);
                 mCommentGoodTextView.setText(String.valueOf(mGoodNum));
                 DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
                 mGoodTapped = false;
@@ -409,11 +470,13 @@ public class CommunityDetailFragment extends Fragment {
                     addGood();
                 }
                 mBadNum++;
+                mPostComment.setComLike(mBadNum);
                 mCommentBadTextView.setText(String.valueOf(mBadNum));
                 DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
                 mBadTapped = true;
             } else {
                 mBadNum--;
+                mPostComment.setComLike(mBadNum);
                 mCommentBadTextView.setText(String.valueOf(mBadNum));
                 DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
                 mBadTapped = false;
