@@ -13,7 +13,7 @@ public class PostMain {
     private long mPostTime;
     private String mPostBody;
     private String mCommentId;
-    private int mCommentNum;
+    private int mCommentsNum;
 
     public PostMain() {
     }
@@ -26,12 +26,12 @@ public class PostMain {
         this.mCommentId = mCommentId;
     }
 
-    public int getCommentNum() {
-        return mCommentNum;
+    public int getCommentsNum() {
+        return mCommentsNum;
     }
 
-    public void setCommentNum(int commentNum) {
-        mCommentNum = commentNum;
+    public void setCommentsNum(int commentNum) {
+        mCommentsNum = commentNum;
     }
 
     public String getPostId() {

@@ -17,8 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Toast;
-
 import com.example.aki.javaq.Domain.Entity.PostComment;
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
@@ -125,21 +123,15 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
 //        if (!(imm == null))
 //            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
 
-
         final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
         post_ref.addValueEventListener(new ValueEventListener() {
             public void onDataChange(DataSnapshot snapshot) {
                 PostMain postMain = snapshot.getValue(PostMain.class);
                 mCommentsNumInt = postMain.getCommentsNum();
             }
-
             public void onCancelled(DatabaseError firebaseError){
             }
         });
-
-
-
-
 
     }
 
@@ -166,23 +158,9 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, true, false, mUserId);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
-
-
                 final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
-                post_ref.addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot snapshot) {
-                        PostMain postMain = snapshot.getValue(PostMain.class);
-                        mCommentsNumInt = postMain.getCommentNum();
-                        mCommentsNumInt++;
-                        postMain.setCommentNum(mCommentsNumInt);
-                    }
-                    public void onCancelled(DatabaseError firebaseError){
-                    }
-                });
                 mCommentsNumInt++;
                 post_ref.child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentsNumInt);
-
-
                 Intent intent = CommunityDetailActivity.newIntent(this, mPostKey);
                 startActivity(intent);
 
