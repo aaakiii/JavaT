@@ -30,5 +30,7 @@ public class FirebaseNodes {
         public static final String USER_ID = "userId";
         public static final String POST_COM_TIME = "postComTime";
         public static final String POSTS_MAIN_ID = "postMainId";
+        public static final String LIKE = "comLike";
+        public static final String UNLIKE = "comUnLike";
     }
 }
