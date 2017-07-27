@@ -126,8 +126,6 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
 //            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
 
 
-
-
     }
 
     @Override
@@ -136,7 +134,6 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_post, menu);
         return true;
     }
-
 
 
     @Override
@@ -151,7 +148,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
                 String key = ref.push().getKey();
                 //String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, boolean isLikeTapped, boolean isUnlikeTapped, String mUserId
-                PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, mUserId);
+                PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, true, false, mUserId);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();
@@ -163,14 +160,14 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                         mCommentsNumInt++;
                         postMain.setCommentNum(mCommentsNumInt);
                     }
-                    public void onCancelled(DatabaseError firebaseError){
+
+                    public void onCancelled(DatabaseError firebaseError) {
                     }
                 });
 
                 Intent intent = CommunityDetailActivity.newIntent(this, mPostKey);
                 startActivity(intent);
 
-                Toast.makeText(this, mPostKey, Toast.LENGTH_SHORT).show();
                 return true;
             case android.R.id.home:
                 onBackPressed();
@@ -180,6 +177,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 

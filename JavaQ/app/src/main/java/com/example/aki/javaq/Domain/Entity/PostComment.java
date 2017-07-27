@@ -11,19 +11,23 @@ public class PostComment {
     private long mComTime;
     private int mComLike;
     private int mComUnlike;
+    private boolean isComLiked;
+    private boolean isComUnliked;
     private String mUserId;
 
     public PostComment(){
 
     }
 
-    public PostComment(String mComId, String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, String mUserId) {
+    public PostComment(String mComId, String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, boolean isComLiked, boolean isComUnliked, String mUserId) {
         this.mComId = mComId;
         this.mPostId = mPostId;
         this.mComBody = mComBody;
         this.mComTime = mComTime;
         this.mComLike = mComLike;
         this.mComUnlike = mComUnlike;
+        this.isComLiked = isComLiked;
+        this.isComUnliked = isComUnliked;
         this.mUserId = mUserId;
     }
 
@@ -81,5 +85,21 @@ public class PostComment {
 
     public void setUserId(String mUserId) {
         this.mUserId = mUserId;
+    }
+
+    public boolean isComLiked() {
+        return isComLiked;
+    }
+
+    public void setComLiked(boolean comLiked) {
+        isComLiked = comLiked;
+    }
+
+    public boolean isComUnliked() {
+        return isComUnliked;
+    }
+
+    public void setComUnliked(boolean comUnliked) {
+        isComUnliked = comUnliked;
     }
 }
