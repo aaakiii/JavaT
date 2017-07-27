@@ -12,7 +12,7 @@
         android:layout_width="@dimen/user_icon"
         android:layout_height="@dimen/user_icon"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:src="@drawable/image_user_picture_dummy" />
