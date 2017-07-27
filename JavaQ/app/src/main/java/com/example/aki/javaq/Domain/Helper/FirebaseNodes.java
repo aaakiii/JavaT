@@ -22,6 +22,7 @@ public class FirebaseNodes {
         public static final String POST_BODY = "postBody";
         public static final String USER_ID = "userId";
         public static final String POST_TIME = "postTime";
+        public static final String COMMENTS_NUM = "commentsNum";
     }
 
     public static final class PostComment {
@@ -30,5 +31,8 @@ public class FirebaseNodes {
         public static final String USER_ID = "userId";
         public static final String POST_COM_TIME = "postComTime";
         public static final String POSTS_MAIN_ID = "postMainId";
+        public static final String COM_GOOD = "CommentGood";
+        public static final String COM_BAD = "CommentBad";
+
     }
 }

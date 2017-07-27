@@ -71,6 +71,8 @@ public class CommunityListFragment extends Fragment {
     private String mPostTimeAgo;
     private String mPostKey;
     private String mUserId;
+    private int mCommentsNumInt;
+    private String mCommentsNum;
 
 
     @Override
@@ -200,12 +202,35 @@ public class CommunityListFragment extends Fragment {
 
             //Display Comment num
             //TODO:comments nodeから取得
-            DatabaseReference comments_ref = FirebaseLab.getFirebaseDatabaseReference()
-                    .child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+//            DatabaseReference post_ref = FirebaseLab.getFirebaseDatabaseReference()
+//                    .child(FirebaseNodes.PostMain.POSTS_CHILD);
+
+            int a = mPostMain.getCommentNum();
+
+//            if(mCommentsNum == null ){
+//                mCommentsNumInt  = 0;
+//            }   else{
+//
+//
+//
+//                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
+//                post_ref.child(mPostMain.getPostId()).addValueEventListener(new ValueEventListener() {
+//                    public void onDataChange(DataSnapshot snapshot) {
+//                        mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
+//
+//                    }
+//                    public void onCancelled(DatabaseError firebaseError) {
+//                    }
+//                });
+//            }
 
 
-            int mCommentsNumInt = 18; //ダミー
-            String mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+
+//            int mCommentsNumInt = 1;
+
+
+
+            mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, a, a);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
 
             if (mUserMap.containsKey(mPostMain.getUserId().toString())) {

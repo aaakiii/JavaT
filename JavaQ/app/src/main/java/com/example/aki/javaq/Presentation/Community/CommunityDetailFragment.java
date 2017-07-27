@@ -62,7 +62,7 @@ public class CommunityDetailFragment extends Fragment {
     private EditText mAddCommentsEditTextView;
     private CircleImageView mMyIconImageView;
     private CommentsAdapter mAdapter;
-    private int mCommentsNumInt = 18; //ダミー
+    private int mCommentsNumInt; //ダミー
     private Date mCommentDate;
     private int mGoodNum;
     private int mBadNum;
@@ -87,6 +87,7 @@ public class CommunityDetailFragment extends Fragment {
     public static final String POST_KEY = "post_key";
     private SharedPreferences mSharedPreferences;
     private static final String POST_SENT_EVENT = "post_sent";
+    private String mCommentsNum;
 
     public static CommunityDetailFragment newInstance(String postKey) {
         Bundle args = new Bundle();
@@ -244,9 +245,25 @@ public class CommunityDetailFragment extends Fragment {
             }
         });
 
+        if(mCommentsNum == null ){
+            mCommentsNumInt  = 0;
+        }   else{
 
-        String comments = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-        mPostCommentsNumTextView.setText(comments);
+            final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
+            post_ref.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                public void onDataChange(DataSnapshot snapshot) {
+                    mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
+                }
+                public void onCancelled(DatabaseError firebaseError) {
+                }
+            });
+        }
+
+
+
+
+        mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+        mPostCommentsNumTextView.setText(mCommentsNum);
         return view;
     }
 

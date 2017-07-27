@@ -13,6 +13,7 @@ public class PostMain {
     private long mPostTime;
     private String mPostBody;
     private String mCommentId;
+    private int mCommentNum;
 
     public PostMain() {
     }
@@ -23,6 +24,14 @@ public class PostMain {
         this.mPostTime = mPostTime;
         this.mPostBody = mPostBody;
         this.mCommentId = mCommentId;
+    }
+
+    public int getCommentNum() {
+        return mCommentNum;
+    }
+
+    public void setCommentNum(int commentNum) {
+        mCommentNum = commentNum;
     }
 
     public String getPostId() {

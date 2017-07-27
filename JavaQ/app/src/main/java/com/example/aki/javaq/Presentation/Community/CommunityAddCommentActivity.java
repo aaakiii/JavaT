@@ -27,7 +27,10 @@ import com.example.aki.javaq.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 /**
@@ -55,6 +58,8 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     public static final String POST_KEY = "post_key";
     private static String mPostKey;
     private PostComment mPostCommentContentes;
+    private int mCommentNum;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +153,17 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();
+                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
+                post_ref.addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot snapshot) {
+                        mCommentNum =  (snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode()) +1;
+                        post_ref.child(mPostKey).child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentNum);
+
+                    }
+                    public void onCancelled(DatabaseError firebaseError) {
+                    }
+                });
+
                 Intent intent = CommunityDetailActivity.newIntent(this, mPostKey);
                 startActivity(intent);
 

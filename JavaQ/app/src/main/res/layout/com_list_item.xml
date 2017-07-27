@@ -54,7 +54,6 @@
         app:layout_constraintLeft_toLeftOf="@+id/post_user_icon" />
 
     <TextView
-        android:visibility="invisible"
         android:id="@+id/post_comment_num"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
