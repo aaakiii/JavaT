@@ -62,7 +62,7 @@ public class CommunityDetailFragment extends Fragment {
     private EditText mAddCommentsEditTextView;
     private CircleImageView mMyIconImageView;
     private CommentsAdapter mAdapter;
-    private int mCommentsNumInt; //ダミー
+    private int mCommentsNumInt = 0;
     private Date mCommentDate;
     private int mGoodNum;
     private int mBadNum;
@@ -74,7 +74,7 @@ public class CommunityDetailFragment extends Fragment {
     private String mPostKey;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    public DatabaseReference mPostsRef;
+    public DatabaseReference mCommentsRef;
     public DatabaseReference mUsersRef;
     private CommentsAdapter mCommentsAdapter;
     private RecyclerView mCommentsRecyclerView;
@@ -137,7 +137,7 @@ public class CommunityDetailFragment extends Fragment {
         mPostDateTextView = (TextView) view.findViewById(R.id.post_date);
         mPostCommentsNumTextView = (TextView) view.findViewById(R.id.post_comment_num);
         mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-        mPostsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
+        mCommentsRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
         mUsersRef = FirebaseLab.getFirebaseDatabaseReference().child(FirebaseNodes.User.USER_CHILD);
 
         mFirebaseUser = FirebaseLab.getFirebaseUser();
@@ -149,31 +149,31 @@ public class CommunityDetailFragment extends Fragment {
                 mFirebaseDatabaseReference.child(FirebaseNodes.User.USER_CHILD).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(final DataSnapshot snapshot) {
-                            mUserNameTextView.setText(snapshot.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).child(FirebaseNodes.User.USER_NAME).getValue().toString());
-                            //Display User picture
-                            StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
-                            rootRef.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    //If there's a picture in the storage, set the picture
-                                    Glide.with(getActivity())
-                                            .load(uri)
-                                            .into(mUserIconImageView);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    //If not, set the default picture
-                                    int id = R.drawable.image_user_default;
-                                    Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                                            "://" + getResources().getResourcePackageName(id)
-                                            + '/' + getResources().getResourceTypeName(id)
-                                            + '/' + getResources().getResourceEntryName(id));
-                                    Glide.with(getActivity())
-                                            .load(mPictureDefaultUri)
-                                            .into(mUserIconImageView);
-                                }
-                            });
+                        mUserNameTextView.setText(snapshot.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).child(FirebaseNodes.User.USER_NAME).getValue().toString());
+                        //Display User picture
+                        StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                        rootRef.child(dataSnapshot.child(FirebaseNodes.PostMain.USER_ID).getValue().toString()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                //If there's a picture in the storage, set the picture
+                                Glide.with(getActivity())
+                                        .load(uri)
+                                        .into(mUserIconImageView);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                //If not, set the default picture
+                                int id = R.drawable.image_user_default;
+                                Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                        "://" + getResources().getResourcePackageName(id)
+                                        + '/' + getResources().getResourceTypeName(id)
+                                        + '/' + getResources().getResourceEntryName(id));
+                                Glide.with(getActivity())
+                                        .load(mPictureDefaultUri)
+                                        .into(mUserIconImageView);
+                            }
+                        });
 
                     }
 
@@ -182,7 +182,7 @@ public class CommunityDetailFragment extends Fragment {
 
                     }
                 });
-                mPostDateTextView.setText(TimeUtils.getTimeAgo((long)dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
+                mPostDateTextView.setText(TimeUtils.getTimeAgo((long) dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -191,7 +191,7 @@ public class CommunityDetailFragment extends Fragment {
 
 
         if (mCommentsAdapter == null) {
-            mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mPostsRef, mUsersRef);
+            mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mCommentsRef, mUsersRef);
             mCommentsRecyclerView.setAdapter(mCommentsAdapter);
         }
 
@@ -274,10 +274,13 @@ public class CommunityDetailFragment extends Fragment {
                     mPostCommentsList.clear();
                     for (DataSnapshot commentsSnapshot : snapshot.getChildren()) {
                         PostComment mPostComment = commentsSnapshot.getValue(PostComment.class);
-                        mPostCommentsList.add(mPostComment);
+                        if (mPostComment.getPostId().equals(mPostKey)) {
+                            mPostCommentsList.add(mPostComment);
+                        }
                     }
                     notifyDataSetChanged();
                 }
+
                 public void onCancelled(DatabaseError firebaseError) {
                 }
             });
@@ -292,6 +295,7 @@ public class CommunityDetailFragment extends Fragment {
                     }
                     notifyDataSetChanged();
                 }
+
                 public void onCancelled(DatabaseError firebaseError) {
                 }
             });
@@ -307,61 +311,91 @@ public class CommunityDetailFragment extends Fragment {
         @Override
         public void onBindViewHolder(final CommentsViewHolder viewHolder, int position) {
             mPostComment = mPostCommentsList.get(position);
-            PostComment comment = mPostCommentsList.get(position);
-            viewHolder.bind(comment);
+            viewHolder.bind(mPostComment);
 
             //Display Body text
-            mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (mPostComment.getPostId().equals(mPostKey)) {
+            viewHolder.mCommentTextView.setText(mPostComment.getComBody());
 
-                        viewHolder.mCommentTextView.setText(mPostComment.getComBody());
-                        //Display Time
-                        long timestamp = mPostComment.getComTime();
-                        mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
-                        viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
+            //Display Time
+            long timestamp = mPostComment.getComTime();
+            mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
+            viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
-                    if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
-                        //Display User name
-                        User mUser = mUserMap.get(mPostComment.getUserId().toString());
-                        viewHolder.mCommentUserNameTextView.setText(mUser.getUserName());
+            //Display good / bad num
+            //TODO:numはローカルにする
+            mGoodNum = mPostComment.getComLike();
+            viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+            mBadNum = mPostComment.getComUnlike();
+            viewHolder.mCommentBadTextView.setText(String.valueOf(mBadNum));
 
-                        //Display User picture
-                        StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
-                        rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                //If there's a picture in the storage, set the picture
-                                Glide.with(getActivity())
-                                        .load(uri)
-                                        .into(viewHolder.mCommentUserIconImageView);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                //If not, set the default picture
-                                int id = R.drawable.image_user_default;
-                                Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
-                                        "://" + getResources().getResourcePackageName(id)
-                                        + '/' + getResources().getResourceTypeName(id)
-                                        + '/' + getResources().getResourceEntryName(id));
-                                Glide.with(getActivity())
-                                        .load(mPictureDefaultUri)
-                                        .into(viewHolder.mCommentUserIconImageView);
-                            }
-                        });
+            // Good Bad button
+            viewHolder.mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    DatabaseReference good_ref = mCommentsRef.child(mPostComment.getComId()).child(FirebaseNodes.PostComment.LIKE);
+
+                    if (!mGoodTapped) {
+                        if (mBadTapped) {
+                            mBadNum--;
+                            viewHolder.mCommentBadTextView.setText(String.valueOf(mBadNum));
+                            DrawableCompat.setTint(viewHolder.mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                            mBadTapped = false;
+                        }
+                        mGoodNum++;
+                        viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+                        DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+                        mGoodTapped = true;
+//                        good_ref.setValue(mGoodNum);
+                    } else {
+                        mGoodNum--;
+                        viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+                        DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                        mGoodTapped = false;
+//                        good_ref.setValue(mGoodNum);
                     }
-                 }
-
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            });
+            viewHolder.mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+//                    addGood(mPostComment.getComId());
                 }
             });
 
+
+            if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
+                //Display User name
+                User mUser = mUserMap.get(mPostComment.getUserId().toString());
+                viewHolder.mCommentUserNameTextView.setText(mUser.getUserName());
+
+                //Display User picture
+                StorageReference rootRef = FirebaseLab.getStorageReference().child(FirebaseNodes.UserPicture.USER_PIC_CHILD);
+                rootRef.child(mUser.getUserId()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //If there's a picture in the storage, set the picture
+                        Glide.with(getActivity())
+                                .load(uri)
+                                .into(viewHolder.mCommentUserIconImageView);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        //If not, set the default picture
+                        int id = R.drawable.image_user_default;
+                        Uri mPictureDefaultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                "://" + getResources().getResourcePackageName(id)
+                                + '/' + getResources().getResourceTypeName(id)
+                                + '/' + getResources().getResourceEntryName(id));
+                        Glide.with(getActivity())
+                                .load(mPictureDefaultUri)
+                                .into(viewHolder.mCommentUserIconImageView);
+                    }
+                });
+            }
+
+
         }
 
+        @Override
         public int getItemCount() {
             return mPostCommentsList.size();
         }
@@ -392,108 +426,39 @@ public class CommunityDetailFragment extends Fragment {
             mCommentGoodButton = (ImageButton) itemView.findViewById(R.id.comment_button_good);
             mCommentBadButton = (ImageButton) itemView.findViewById(R.id.comment_button_bad);
 
+//            // Good / Bad button
+//            mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    addGood(mPostComment.getComId());
+//                }
+//            });
+//            mCommentGoodTextView.setText(String.valueOf(mGoodNum));
+//            mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    addGood(mPostComment.getComId());
+//                }
+//            });
 
-            // TODO: データベースから取得
-//            mGoodNum = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.COM_GOOD).hashCode();
-//            mGoodNum = 12;
-//            mBadNum = 3;
-            mCommentDate = new Date(2017 - 1900, 6, 10, 22, 49, 00);
-            mGoodTapped = false;
-            mBadTapped = false;
+//            //Bad button
+//            mCommentBadButton.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+////                        addBad();
+//                }
+//            });
+//            mCommentBadTextView.setText(String.valueOf(mBadNum));
+//            mCommentBadTextView.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+////                        addBad();
+//                }
+//            });
+
         }
 
-        public void bind(PostComment post) {
-            mPostComment = post;
-//            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//            mGoodNum = post.getComLike();
-//            mBadNum = post.getComUnlike();
-//            mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-//            mFirebaseAnalytics = FirebaseLab.getFirebaseAnalytics(getActivity());
-//            mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
-//            FirebaseLab.SetConfig();
-//            FirebaseLab.fetchConfig();
-
-
-            // TO DO: 保留
-            // Good button
-            mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    addGood();
-                }
-            });
-            mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-            mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    addGood();
-                }
-            });
-            //Bad button
-            mCommentBadButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    addBad();
-                }
-            });
-
-            mCommentBadTextView.setText(String.valueOf(mBadNum));
-            mCommentBadTextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    addBad();
-                }
-            });
+        public void bind(final PostComment postComment) {
+            mPostComment = postComment;
         }
 
 
-        //TODO:mGoodNumとmGoodTappedをデータベースに保存
-        private void addGood() {
-//            mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//
-//            mFirebaseDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
-//            mFirebaseAnalytics = FirebaseLab.getFirebaseAnalytics(getActivity());
-//            mFirebaseRemoteConfig = FirebaseLab.getFirebaseRemoteConfig();
-//            FirebaseLab.SetConfig();
-//            FirebaseLab.fetchConfig();
-            if (!mGoodTapped) {
-                if(mBadTapped){
-                    addBad();
-                }
-                mGoodNum++;
-//
-//                DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
-//                String key = ref.push().getKey();
-//                PostComment comment = new PostComment(key, null, null, 0, mGoodNum, mBadNum);
-//                ref.child(key).setValue(comment);
-//                mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
-                mPostComment.setComLike(mGoodNum);
-                mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
-                mGoodTapped = true;
-            } else {
-                mGoodNum--;
-                mPostComment.setComLike(mGoodNum);
-                mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
-                mGoodTapped = false;
-            }
-        }
-
-        private void addBad() {
-            if (!mBadTapped) {
-                if(mGoodTapped){
-                    addGood();
-                }
-                mBadNum++;
-                mPostComment.setComLike(mBadNum);
-                mCommentBadTextView.setText(String.valueOf(mBadNum));
-                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
-                mBadTapped = true;
-            } else {
-                mBadNum--;
-                mPostComment.setComLike(mBadNum);
-                mCommentBadTextView.setText(String.valueOf(mBadNum));
-                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
-                mBadTapped = false;
-            }
-        }
     }
 
 
