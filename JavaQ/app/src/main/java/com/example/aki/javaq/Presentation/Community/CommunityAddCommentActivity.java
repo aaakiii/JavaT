@@ -73,8 +73,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        //TODO: drawableにclose iconいれてそれにセットする
-        ab.setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
+        ab.setHomeAsUpIndicator(R.drawable.ic_close);
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         //New Child entries

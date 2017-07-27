@@ -19,10 +19,13 @@
 
     <EditText
         android:id="@+id/edit_post"
+        style="@style/mMainText"
         android:layout_width="match_parent"
         android:windowSoftInputMode="stateAlwaysVisible"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:background="@android:color/transparent"
         android:hint="Add a new post"/>
 

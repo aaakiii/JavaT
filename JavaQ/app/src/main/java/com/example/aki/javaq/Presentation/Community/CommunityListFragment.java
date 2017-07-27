@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -194,6 +195,10 @@ public class CommunityListFragment extends Fragment {
 
             //Display Body text
             viewHolder.mPostBodyTextView.setText(mPostMain.getPostBody());
+            //Set ellipsize
+            viewHolder.mPostBodyTextView.setSingleLine(false);
+            viewHolder.mPostBodyTextView.setEllipsize(TextUtils.TruncateAt.END);
+            viewHolder.mPostBodyTextView.setMaxLines(5);
 
             //Display Time
             long timestamp = mPostMain.getPostTime();
