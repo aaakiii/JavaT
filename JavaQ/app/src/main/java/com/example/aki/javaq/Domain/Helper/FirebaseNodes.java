@@ -34,5 +34,6 @@ public class FirebaseNodes {
         public static final String COM_GOOD = "CommentGood";
         public static final String COM_BAD = "CommentBad";
 
+
     }
 }

@@ -5,25 +5,34 @@ package com.example.aki.javaq.Domain.Entity;
  */
 
 public class PostComment {
+    private String mComId;
     private String mPostId;
     private String mComBody;
+    private long mComTime;
     private int mComLike;
     private int mComUnlike;
     private String mUserId;
-    private long mPostTime;
 
     public PostComment(){
 
     }
 
-    public PostComment(String mPostId, String mComBody, String mUserId, long mPostTime, int like, int unLike){
+    public PostComment(String mComId, String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, String mUserId) {
+        this.mComId = mComId;
         this.mPostId = mPostId;
         this.mComBody = mComBody;
+        this.mComTime = mComTime;
+        this.mComLike = mComLike;
+        this.mComUnlike = mComUnlike;
         this.mUserId = mUserId;
-        mComLike = like;
-        mComUnlike = unLike;
-        this.mPostTime = mPostTime;
+    }
 
+    public String getComId() {
+        return mComId;
+    }
+
+    public void setComId(String mComId) {
+        this.mComId = mComId;
     }
 
     public String getPostId() {
@@ -42,19 +51,12 @@ public class PostComment {
         this.mComBody = mComBody;
     }
 
-
-    public long getPostTime() {
-        return mPostTime;
-    }
-    public String getUserId() {
-        return mUserId;
+    public long getComTime() {
+        return mComTime;
     }
 
-    public void setUserId(String mUserId) {
-        this.mUserId = mUserId;
-    }
-    public void setPostTime(long mPostTime) {
-        this.mPostTime = mPostTime;
+    public void setComTime(long mComTime) {
+        this.mComTime = mComTime;
     }
 
     public int getComLike() {
@@ -71,5 +73,13 @@ public class PostComment {
 
     public void setComUnlike(int mComUnlike) {
         this.mComUnlike = mComUnlike;
+    }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(String mUserId) {
+        this.mUserId = mUserId;
     }
 }

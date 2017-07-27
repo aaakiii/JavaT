@@ -52,7 +52,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     public static String mUsername;
     private String mPostComBody;
     private String mUserId;
-    private long mPostTime;
+    private long mComTime;
     private static String mPhotoUrl;
     private static final String POST_SENT_EVENT = "post_sent";
     public static final String POST_KEY = "post_key";
@@ -144,11 +144,12 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 //TODO: mCommentTextをデータベースにセット
                 mPostComBody = mCommentEditTextView.getText().toString();
                 mUserId = mFirebaseUser.getUid();
-                mPostTime = System.currentTimeMillis();
+                mComTime = System.currentTimeMillis();
                 //Save post to the Firebase
                 DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
                 String key = ref.push().getKey();
-                PostComment comment = new PostComment(mPostKey, mPostComBody, mUserId, mPostTime, 0, 0);
+                //String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, boolean isLikeTapped, boolean isUnlikeTapped, String mUserId
+                PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, mUserId);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();
