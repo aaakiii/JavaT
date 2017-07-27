@@ -31,4 +31,10 @@ public class CommunityDetailActivity extends SingleFragmentActivity {
         String postKey = (String) getIntent().getSerializableExtra(EXTRA_POST_KEY);
         return CommunityDetailFragment.newInstance(postKey);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(),CommunityListActivity.class);
+        startActivity(intent);
+    }
 }
