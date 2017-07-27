@@ -155,8 +155,8 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
                 post_ref.addValueEventListener(new ValueEventListener() {
                     public void onDataChange(DataSnapshot snapshot) {
-                        mCommentNum =  (snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode()) +1;
-                        post_ref.child(mPostKey).child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentNum);
+                        mCommentNum =  1;
+                        post_ref.child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentNum);
 
                     }
                     public void onCancelled(DatabaseError firebaseError) {

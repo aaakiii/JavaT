@@ -245,25 +245,22 @@ public class CommunityDetailFragment extends Fragment {
             }
         });
 
-        if(mCommentsNum == null ){
-            mCommentsNumInt  = 0;
-        }   else{
+//        if(mCommentsNum == null ){
+//            mCommentsNumInt  = 0;
+//        }   else{
 
             final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
             post_ref.child(mPostKey).addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
                     mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
+                    mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+                    mPostCommentsNumTextView.setText(mCommentsNum);
                 }
                 public void onCancelled(DatabaseError firebaseError) {
                 }
             });
-        }
+//        }
 
-
-
-
-        mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-        mPostCommentsNumTextView.setText(mCommentsNum);
         return view;
     }
 
@@ -321,11 +318,11 @@ public class CommunityDetailFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (mPostComment.getPostId().equals(mPostKey)) {
 
-                    viewHolder.mCommentTextView.setText(mPostComment.getComBody());
-                    //Display Time
-                    long timestamp = mPostComment.getPostTime();
-                    mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
-                    viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
+                        viewHolder.mCommentTextView.setText(mPostComment.getComBody());
+                        //Display Time
+                        long timestamp = mPostComment.getPostTime();
+                        mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
+                        viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
                     if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
                         //Display User name

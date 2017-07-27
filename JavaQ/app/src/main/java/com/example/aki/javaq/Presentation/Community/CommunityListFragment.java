@@ -212,22 +212,20 @@ public class CommunityListFragment extends Fragment {
 
             int a = mPostMain.getCommentNum();
 
-//            if(mCommentsNum == null ){
-//                mCommentsNumInt  = 0;
-//            }   else{
-//
-//
-//
-//                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
-//                post_ref.child(mPostMain.getPostId()).addValueEventListener(new ValueEventListener() {
-//                    public void onDataChange(DataSnapshot snapshot) {
-//                        mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
-//
-//                    }
-//                    public void onCancelled(DatabaseError firebaseError) {
-//                    }
-//                });
-//            }
+            if(mCommentsNum == null ){
+                mCommentsNumInt  = 0;
+            }   else{
+                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
+                post_ref.child(mPostMain.getPostId()).addValueEventListener(new ValueEventListener() {
+                    public void onDataChange(DataSnapshot snapshot) {
+                        mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
+                        mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+                        viewHolder.mCommentsNumTextView.setText(mCommentsNum);
+                    }
+                    public void onCancelled(DatabaseError firebaseError) {
+                    }
+                });
+            }
 
 
 
@@ -235,8 +233,7 @@ public class CommunityListFragment extends Fragment {
 
 
 
-            mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, a, a);
-            viewHolder.mCommentsNumTextView.setText(mCommentsNum);
+
 
             if (mUserMap.containsKey(mPostMain.getUserId().toString())) {
 
