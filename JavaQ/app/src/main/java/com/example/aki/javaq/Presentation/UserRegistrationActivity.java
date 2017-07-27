@@ -17,6 +17,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
+import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;
@@ -79,7 +81,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private StorageReference mUserPicReference;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean isFromSignIn = false;
-
+    public static final int DEFAULT_MSG_LENGTH_LIMIT = 20;
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
     public static final String NEW_USER = "new_user";
@@ -126,8 +128,12 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         mEditIconTextView = (TextView) findViewById(R.id.add_icon_text);
         mEditIconTextView.setOnClickListener(this);
+
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+        InputFilter[] inputFilter = new InputFilter[1];
+        inputFilter[0] = new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT);
+        mAddUserNameTextView.setFilters(inputFilter);
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -148,9 +154,11 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
                 //TODO:記号なしをやめて最大文字数を設定する
                 //For error
-                if (hasSpecialSymbol(s.toString().trim())) {
+
+                if(s.toString().length() >= 20){
                     mErrorTextView.setText(R.string.error_user_name);
-                } else {
+                }
+                else {
                     mErrorTextView.setText("");
                 }
             }

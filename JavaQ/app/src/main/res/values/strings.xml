@@ -35,7 +35,7 @@
     <string name="user_name">User name</string>
     <string name="save">Save</string>
     <string name="post">Post</string>
-    <string name="error_user_name">Names cannot contain special symbols or emoji characters.</string>
+    <string name="error_user_name">Username should be less than 20 characters</string>
 
 
     <!-- Other -->

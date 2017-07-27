@@ -106,7 +106,6 @@ public class CommunityListFragment extends Fragment {
         mFirebaseAuth = FirebaseLab.getFirebaseAuth();
         mFirebaseUser = FirebaseLab.getFirebaseUser();
 
-
         //For the issue floating action button unexpected anchor gravity change
         mComRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -175,7 +174,6 @@ public class CommunityListFragment extends Fragment {
                     }
                     notifyDataSetChanged();
                 }
-
                 public void onCancelled(DatabaseError firebaseError) {
                 }
             });
