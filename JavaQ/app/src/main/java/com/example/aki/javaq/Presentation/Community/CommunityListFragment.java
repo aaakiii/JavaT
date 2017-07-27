@@ -210,7 +210,7 @@ public class CommunityListFragment extends Fragment {
 //            DatabaseReference post_ref = FirebaseLab.getFirebaseDatabaseReference()
 //                    .child(FirebaseNodes.PostMain.POSTS_CHILD);
 //
-            mCommentsNumInt = mPostMain.getCommentNum();
+            mCommentsNumInt = mPostMain.getCommentsNum();
             mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
 

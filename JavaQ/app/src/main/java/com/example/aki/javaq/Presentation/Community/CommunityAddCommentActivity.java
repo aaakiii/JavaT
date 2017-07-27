@@ -59,8 +59,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     public static final String POST_KEY = "post_key";
     private static String mPostKey;
     private PostComment mPostCommentContentes;
-    private String mCommentNum;
-    private int mCommentsNumInt = 0;
+    private int mCommentsNumInt;
 
 
     @Override
@@ -126,6 +125,19 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
 //            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 1);
 
 
+        final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
+        post_ref.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot snapshot) {
+                PostMain postMain = snapshot.getValue(PostMain.class);
+                mCommentsNumInt = postMain.getCommentsNum();
+            }
+
+            public void onCancelled(DatabaseError firebaseError){
+            }
+        });
+
+
+
 
 
     }
@@ -154,18 +166,21 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, mUserId);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
-//                finish();
+
+
                 final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
                 post_ref.addValueEventListener(new ValueEventListener() {
                     public void onDataChange(DataSnapshot snapshot) {
                         PostMain postMain = snapshot.getValue(PostMain.class);
-                        mCommentsNumInt = postMain.getCommentNum();
-                        mCommentsNumInt++;
-                        postMain.setCommentNum(mCommentsNumInt);
+                        mCommentsNumInt = postMain.getCommentsNum();
                     }
+
                     public void onCancelled(DatabaseError firebaseError){
                     }
                 });
+                mCommentsNumInt++;
+                post_ref.child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentsNumInt);
+
 
                 Intent intent = CommunityDetailActivity.newIntent(this, mPostKey);
                 startActivity(intent);

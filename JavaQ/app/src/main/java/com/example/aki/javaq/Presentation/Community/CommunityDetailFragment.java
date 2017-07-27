@@ -250,7 +250,7 @@ public class CommunityDetailFragment extends Fragment {
             post_ref.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
                     PostMain mPostMain = snapshot.getValue(PostMain.class);
-                    mCommentsNumInt = mPostMain.getCommentNum();
+                    mCommentsNumInt = mPostMain.getCommentsNum();
                     mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
                     mPostCommentsNumTextView.setText(mCommentsNum);
                 }
