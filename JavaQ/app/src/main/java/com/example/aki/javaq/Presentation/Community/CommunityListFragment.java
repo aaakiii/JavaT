@@ -210,22 +210,25 @@ public class CommunityListFragment extends Fragment {
 //            DatabaseReference post_ref = FirebaseLab.getFirebaseDatabaseReference()
 //                    .child(FirebaseNodes.PostMain.POSTS_CHILD);
 
-            int a = mPostMain.getCommentNum();
+//            int a = mPostMain.getCommentNum();
+//            mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+//            viewHolder.mCommentsNumTextView.setText(String.valueOf(a));
+//
+//                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
+//                post_ref.child(mPostMain.getPostId()).addValueEventListener(new ValueEventListener() {
+//                    public void onDataChange(DataSnapshot snapshot) {
+//                        if(mCommentsNum == null){
+//                            mCommentsNumInt  = 0;
+//                        }else{
+////                            mCommentsNumInt = Integer.parseInt(String.valueOf(snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue()));
+//                        }
+//                        mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+//                        viewHolder.mCommentsNumTextView.setText(snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().toString());
+//                    }
+//                    public void onCancelled(DatabaseError firebaseError) {
+//                    }
+//                });
 
-            if(mCommentsNum == null ){
-                mCommentsNumInt  = 0;
-            }   else{
-                final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
-                post_ref.child(mPostMain.getPostId()).addValueEventListener(new ValueEventListener() {
-                    public void onDataChange(DataSnapshot snapshot) {
-                        mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
-                        mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-                        viewHolder.mCommentsNumTextView.setText(mCommentsNum);
-                    }
-                    public void onCancelled(DatabaseError firebaseError) {
-                    }
-                });
-            }
 
 
 

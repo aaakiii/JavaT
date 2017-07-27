@@ -320,7 +320,7 @@ public class CommunityDetailFragment extends Fragment {
 
                         viewHolder.mCommentTextView.setText(mPostComment.getComBody());
                         //Display Time
-                        long timestamp = mPostComment.getPostTime();
+                        long timestamp = mPostComment.getComTime();
                         mPostTimeAgo = TimeUtils.getTimeAgo(timestamp);
                         viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
