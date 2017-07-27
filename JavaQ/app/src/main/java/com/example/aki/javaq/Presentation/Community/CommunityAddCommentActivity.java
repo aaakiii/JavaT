@@ -144,7 +144,7 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 DatabaseReference ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD);
                 String key = ref.push().getKey();
                 //String mPostId, String mComBody, long mComTime, int mComLike, int mComUnlike, boolean isLikeTapped, boolean isUnlikeTapped, String mUserId
-                PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, false, false, mUserId);
+                PostComment comment = new PostComment(key, mPostKey, mPostComBody, mComTime, 0, 0, mUserId);
                 ref.child(key).setValue(comment);
                 mFirebaseAnalytics.logEvent(POST_SENT_EVENT, null);
 //                finish();
