@@ -245,14 +245,12 @@ public class CommunityDetailFragment extends Fragment {
             }
         });
 
-//        if(mCommentsNum == null ){
-//            mCommentsNumInt  = 0;
-//        }   else{
 
-            final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD);
-            post_ref.child(mPostKey).addValueEventListener(new ValueEventListener() {
+            final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
+            post_ref.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot snapshot) {
-                    mCommentsNumInt = snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
+                    PostMain mPostMain = snapshot.getValue(PostMain.class);
+                    mCommentsNumInt = mPostMain.getCommentNum();
                     mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
                     mPostCommentsNumTextView.setText(mCommentsNum);
                 }
@@ -313,7 +311,7 @@ public class CommunityDetailFragment extends Fragment {
             viewHolder.bind(comment);
 
             //Display Body text
-            mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD).child(FirebaseNodes.PostComment.POSTS_MAIN_ID).addValueEventListener(new ValueEventListener() {
+            mFirebaseDatabaseReference.child(FirebaseNodes.PostComment.POSTS_COM_CHILD).child(mPostKey).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (mPostComment.getPostId().equals(mPostKey)) {

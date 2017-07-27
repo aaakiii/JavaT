@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.aki.javaq.Domain.Entity.PostComment;
+import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
 import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
@@ -58,7 +59,8 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
     public static final String POST_KEY = "post_key";
     private static String mPostKey;
     private PostComment mPostCommentContentes;
-    private int mCommentNum;
+    private String mCommentNum;
+    private int mCommentsNumInt = 0;
 
 
     @Override
@@ -156,11 +158,12 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
                 final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
                 post_ref.addValueEventListener(new ValueEventListener() {
                     public void onDataChange(DataSnapshot snapshot) {
-                        mCommentNum =  snapshot.child(FirebaseNodes.PostMain.COMMENTS_NUM).getValue().hashCode();
-                        post_ref.child(FirebaseNodes.PostMain.COMMENTS_NUM).setValue(mCommentNum);
-
+                        PostMain postMain = snapshot.getValue(PostMain.class);
+                        mCommentsNumInt = postMain.getCommentNum();
+                        mCommentsNumInt++;
+                        postMain.setCommentNum(mCommentsNumInt);
                     }
-                    public void onCancelled(DatabaseError firebaseError) {
+                    public void onCancelled(DatabaseError firebaseError){
                     }
                 });
 
