@@ -25,12 +25,12 @@
         android:maxLines="1"
         tools:text="MinaMinaMinaMinaMinaMinaMinaMinaMinaMina"
         style="@style/mMainText.mUserName"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:layout_constraintLeft_toRightOf="@+id/post_user_icon"
         app:layout_constraintRight_toLeftOf="@+id/post_date"
         app:layout_constraintTop_toTopOf="@+id/post_user_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/post_user_icon"
-        android:layout_marginStart="8dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/post_user_icon" />
 
     <TextView
         android:id="@+id/post_date"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         tools:text="Hi, I have a question about something. Hi, I have a question about somethingHi, I have a question about somethingHi, I have a question about somethingHi, I have a question about something"
         style="@style/mMainText"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/post_user_icon"
         app:layout_constraintRight_toRightOf="@+id/post_date"
         app:layout_constraintLeft_toLeftOf="@+id/post_user_icon"
@@ -62,7 +62,6 @@
         android:layout_height="wrap_content"
         tools:text="18 comments"
         style="@style/mSubText"
-        android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@+id/post_text"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="@+id/post_user_icon"/>
