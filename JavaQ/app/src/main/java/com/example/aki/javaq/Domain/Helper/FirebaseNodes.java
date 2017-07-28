@@ -33,7 +33,7 @@ public class FirebaseNodes {
         public static final String POST_ID = "postId";
         public static final String LIKE = "comLike";
         public static final String UNLIKE = "comUnLike";
-        public static final String IS_LIKEED = "comUnLiked";
-        public static final String IS_UNLIKEED = "comUnLike";
+        public static final String IS_LIKEED = "comLiked";
+        public static final String IS_UNLIKEED = "comUnliked";
     }
 }
