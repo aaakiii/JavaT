@@ -294,7 +294,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         if (mPicturePath == null) {
             mMyIconImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.image_user_default));
         } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(getResources(), mPicturePath, mIconViewWith);
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPicturePath);
             mMyIconImageView.setImageBitmap(bitmap);
         }
     }
