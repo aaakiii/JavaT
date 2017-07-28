@@ -147,7 +147,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 if (0 < s.toString().trim().length() && s.toString().trim().length() <= 20) {
                     mTappable = true;
                 } else {
-                    hasSpecialSymbol(s.toString());
                     mTappable = false;
                 }
 
@@ -373,14 +372,14 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     }
 
 
-    private boolean hasSpecialSymbol(String input) {
-        String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
-        Pattern p1 = Pattern.compile("[^a-z] | [\uD83C-\uDBFF\uDC00-\uDFFF]+", Pattern.CASE_INSENSITIVE);
-        Pattern p2 = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
-        boolean b = p1.matcher(input).matches() || p2.matcher(input).matches();
-
-        return (b) ? true : false;
-    }
+//    private boolean hasSpecialSymbol(String input) {
+//        String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
+//        Pattern p1 = Pattern.compile("[^a-z] | [\uD83C-\uDBFF\uDC00-\uDFFF]+", Pattern.CASE_INSENSITIVE);
+//        Pattern p2 = Pattern.compile(regexPattern, Pattern.CASE_INSENSITIVE);
+//        boolean b = p1.matcher(input).matches() || p2.matcher(input).matches();
+//
+//        return (b) ? true : false;
+//    }
 
     @Override
     public void onStop() {
