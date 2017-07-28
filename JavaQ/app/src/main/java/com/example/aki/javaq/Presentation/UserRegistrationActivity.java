@@ -81,7 +81,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private StorageReference mUserPicReference;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean isFromSignIn = false;
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 20;
+//    public static final int DEFAULT_MSG_LENGTH_LIMIT = 20;
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
     public static final String NEW_USER = "new_user";
@@ -131,9 +131,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
 
         mAddUserNameTextView = (EditText) findViewById(R.id.add_user_name);
         mAddUserNameTextView.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
-        InputFilter[] inputFilter = new InputFilter[1];
-        inputFilter[0] = new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT);
-        mAddUserNameTextView.setFilters(inputFilter);
+//        InputFilter[] inputFilter = new InputFilter[1];
+//        inputFilter[0] = new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT);
+//        mAddUserNameTextView.setFilters(inputFilter);
         mAddUserNameTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,19 +143,16 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 invalidateOptionsMenu();
 
-                //TODO:編集してなかったらfalse
                 //Detect inputted user name
-                if (s.toString().trim().length() > 0) {
+                if (0 < s.toString().trim().length() && s.toString().trim().length() <= 20) {
                     mTappable = true;
                 } else {
                     hasSpecialSymbol(s.toString());
                     mTappable = false;
                 }
 
-                //TODO:記号なしをやめて最大文字数を設定する
                 //For error
-
-                if(s.toString().length() >= 20){
+                if(s.toString().length() > 20){
                     mErrorTextView.setText(R.string.error_user_name);
                 }
                 else {
@@ -347,9 +344,6 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                     });
                 }
 
-
-                //Todo:読み込み終わったらLoading非表示
-//                new Loading(this).showLoadingDialog();
 
                 //TODO:理想はコメントから来た人はdetailページからコメント入力画面に遷移
                 Intent intent = new Intent(this, CommunityListActivity.class);
