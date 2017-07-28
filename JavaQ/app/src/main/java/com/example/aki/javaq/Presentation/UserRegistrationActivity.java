@@ -108,18 +108,20 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         mDatabaseReference = FirebaseLab.getFirebaseDatabaseReference();
         mUserPicReference = FirebaseLab.getStorageReference();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    mCurrentUser = FirebaseLab.getFirebaseUser();
-                    setView();
-                }
-            }
-        };
-        FirebaseLab.getFirebaseAuth().addAuthStateListener(mAuthListener);
+//        mAuthListener = new FirebaseAuth.AuthStateListener() {
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    // User is signed in
+//                    mCurrentUser = FirebaseLab.getFirebaseUser();
+//                    setView();
+//                } else {
+//                    mAddUserNameTextView.setText("");
+//                }
+//            }
+//        };
+//        FirebaseLab.getFirebaseAuth().addAuthStateListener(mAuthListener);
 
 
         mMyIconImageView = (CircleImageView) findViewById(R.id.add_user_icon);
