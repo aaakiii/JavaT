@@ -1,5 +1,6 @@
 package com.example.aki.javaq.Domain.Helper;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -9,7 +10,7 @@ import android.graphics.BitmapFactory;
 
 public class PictureUtils {
 
-    public static Bitmap getScaledBitmap(String path, int photoViewWidth, int photoViewHeight){
+    public static Bitmap getScaledBitmap(Resources res, String path, int photoViewWidthPixel){
         // read in the dimensions of the image on disk
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -17,7 +18,8 @@ public class PictureUtils {
         BitmapFactory.decodeFile(path, options);
 
         //figure out how much to scale down by
-        int inSampleSize = Math.round(photoViewHeight > photoViewWidth ? photoViewHeight : photoViewWidth);; //2なら画像の縦横のピクセル数を1/2にしたサイズ。3なら1/3にしたサイズで読み込まれる。
+        float photoViewWidthDp = photoViewWidthPixel / res.getDisplayMetrics().density;
+        int inSampleSize = Math.round(photoViewWidthDp);
         options = new BitmapFactory.Options();
         options.inSampleSize = inSampleSize;
 

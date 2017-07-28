@@ -81,7 +81,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
     private StorageReference mUserPicReference;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private boolean isFromSignIn = false;
-//    public static final int DEFAULT_MSG_LENGTH_LIMIT = 20;
+    //    public static final int DEFAULT_MSG_LENGTH_LIMIT = 20;
     public static final int RESULT_LOAD_IMAGE = 1;
     private final int REQUEST_PERMISSION_PHONE_STATE = 1;
     public static final String NEW_USER = "new_user";
@@ -151,10 +151,9 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
                 }
 
                 //For error
-                if(s.toString().length() > 20){
+                if (s.toString().length() > 20) {
                     mErrorTextView.setText(R.string.error_user_name);
-                }
-                else {
+                } else {
                     mErrorTextView.setText("");
                 }
             }
@@ -295,7 +294,7 @@ public class UserRegistrationActivity extends AppCompatActivity implements View.
         if (mPicturePath == null) {
             mMyIconImageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.image_user_default));
         } else {
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPicturePath, mIconViewWith, mIconViewHeight);
+            Bitmap bitmap = PictureUtils.getScaledBitmap(getResources(), mPicturePath, mIconViewWith);
             mMyIconImageView.setImageBitmap(bitmap);
         }
     }
