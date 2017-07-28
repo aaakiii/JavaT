@@ -92,10 +92,6 @@ public class CommunityAddCommentActivity extends AppCompatActivity {
         }
 
         mCommentEditTextView = (EditText) findViewById(R.id.edit_post);
-        mCommentEditTextView.setFilters(new InputFilter[]{new InputFilter
-                .LengthFilter(mSharedPreferences
-                .getInt(JavaQPreferences
-                        .FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
 
         mCommentEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
