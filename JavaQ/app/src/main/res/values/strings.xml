@@ -25,6 +25,7 @@
 
 
     <!-- Community -->
+    <string name="comments_zero">%1$s comment</string>
     <plurals name="comments_plural">
         <item quantity="one">%1$s comment</item>
         <item quantity="other">%1$s comments</item>

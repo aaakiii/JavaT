@@ -188,10 +188,23 @@ public class CommunityDetailFragment extends Fragment {
         });
 
 
-        if (mCommentsAdapter == null) {
-            mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mCommentsRef, mUsersRef);
-            mCommentsRecyclerView.setAdapter(mCommentsAdapter);
-        }
+        // Display number of comments
+        final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
+        post_ref.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot snapshot) {
+                PostMain mPostMain = snapshot.getValue(PostMain.class);
+                mCommentsNumInt = mPostMain.getCommentsNum();
+                if(mCommentsNumInt == 0){
+                    mCommentsNum = getResources().getString(R.string.comments_zero, mCommentsNumInt);
+                } else {
+                    mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+                }
+                mPostCommentsNumTextView.setText(mCommentsNum);
+            }
+
+            public void onCancelled(DatabaseError firebaseError) {
+            }
+        });
 
 
         //get user info
@@ -223,7 +236,6 @@ public class CommunityDetailFragment extends Fragment {
             }
         });
 
-
         mAddCommentsEditTextView = (EditText) view.findViewById(R.id.add_new_comment_text);
         mAddCommentsEditTextView.setFocusable(false);
         mAddCommentsEditTextView.setOnClickListener(new View.OnClickListener() {
@@ -243,20 +255,10 @@ public class CommunityDetailFragment extends Fragment {
             }
         });
 
-
-        final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
-        post_ref.addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot snapshot) {
-                PostMain mPostMain = snapshot.getValue(PostMain.class);
-                mCommentsNumInt = mPostMain.getCommentsNum();
-                mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-                mPostCommentsNumTextView.setText(mCommentsNum);
-            }
-
-            public void onCancelled(DatabaseError firebaseError) {
-            }
-        });
-//        }
+        if (mCommentsAdapter == null) {
+            mCommentsAdapter = new CommunityDetailFragment.CommentsAdapter(mCommentsRef, mUsersRef);
+            mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+        }
 
         return view;
     }

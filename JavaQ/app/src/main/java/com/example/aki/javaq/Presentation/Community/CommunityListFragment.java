@@ -204,12 +204,12 @@ public class CommunityListFragment extends Fragment {
             viewHolder.mPostTimeTextView.setText(mPostTimeAgo);
 
             //Display Comment num
-            //TODO:comments nodeから取得
-//            DatabaseReference post_ref = FirebaseLab.getFirebaseDatabaseReference()
-//                    .child(FirebaseNodes.PostMain.POSTS_CHILD);
-//
             mCommentsNumInt = mPostMain.getCommentsNum();
-            mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            if(mCommentsNumInt == 0){
+                mCommentsNum = getResources().getString(R.string.comments_zero, mCommentsNumInt);
+            } else {
+                mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+            }
             viewHolder.mCommentsNumTextView.setText(mCommentsNum);
 
             if (mUserMap.containsKey(mPostMain.getUserId().toString())) {
