@@ -64,10 +64,6 @@ public class CommunityDetailFragment extends Fragment {
     private CommentsAdapter mAdapter;
     private int mCommentsNumInt = 0;
     private Date mCommentDate;
-    private int mGoodNum;
-    private int mBadNum;
-    private boolean mGoodTapped;
-    private boolean mBadTapped;
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -76,6 +72,7 @@ public class CommunityDetailFragment extends Fragment {
     private FirebaseUser mFirebaseUser;
     public DatabaseReference mCommentsRef;
     public DatabaseReference mUsersRef;
+    public DatabaseReference mComRef;
     private CommentsAdapter mCommentsAdapter;
     private RecyclerView mCommentsRecyclerView;
     private String mPostTimeAgo;
@@ -103,18 +100,18 @@ public class CommunityDetailFragment extends Fragment {
         mPostKey = getArguments().getString(ARG_POST_KEY);
     }
 
-    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            // 3秒待機
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }, 3000);
-        }
-    };
+//    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+//        @Override
+//        public void onRefresh() {
+//            // 3秒待機
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mSwipeRefreshLayout.setRefreshing(false);
+//                }
+//            }, 3000);
+//        }
+//    };
 
 
     @Override
@@ -184,6 +181,7 @@ public class CommunityDetailFragment extends Fragment {
                 });
                 mPostDateTextView.setText(TimeUtils.getTimeAgo((long) dataSnapshot.child(FirebaseNodes.PostMain.POST_TIME).getValue()));
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
@@ -246,17 +244,18 @@ public class CommunityDetailFragment extends Fragment {
         });
 
 
-            final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
-            post_ref.addValueEventListener(new ValueEventListener() {
-                public void onDataChange(DataSnapshot snapshot) {
-                    PostMain mPostMain = snapshot.getValue(PostMain.class);
-                    mCommentsNumInt = mPostMain.getCommentsNum();
-                    mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
-                    mPostCommentsNumTextView.setText(mCommentsNum);
-                }
-                public void onCancelled(DatabaseError firebaseError) {
-                }
-            });
+        final DatabaseReference post_ref = mFirebaseDatabaseReference.child(FirebaseNodes.PostMain.POSTS_CHILD).child(mPostKey);
+        post_ref.addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot snapshot) {
+                PostMain mPostMain = snapshot.getValue(PostMain.class);
+                mCommentsNumInt = mPostMain.getCommentsNum();
+                mCommentsNum = getResources().getQuantityString(R.plurals.comments_plural, mCommentsNumInt, mCommentsNumInt);
+                mPostCommentsNumTextView.setText(mCommentsNum);
+            }
+
+            public void onCancelled(DatabaseError firebaseError) {
+            }
+        });
 //        }
 
         return view;
@@ -303,7 +302,6 @@ public class CommunityDetailFragment extends Fragment {
 
         @Override
         public CommentsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.com_detail_comment_item, parent, false);
             return new CommentsViewHolder(view);
         }
@@ -312,6 +310,7 @@ public class CommunityDetailFragment extends Fragment {
         public void onBindViewHolder(final CommentsViewHolder viewHolder, int position) {
             mPostComment = mPostCommentsList.get(position);
             viewHolder.bind(mPostComment);
+
 
             //Display Body text
             viewHolder.mCommentTextView.setText(mPostComment.getComBody());
@@ -322,43 +321,18 @@ public class CommunityDetailFragment extends Fragment {
             viewHolder.mCommentTimeTextView.setText(mPostTimeAgo);
 
             //Display good / bad num
-            //TODO:numはローカルにする
-            mGoodNum = mPostComment.getComLike();
-            viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-            mBadNum = mPostComment.getComUnlike();
-            viewHolder.mCommentBadTextView.setText(String.valueOf(mBadNum));
-
-            // Good Bad button
-            viewHolder.mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    DatabaseReference good_ref = mCommentsRef.child(mPostComment.getComId()).child(FirebaseNodes.PostComment.LIKE);
-
-                    if (!mGoodTapped) {
-                        if (mBadTapped) {
-                            mBadNum--;
-                            viewHolder.mCommentBadTextView.setText(String.valueOf(mBadNum));
-                            DrawableCompat.setTint(viewHolder.mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
-                            mBadTapped = false;
-                        }
-                        mGoodNum++;
-                        viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-                        DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
-                        mGoodTapped = true;
-//                        good_ref.setValue(mGoodNum);
-                    } else {
-                        mGoodNum--;
-                        viewHolder.mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-                        DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
-                        mGoodTapped = false;
-//                        good_ref.setValue(mGoodNum);
-                    }
-                }
-            });
-            viewHolder.mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-//                    addGood(mPostComment.getComId());
-                }
-            });
+            viewHolder.mCommentGoodTextView.setText(String.valueOf(mPostComment.getComLike()));
+            viewHolder.mCommentBadTextView.setText(String.valueOf(mPostComment.getComUnlike()));
+            if (mPostComment.isComLiked()) {
+                DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+            } else {
+                DrawableCompat.setTint(viewHolder.mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+            }
+            if (mPostComment.isComUnliked()) {
+                DrawableCompat.setTint(viewHolder.mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+            } else {
+                DrawableCompat.setTint(viewHolder.mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+            }
 
 
             if (mUserMap.containsKey(mPostComment.getUserId().toString())) {
@@ -426,36 +400,98 @@ public class CommunityDetailFragment extends Fragment {
             mCommentGoodButton = (ImageButton) itemView.findViewById(R.id.comment_button_good);
             mCommentBadButton = (ImageButton) itemView.findViewById(R.id.comment_button_bad);
 
-//            // Good / Bad button
-//            mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    addGood(mPostComment.getComId());
-//                }
-//            });
-//            mCommentGoodTextView.setText(String.valueOf(mGoodNum));
-//            mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    addGood(mPostComment.getComId());
-//                }
-//            });
+            // Good / Bad button
+            mCommentGoodButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addLike(mPostComment);
+                }
+            });
+            mCommentGoodTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addLike(mPostComment);
+                }
+            });
 
-//            //Bad button
-//            mCommentBadButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-////                        addBad();
-//                }
-//            });
-//            mCommentBadTextView.setText(String.valueOf(mBadNum));
-//            mCommentBadTextView.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-////                        addBad();
-//                }
-//            });
+            //Bad button
+            mCommentBadButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addUnlike(mPostComment);
+                }
+            });
+            mCommentBadTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    addUnlike(mPostComment);
+                }
+            });
 
         }
 
         public void bind(final PostComment postComment) {
             mPostComment = postComment;
+        }
+
+
+        private void addLike(PostComment mPostComment) {
+            mComRef = mCommentsRef.child(mPostComment.getComId());
+            int mLikeNum = mPostComment.getComLike();
+            int mUnlikeNum = mPostComment.getComUnlike();
+            boolean isLiked = mPostComment.isComLiked();
+            boolean isUnliked = mPostComment.isComUnliked();
+            if (!isLiked) {
+                if (isUnliked) {
+                    mUnlikeNum--;
+                    mCommentBadTextView.setText(String.valueOf(mUnlikeNum));
+                    DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                    mPostComment.setComUnliked(false);
+                    mPostComment.setComUnliked(false);
+                    mPostComment.setComUnlike(mUnlikeNum);
+                    mComRef.setValue(mPostComment);
+                }
+                mLikeNum++;
+                mCommentGoodTextView.setText(String.valueOf(mLikeNum));
+                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+                mPostComment.setComLiked(true);
+                mPostComment.setComLike(mLikeNum);
+                mComRef.setValue(mPostComment);
+            } else {
+                mLikeNum--;
+                mCommentGoodTextView.setText(String.valueOf(mLikeNum));
+                DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                mPostComment.setComLiked(false);
+                mPostComment.setComLike(mLikeNum);
+                mComRef.setValue(mPostComment);
+            }
+        }
+
+        private void addUnlike(PostComment mPostComment) {
+            mComRef = mCommentsRef.child(mPostComment.getComId());
+            int mLikeNum = mPostComment.getComLike();
+            int mUnlikeNum = mPostComment.getComUnlike();
+            boolean isLiked = mPostComment.isComLiked();
+            boolean isUnliked = mPostComment.isComUnliked();
+            if (!isUnliked) {
+                if (isLiked) {
+                    mLikeNum--;
+                    mCommentGoodTextView.setText(String.valueOf(mLikeNum));
+                    DrawableCompat.setTint(mCommentGoodButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                    mPostComment.setComLiked(false);
+                    mPostComment.setComLike(mLikeNum);
+                    mComRef.setValue(mPostComment);
+                }
+                mUnlikeNum++;
+                mCommentBadTextView.setText(String.valueOf(mUnlikeNum));
+                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_color));
+                mPostComment.setComUnliked(true);
+                mPostComment.setComUnlike(mUnlikeNum);
+                mComRef.setValue(mPostComment);
+            } else {
+                mUnlikeNum--;
+                mCommentBadTextView.setText(String.valueOf(mUnlikeNum));
+                DrawableCompat.setTint(mCommentBadButton.getDrawable(), ContextCompat.getColor(getActivity(), R.color.sub_text));
+                mPostComment.setComUnliked(false);
+                mPostComment.setComUnlike(mUnlikeNum);
+                mComRef.setValue(mPostComment);
+            }
         }
 
 
