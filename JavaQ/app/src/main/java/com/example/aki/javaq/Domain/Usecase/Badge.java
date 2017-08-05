@@ -1,6 +1,5 @@
 package com.example.aki.javaq.Domain.Usecase;
 
-import com.example.aki.javaq.Domain.Usecase.QuizLab;
 
 /**
  * Created by MinaFujisawa on 2017/06/11.
@@ -8,12 +7,10 @@ import com.example.aki.javaq.Domain.Usecase.QuizLab;
 
 public class Badge {
     private int mScore;
-    private int mSectionID;
     private int mMaxScore;
 
     public Badge(int mScore, int mSectionID) {
         this.mScore = mScore;
-        this.mSectionID = mSectionID;
         this.mMaxScore = new QuizLab(mSectionID).getQuizzes().size();
     }
 
