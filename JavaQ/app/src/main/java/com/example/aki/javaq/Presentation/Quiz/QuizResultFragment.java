@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class QuizResultFragment extends Fragment {
-    public static final String EXTRA_SCORE = "com.example.aki.javaq.score";
+    private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
     public static final String SHEARED_PREF_PROGRESS = "shared_pref_progress";
     public static final String SHEARED_PREF_PROGRESS_ACTIVE_DAYS = "shared_pref_progress_active_days";
@@ -114,9 +114,6 @@ public class QuizResultFragment extends Fragment {
                 editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
                 editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
-
-            } else {
-
             }
         }
     }
