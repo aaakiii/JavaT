@@ -80,9 +80,6 @@ public class ProgressFragment extends Fragment {
             editor.putInt(SAVE, mFirstLongestDays);
             editor.apply();
             mLongestStreakTextView.setText(String.valueOf(mLongestDays));
-//            Toast.makeText(getActivity(), "activeDays", Toast.LENGTH_SHORT).show();
-//            Toast.makeText(getActivity(), String.valueOf(mLongestDays), Toast.LENGTH_SHORT).show();
-
         }
         else{
 
@@ -91,15 +88,12 @@ public class ProgressFragment extends Fragment {
                 editor.putInt(KEY, mLongestDays);
                 editor.apply();
                 mLongestStreakTextView.setText(String.valueOf(mLongestDays));
-//                Toast.makeText(getActivity(), "longestDays>", Toast.LENGTH_SHORT).show();
             }
             else if(mLongestDays <= activeDays){
                 mLongestDays = activeDays;
                 editor.putInt(KEY, mLongestDays);
                 editor.apply();
                 mLongestStreakTextView.setText(String.valueOf(mLongestDays));
-//                Toast.makeText(getActivity(),"longest<", Toast.LENGTH_SHORT).show();
-
             }
         }
 
