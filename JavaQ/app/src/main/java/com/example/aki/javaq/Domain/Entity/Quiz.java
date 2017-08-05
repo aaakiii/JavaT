@@ -1,14 +1,14 @@
 package com.example.aki.javaq.Domain.Entity;
 
 
-import java.util.UUID;
+
 
 /**
  * Created by AKI on 2017-06-06.
  */
 
 public class Quiz {
-    private UUID mId;
+
     private int mQuizSectionID;
     private String mQuestionText;
     private String mFirstChoice;
