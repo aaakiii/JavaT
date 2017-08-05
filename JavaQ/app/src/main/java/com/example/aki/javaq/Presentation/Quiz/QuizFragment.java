@@ -195,7 +195,7 @@ public class QuizFragment extends Fragment {
         mThirdButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
         mThirdButton.setTextColor(getResources().getColor(R.color.red));
     }
-    
+
     public boolean checkAnswer(int mClickedAnswer) {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);

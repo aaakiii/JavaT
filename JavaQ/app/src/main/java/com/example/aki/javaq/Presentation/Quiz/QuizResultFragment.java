@@ -38,7 +38,6 @@ public class QuizResultFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private DayOfWeek dayOfWeek;
     private boolean isUsedYesterday = true;
-    private int mPreviousCountAccess;
     private int mCountAccess;
 
 
@@ -108,16 +107,16 @@ public class QuizResultFragment extends Fragment {
             mCountAccess++;
             editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
             editor.commit();
-//            Toast.makeText(getActivity(), "Active streak : " + String.valueOf(mCountAccess), Toast.LENGTH_SHORT).show();
+
         } else {
             // reset to 1
             if (!isUsedYesterday) {
                 editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
                 editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
-//                Toast.makeText(getActivity(), "reset to 1", Toast.LENGTH_SHORT).show();
+
             } else {
-//                Toast.makeText(getActivity(), "we already counted today", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
