@@ -200,7 +200,7 @@ public class QuizFragment extends Fragment {
         if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
             setItemVisibility(true);
-            mPopUpImageView.setImageResource(R.drawable.icon_correct);
+            mPopUpImageView.setImageResource(R.drawable.ic_correct);
             mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
             int correct = new Random().nextInt(mCorrectWords.length);
             String correctWord = (mCorrectWords[correct]);
@@ -210,7 +210,7 @@ public class QuizFragment extends Fragment {
             return true;
         } else {
             setItemVisibility(true);
-            mPopUpImageView.setImageResource(R.drawable.icon_incorrect);
+            mPopUpImageView.setImageResource(R.drawable.ic_incorrect);
             soundPool.play(bad_se, 1F, 1F, 0, 0, 1F);
             mIncorrectWords = getResources().getStringArray(R.array.Incorrect_word_list);
             int incorrect = new Random().nextInt(mIncorrectWords.length);
@@ -238,14 +238,17 @@ public class QuizFragment extends Fragment {
         mContinueButton.setVisibility(INVISIBLE);
         String question = mQuizzes.get(mCurrentIndex).getmQuestionText();
         mQuizTextView.setText(question);
+
         mFirstButton.setBackgroundResource(R.drawable.answer_button_customize);
         mFirstButton.setTextColor(getResources().getColor(R.color.main_text));
         String first_button = mQuizzes.get(mCurrentIndex).getmFirstChoice();
         mFirstButton.setText(first_button);
+
         mSecondButton.setBackgroundResource(R.drawable.answer_button_customize);
         mSecondButton.setTextColor(getResources().getColor(R.color.main_text));
         String second_button = mQuizzes.get(mCurrentIndex).getmSecondChoice();
         mSecondButton.setText(second_button);
+
         mThirdButton.setBackgroundResource(R.drawable.answer_button_customize);
         mThirdButton.setTextColor(getResources().getColor(R.color.main_text));
         String third_button = mQuizzes.get(mCurrentIndex).getmThirdChoice();
