@@ -32,15 +32,10 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
     private int mActionLayoutID;
     private int mFragmentContainerID ;
 
-//    public DrawerMenuActivity(int layoutId, int fragmentContainerId) {
-//        this.mActionLayoutID = layoutId;
-//        this.mFragmentContainerID = fragmentContainerId;
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO:fragment_containerに統一
         mFragmentContainerID = R.id.fragment_container;
         mActionLayoutID = R.layout.activity_with_drawermenu;
 
@@ -51,7 +46,7 @@ public abstract class DrawerMenuActivity extends AppCompatActivity {
 
 
         if (fragment == null) {
-            fragment = new CommunityListFragment();
+            fragment = new QuizSectionFragment();
             fm.beginTransaction().add(mFragmentContainerID, fragment).commit();
         }
 

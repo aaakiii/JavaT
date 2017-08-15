@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Presentation.Quiz.QuizActivity">
+        <activity android:name=".Presentation.Quiz.QuizSectionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,15 +26,14 @@
                     />
             </intent-filter>
         </activity>
-        <activity android:name=".Presentation.Community.CommunityListActivity" />
-        <activity android:name=".Presentation.UserRegistrationActivity"/>
         <activity android:name=".Presentation.Quiz.QuizResultActivity" />
-        <activity android:name=".Presentation.Quiz.QuizSectionActivity" />
+        <activity android:name=".Presentation.Quiz.QuizActivity" />
         <activity android:name=".Presentation.Progress.ProgressActivity" />
+        <activity android:name=".Presentation.Community.CommunityListActivity" />
         <activity android:name=".Presentation.Community.CommunityAddCommentActivity" />
-        <activity android:name=".Presentation.Setting.SettingListActivity" />
         <activity android:name=".Presentation.Community.CommunityPostActivity" />
         <activity android:name=".Presentation.Community.CommunityDetailActivity" />
+        <activity android:name=".Presentation.Setting.SettingListActivity" />
         <activity android:name=".Presentation.UserRegistrationActivity" />
 
     </application>
