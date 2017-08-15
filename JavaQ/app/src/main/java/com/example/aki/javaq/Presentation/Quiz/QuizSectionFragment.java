@@ -112,19 +112,19 @@ public class QuizSectionFragment extends Fragment {
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
                 case "gold" :
-                    mBadgeImageView.setImageResource(R.drawable.badge_gold);
+                    mBadgeImageView.setImageResource(R.drawable.ic_badge_gold);
                     break;
                 case "silver" :
-                    mBadgeImageView.setImageResource(R.drawable.badge_silver);
+                    mBadgeImageView.setImageResource(R.drawable.ic_badge_silver);
                     break;
                 case "copper":
-                    mBadgeImageView.setImageResource(R.drawable.badge_copper);
+                    mBadgeImageView.setImageResource(R.drawable.ic_badge_copper);
                     break;
                 case "" :
-                    mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
+                    mBadgeImageView.setImageResource(R.drawable.ic_badge_notpassed);
                     break;
                 default:
-                    mBadgeImageView.setImageResource(R.drawable.badge_not_passed);
+                    mBadgeImageView.setImageResource(R.drawable.ic_badge_notpassed);
                     break;
             }
             return view;

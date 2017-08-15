@@ -76,15 +76,15 @@ public class QuizResultFragment extends Fragment {
             switch (status) {
                 case "gold":
                     mScoreCommentTextView.setText("Fantastic!");
-                    mScoreBadge.setImageResource(R.drawable.badge_gold);
+                    mScoreBadge.setImageResource(R.drawable.ic_badge_gold);
                     break;
                 case "silver":
                     mScoreCommentTextView.setText("Great!");
-                    mScoreBadge.setImageResource(R.drawable.badge_silver);
+                    mScoreBadge.setImageResource(R.drawable.ic_badge_silver);
                     break;
                 case "copper":
                     mScoreCommentTextView.setText("Good!");
-                    mScoreBadge.setImageResource(R.drawable.badge_copper);
+                    mScoreBadge.setImageResource(R.drawable.ic_badge_copper);
                     break;
             }
         } else {
