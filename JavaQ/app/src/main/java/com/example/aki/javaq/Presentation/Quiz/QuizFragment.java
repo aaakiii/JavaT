@@ -3,8 +3,11 @@ package com.example.aki.javaq.Presentation.Quiz;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +43,6 @@ public class QuizFragment extends Fragment {
     private SoundPool soundPool;
     private int good_se;
     private int bad_se;
-    private Quiz mQuiz;
     private int mCurrentSectionID;
     private String[] mSectionList;
     private List<Quiz> mQuizzes;
@@ -69,7 +71,6 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.quiz_fragment, container, false);
 
-        Intent intent = getActivity().getIntent();
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         mCurrentSectionID = settings.getInt("position", 0);
         mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
@@ -85,6 +86,7 @@ public class QuizFragment extends Fragment {
         mPopUpImageView.setVisibility(INVISIBLE);
         mPopUpTextView = (TextView) v.findViewById(R.id.answer_text_popup);
         mPopUpTextView.setVisibility(INVISIBLE);
+
         mFirstButton = (Button) v.findViewById(R.id.first_button);
         mFirstButton.setText(mQuizzes.get(mCurrentIndex).getmFirstChoice());
         mFirstButton.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +105,7 @@ public class QuizFragment extends Fragment {
                 }
             }
         });
+
         mSecondButton = (Button) v.findViewById(R.id.second_button);
         mSecondButton.setText(mQuizzes.get(mCurrentIndex).getmSecondChoice());
         mSecondButton.setOnClickListener(new View.OnClickListener() {
@@ -122,6 +125,7 @@ public class QuizFragment extends Fragment {
 
             }
         });
+
         mThirdButton = (Button) v.findViewById(R.id.third_button);
         mThirdButton.setText(mQuizzes.get(mCurrentIndex).getmThirdChoice());
         mThirdButton.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +144,7 @@ public class QuizFragment extends Fragment {
                 }
             }
         });
+
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.setVisibility(INVISIBLE);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +161,7 @@ public class QuizFragment extends Fragment {
                     intent.putExtra(EXTRA_CURRENT_SECTION_ID, mCurrentSectionID);
                     intent.putExtra(EXTRA_QUIZZES, mQuizzes.size());
                     startActivity(intent);
+
                     //SharedPreferences
                     SharedPreferences data = getActivity().getSharedPreferences(SHARED_PREF_SCORE, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = data.edit();
@@ -274,19 +280,24 @@ public class QuizFragment extends Fragment {
     }
 
     private void setProgressBar(){
+        GradientDrawable progress_circle;
         for (int i = 0; i < mQuizzes.size(); i++) {
             ImageView mProgressBar = new ImageView(getActivity().getApplicationContext());
             mProgressBar.setId(i);
             mProgressBar.setPadding(8, 0, 8, 0);
-            mProgressBar.setImageResource(R.drawable.icon_progress_gray);
+            progress_circle = (GradientDrawable) getResources().getDrawable(R.drawable.quiz_progress_circle);
+            progress_circle.setColor(ContextCompat.getColor(getActivity(),R.color.light_gray));
+            mProgressBar.setImageDrawable(progress_circle);
 
             //set width and height
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
             mProgressBar.setLayoutParams(layoutParams);
 
             //set green color
-            if(mCurrentIndex == i || i < mCurrentIndex){
-                mProgressBar.setImageResource(R.drawable.icon_progress_maincolor);
+            if(i <= mCurrentIndex){
+                progress_circle = (GradientDrawable) getResources().getDrawable(R.drawable.quiz_progress_circle);
+                progress_circle.setColor(ContextCompat.getColor(getActivity(),R.color.main_color));
+                mProgressBar.setImageDrawable(progress_circle);
             }
             mLinearLayout.addView(mProgressBar);
         }
