@@ -74,7 +74,6 @@ public class QuizFragment extends Fragment {
         SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         mCurrentSectionID = settings.getInt("position", 0);
         mQuizzes = new QuizLab(mCurrentSectionID).getQuizzes();
-        mQuiz = new QuizLab(mCurrentSectionID).getQuiz();
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout) v.findViewById(R.id.progress_linear);
         setProgressBar();
