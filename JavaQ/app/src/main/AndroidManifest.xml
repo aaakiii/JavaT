@@ -10,32 +10,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Presentation.Quiz.QuizSectionActivity">
+        <activity android:name=".Presentation.Quiz.QuizSectionActivity"
+                    android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:host="friendlychat.firebase.google.com"
-                    android:scheme="http"
-                    android:pathPrefix="/message"
-                    />
-            </intent-filter>
         </activity>
-        <activity android:name=".Presentation.Quiz.QuizResultActivity" />
-        <activity android:name=".Presentation.Quiz.QuizActivity" />
-        <activity android:name=".Presentation.Progress.ProgressActivity" />
-        <activity android:name=".Presentation.Community.CommunityListActivity" />
-        <activity android:name=".Presentation.Community.CommunityAddCommentActivity" />
-        <activity android:name=".Presentation.Community.CommunityPostActivity" />
-        <activity android:name=".Presentation.Community.CommunityDetailActivity" />
-        <activity android:name=".Presentation.Setting.SettingListActivity" />
-        <activity android:name=".Presentation.UserRegistrationActivity" />
-
+        <activity android:name=".Presentation.Quiz.QuizResultActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Quiz.QuizActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Progress.ProgressActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Community.CommunityListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Community.CommunityAddCommentActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Community.CommunityPostActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Community.CommunityDetailActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.Setting.SettingListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Presentation.UserRegistrationActivity" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
