@@ -37,7 +37,7 @@ public class QuizFragment extends Fragment {
     private Button mSecondButton;
     private Button mThirdButton;
     private int mCurrentIndex = 0;
-    private int mSelectedAnswerIndex;
+    private int mSelectedAnswer;
     private int mCorrectAnswerIndex;
     private Button mContinueButton;
     private int score = 0;
@@ -170,9 +170,9 @@ public class QuizFragment extends Fragment {
 
 
     private boolean checkAnswer(int inputAnswer) {
-        mSelectedAnswerIndex = inputAnswer;
+        mSelectedAnswer = inputAnswer;
         mCorrectAnswerIndex = mQuizzes.get(mCurrentIndex).getmAnswerIndex();
-        if (mSelectedAnswerIndex == mCorrectAnswerIndex) {
+        if (mSelectedAnswer == mCorrectAnswerIndex) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
             mPopUpImageView.setImageResource(R.drawable.ic_correct);
             mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
@@ -203,8 +203,8 @@ public class QuizFragment extends Fragment {
         mAnswerButton.setTextColor(getResources().getColor(R.color.white));
 
         //set incorrect color
-        if(mSelectedAnswerIndex != mCorrectAnswerIndex){
-            Button mInCorrectButton =  getButtonByIndex(mSelectedAnswerIndex);
+        if(mSelectedAnswer != mCorrectAnswerIndex){
+            Button mInCorrectButton =  getButtonByIndex(mSelectedAnswer);
             mInCorrectButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
             mInCorrectButton.setTextColor(getResources().getColor(R.color.red));
         }
