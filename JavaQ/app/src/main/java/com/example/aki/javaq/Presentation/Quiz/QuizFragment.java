@@ -145,7 +145,7 @@ public class QuizFragment extends Fragment {
         });
 
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
-        mContinueButton.setVisibility(INVISIBLE);
+        mContinueButton.getBackground().setAlpha(128);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,9 +227,9 @@ public class QuizFragment extends Fragment {
     }
 
 
-    public void setItemVisibility(boolean isVisible) {
-        if(isVisible){
-            mContinueButton.setVisibility(VISIBLE);
+    public void setItemVisibility(boolean on) {
+        if(on){
+            mContinueButton.getBackground().setAlpha(255);
             mPopUpImageView.setVisibility(VISIBLE);
             mPopUpTextView.setVisibility(VISIBLE);
         }
@@ -240,7 +240,7 @@ public class QuizFragment extends Fragment {
     }
 
     public void updateQuestion() {
-        mContinueButton.setVisibility(INVISIBLE);
+        mContinueButton.getBackground().setAlpha(128);
         String question = mQuizzes.get(mCurrentIndex).getmQuestionText();
         mQuizTextView.setText(question);
 
