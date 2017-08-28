@@ -12,5 +12,6 @@
     <color name="sub_color_text">#1e9cea</color>
     <color name="light_gray">#e5e5e5</color>
     <color name="bg">#f5f5f5</color>
+    <color name="bg_quiz">#fafafa</color>
     <color name="failed_bg">#949699</color>
 </resources>
