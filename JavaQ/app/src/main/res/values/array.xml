@@ -2,16 +2,30 @@
 <resources>
     <string-array name="section_list">
         <item>Basic concepts</item>
-        <item>Variable</item>
+        <item>Variables</item>
         <item>Booleans</item>
         <item>If and else</item>
         <item>Arrays</item>
-        <item>String</item>
+        <item>Strings</item>
         <item>ArrayLists</item>
-        <item>Loop</item>
-        <item>Method</item>
+        <item>Loops</item>
+        <item>Methods</item>
         <item>Classes</item>
     </string-array>
+
+    <integer-array name="section_list_icons">
+        <item>@drawable/ic_section_basic</item>
+        <item>@drawable/ic_section_variable</item>
+        <item>@drawable/ic_section_boolean</item>
+        <item>@drawable/ic_section_if</item>
+        <item>@drawable/ic_section_array</item>
+        <item>@drawable/ic_section_string</item>
+        <item>@drawable/ic_section_arraylist</item>
+        <item>@drawable/ic_section_loop</item>
+        <item>@drawable/ic_section_method</item>
+        <item>@drawable/ic_section_class</item>
+    </integer-array>
+
     <string-array name="Correct_word_list">
         <item>Great!</item>
         <item>Good!!</item>

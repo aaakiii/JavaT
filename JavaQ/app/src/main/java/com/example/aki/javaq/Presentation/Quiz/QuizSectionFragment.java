@@ -3,6 +3,9 @@ package com.example.aki.javaq.Presentation.Quiz;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -26,10 +29,11 @@ import java.util.List;
 
 public class QuizSectionFragment extends Fragment {
     ListView mListView;
-    List<String> mSectionArrayList;
-    String[] mSectionList;
+    List<String> mSectionNameList;
+    String[] mSectionNameArray;
     SharedPreferences data;
     TextView mQuizListNameTextView;
+    ImageView mSectionIcon;
     ImageView mBadgeImageView;
     public static final String PREFS_NAME = "MyPrefsFile";
 
@@ -47,15 +51,16 @@ public class QuizSectionFragment extends Fragment {
         View view = inflater.inflate(R.layout.quiz_section_fragment, container, false);
         data = getContext().getSharedPreferences(QuizFragment.SHARED_PREF_SCORE, Context.MODE_PRIVATE);
 
-        mSectionArrayList = new ArrayList<>();
-        mSectionList = getResources().getStringArray(R.array.section_list);
+        mSectionNameList = new ArrayList<>();
+        mSectionNameArray = getResources().getStringArray(R.array.section_list);
+        TypedArray mSectionIconArray = getResources().obtainTypedArray(R.array.section_list_icons);
 
-        for (int i = 0; i < mSectionList.length; i++) {
-            mSectionArrayList.add(mSectionList[i]);
+        for (int i = 0; i < mSectionNameArray.length; i++) {
+            mSectionNameList.add(mSectionNameArray[i]);
         }
 
         myArrayAdapter adapter =
-                new myArrayAdapter(getActivity(), R.layout.quiz_section_item, mSectionArrayList);
+                new myArrayAdapter(getActivity(), R.layout.quiz_section_item, mSectionNameList, mSectionIconArray);
 
         mListView = (ListView) view.findViewById(R.id.quiz_list_view);
         mListView.setAdapter(adapter);
@@ -76,13 +81,15 @@ public class QuizSectionFragment extends Fragment {
 
     public class myArrayAdapter extends ArrayAdapter<String> {
         private int resourceId;
-        private List<String> items;
+        private List<String> sectionNameList;
+        private TypedArray sectionIconList;
         private LayoutInflater inflater;
 
-        public myArrayAdapter(Context context, int resourceId, List<String> items) {
-            super(context, resourceId, items);
+        public myArrayAdapter(Context context, int resourceId, List<String> sectionNameList, TypedArray mSectionIconArray) {
+            super(context, resourceId, sectionNameList);
             this.resourceId = resourceId;
-            this.items = items;
+            this.sectionNameList = sectionNameList;
+            this.sectionIconList = mSectionIconArray;
             this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
@@ -95,19 +102,21 @@ public class QuizSectionFragment extends Fragment {
                 view = this.inflater.inflate(this.resourceId, null);
             }
 
-            String item = this.items.get(position);
 
             // set texts
             mQuizListNameTextView = (TextView) view.findViewById(R.id.list_name);
-            mQuizListNameTextView.setText(item);
+            mQuizListNameTextView.setText(this.sectionNameList.get(position));
 
             TextView mQuizListNumTextView = (TextView) view.findViewById(R.id.list_num);
             mQuizListNumTextView.setText("Quiz " + (position + 1));
 
+            //set section icons
+            mSectionIcon = (ImageView) view.findViewById(R.id.icon_section);
+            mSectionIcon.setImageDrawable(sectionIconList.getDrawable(position));
 
             // set badge
             mBadgeImageView = (ImageView) view.findViewById(R.id.section_badge);
-            int score = data.getInt(mSectionList[position] + QuizFragment.SHARED_PREF_SCORE_KEY, 0);
+            int score = data.getInt(mSectionNameArray[position] + QuizFragment.SHARED_PREF_SCORE_KEY, 0);
 
             String status = new Badge(score, position).getBadgeStatus();
             switch (status){
