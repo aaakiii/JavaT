@@ -38,6 +38,8 @@ public class QuizFragment extends Fragment {
     private Button mSecondButton;
     private Button mThirdButton;
     private int mCurrentIndex = 0;
+    private int mSelectedAnswer;
+    private int mCorrectAnswerIndex;
     private Button mContinueButton;
     private int score = 0;
     private static final String KEY_INDEX = "index";
@@ -92,17 +94,10 @@ public class QuizFragment extends Fragment {
         mFirstButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFirstButton.setBackgroundResource(R.drawable.correct_answer_button_customize);
-                mFirstButton.setTextColor(getResources().getColor(R.color.white));
-                ButtonsEnable(false);
-                if (checkAnswer(1) == false) {
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        answerIsTwo();
-                    }
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        answerIsThree();
-                    }
-                }
+                setButtonsEnable(false);
+                setItemVisibility(true);
+                checkAnswer(1);
+                setButtonColor();
             }
         });
 
@@ -111,18 +106,10 @@ public class QuizFragment extends Fragment {
         mSecondButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSecondButton.setBackgroundResource(R.drawable.correct_answer_button_customize);
-                mSecondButton.setTextColor(getResources().getColor(R.color.white));
-                ButtonsEnable(false);
-                if (checkAnswer(2) == false) {
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        answerIsOne();
-                    }
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 3) {
-                        answerIsThree();
-                    }
-                }
-
+                setButtonsEnable(false);
+                setItemVisibility(true);
+                checkAnswer(2);
+                setButtonColor();
             }
         });
 
@@ -131,28 +118,21 @@ public class QuizFragment extends Fragment {
         mThirdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mThirdButton.setBackgroundResource(R.drawable.correct_answer_button_customize);
-                mThirdButton.setTextColor(getResources().getColor(R.color.white));
-                ButtonsEnable(false);
-                if (checkAnswer(3) == false) {
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 1) {
-                        answerIsOne();
-                    }
-                    if (mQuizzes.get(mCurrentIndex).getmAnswerIndex() == 2) {
-                        answerIsTwo();
-                    }
-                }
+                setButtonsEnable(false);
+                setItemVisibility(true);
+                checkAnswer(3);
+                setButtonColor();
             }
         });
 
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
-        mContinueButton.setVisibility(INVISIBLE);
+        mContinueButton.getBackground().setAlpha(128);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1);
                 setItemVisibility(false);
-                ButtonsEnable(true);
+                setButtonsEnable(true);
                 mLinearLayout.removeAllViews();
                 setProgressBar();
                 if (mCurrentIndex == mQuizzes.size()) {
@@ -188,24 +168,13 @@ public class QuizFragment extends Fragment {
         return v;
     }
 
-    //set Buttons color
-    private void answerIsOne() {
-        mFirstButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-        mFirstButton.setTextColor(getResources().getColor(R.color.red));
-    }
-    private void answerIsTwo() {
-        mSecondButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-        mSecondButton.setTextColor(getResources().getColor(R.color.red));
-    }
-    private void answerIsThree() {
-        mThirdButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
-        mThirdButton.setTextColor(getResources().getColor(R.color.red));
-    }
 
-    public boolean checkAnswer(int mClickedAnswer) {
-        if (mClickedAnswer == mQuizzes.get(mCurrentIndex).getmAnswerIndex()) {
+
+    private boolean checkAnswer(int inputAnswer) {
+        mSelectedAnswer = inputAnswer;
+        mCorrectAnswerIndex = mQuizzes.get(mCurrentIndex).getmAnswerIndex();
+        if (mSelectedAnswer == mCorrectAnswerIndex) {
             soundPool.play(good_se, 1F, 1F, 0, 0, 1F);
-            setItemVisibility(true);
             mPopUpImageView.setImageResource(R.drawable.ic_correct);
             mCorrectWords = getResources().getStringArray(R.array.Correct_word_list);
             int correct = new Random().nextInt(mCorrectWords.length);
@@ -215,7 +184,6 @@ public class QuizFragment extends Fragment {
             score++;
             return true;
         } else {
-            setItemVisibility(true);
             mPopUpImageView.setImageResource(R.drawable.ic_incorrect);
             soundPool.play(bad_se, 1F, 1F, 0, 0, 1F);
             mIncorrectWords = getResources().getStringArray(R.array.Incorrect_word_list);
@@ -227,10 +195,42 @@ public class QuizFragment extends Fragment {
         }
     }
 
+    private void setButtonColor(){
+        Button mAnswerButton = null;
 
-    public void setItemVisibility(boolean isVisible) {
-        if(isVisible){
-            mContinueButton.setVisibility(VISIBLE);
+        //set correct color
+        mAnswerButton = getButtonByIndex(mCorrectAnswerIndex);
+        mAnswerButton.setBackgroundResource(R.drawable.collect_answer_button_customize);
+        mAnswerButton.setTextColor(getResources().getColor(R.color.white));
+
+        //set incorrect color
+        if(mSelectedAnswer != mCorrectAnswerIndex){
+            Button mInCorrectButton =  getButtonByIndex(mSelectedAnswer);
+            mInCorrectButton.setBackgroundResource(R.drawable.incorrect_answer_button_customize);
+            mInCorrectButton.setTextColor(getResources().getColor(R.color.red));
+        }
+    }
+
+    private Button getButtonByIndex(int index){
+        Button btn = null;
+        switch (index){
+            case 1:
+                btn = mFirstButton;
+                break;
+            case 2:
+                btn = mSecondButton;
+                break;
+            case 3:
+                btn = mThirdButton;
+                break;
+        }
+        return btn;
+    }
+
+
+    private void setItemVisibility(boolean on) {
+        if(on){
+            mContinueButton.getBackground().setAlpha(255);
             mPopUpImageView.setVisibility(VISIBLE);
             mPopUpTextView.setVisibility(VISIBLE);
         }
@@ -240,8 +240,8 @@ public class QuizFragment extends Fragment {
         }
     }
 
-    public void updateQuestion() {
-        mContinueButton.setVisibility(INVISIBLE);
+    private void updateQuestion() {
+        mContinueButton.getBackground().setAlpha(128);
         String question = mQuizzes.get(mCurrentIndex).getmQuestionText();
         mQuizTextView.setText(question);
 
@@ -267,8 +267,8 @@ public class QuizFragment extends Fragment {
         soundPool.release();
     }
 
-    public void ButtonsEnable(boolean IsButtonEnable) {
-        if (IsButtonEnable) {
+    private void setButtonsEnable(boolean on) {
+        if (on) {
             mFirstButton.setEnabled(true);
             mSecondButton.setEnabled(true);
             mThirdButton.setEnabled(true);
@@ -284,13 +284,13 @@ public class QuizFragment extends Fragment {
         for (int i = 0; i < mQuizzes.size(); i++) {
             ImageView mProgressBar = new ImageView(getActivity().getApplicationContext());
             mProgressBar.setId(i);
-            mProgressBar.setPadding(8, 0, 8, 0);
+            mProgressBar.setPadding(6, 0, 6, 0);
             progress_circle = (GradientDrawable) getResources().getDrawable(R.drawable.quiz_progress_circle);
             progress_circle.setColor(ContextCompat.getColor(getActivity(),R.color.light_gray));
             mProgressBar.setImageDrawable(progress_circle);
 
             //set width and height
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(60, 60);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(50, 50);
             mProgressBar.setLayoutParams(layoutParams);
 
             //set green color

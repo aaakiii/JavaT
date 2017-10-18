@@ -15,7 +15,7 @@
         android:id="@+id/icon_section"
         android:layout_width="72dp"
         android:layout_height="72dp"
-        android:src="@drawable/icon_section_dummy"
+        tools:src="@drawable/icon_section_dummy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
