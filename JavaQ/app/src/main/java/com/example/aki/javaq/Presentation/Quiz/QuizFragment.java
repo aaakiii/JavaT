@@ -24,6 +24,7 @@ import com.example.aki.javaq.Domain.Entity.Quiz;
 import com.example.aki.javaq.Domain.Usecase.QuizLab;
 import com.example.aki.javaq.R;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -80,6 +81,7 @@ public class QuizFragment extends Fragment {
         mSectionList = getResources().getStringArray(R.array.section_list);
         mLinearLayout = (LinearLayout) v.findViewById(R.id.progress_linear);
         setProgressBar();
+        Collections.shuffle(mQuizzes);
 
         //set view
         mQuizTextView = (TextView) v.findViewById(R.id.question_item);
