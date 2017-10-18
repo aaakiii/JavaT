@@ -18,6 +18,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.widget.Toast;
 
 import com.example.aki.javaq.Domain.Entity.Quiz;
 import com.example.aki.javaq.Domain.Usecase.QuizLab;
@@ -35,6 +36,7 @@ public class QuizFragment extends Fragment {
     private Button mFirstButton;
     private Button mSecondButton;
     private Button mThirdButton;
+    private Button mFourthButton;
     private int mCurrentIndex = 0;
     private int mSelectedAnswer;
     private int mCorrectAnswerIndex;
@@ -122,6 +124,23 @@ public class QuizFragment extends Fragment {
                 setButtonColor();
             }
         });
+
+        mFourthButton = (Button) v.findViewById(R.id.fourth_button);
+        mFourthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setButtonsEnable(false);
+                setItemVisibility(true);
+                checkAnswer(4);
+                setButtonColor();
+            }
+        });
+
+        if(mQuizzes.get(mCurrentIndex).getmFourthChoice() != null){
+            mFourthButton.setText(mQuizzes.get(mCurrentIndex).getmFourthChoice());
+        }else {
+            mFourthButton.setVisibility(INVISIBLE);
+        }
 
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.getBackground().setAlpha(128);
@@ -221,6 +240,8 @@ public class QuizFragment extends Fragment {
             case 3:
                 btn = mThirdButton;
                 break;
+            case 4:
+                btn = mFourthButton;
         }
         return btn;
     }
@@ -257,6 +278,17 @@ public class QuizFragment extends Fragment {
         mThirdButton.setTextColor(getResources().getColor(R.color.main_text));
         String third_button = mQuizzes.get(mCurrentIndex).getmThirdChoice();
         mThirdButton.setText(third_button);
+
+        mFourthButton.setBackgroundResource(R.drawable.answer_button_customize);
+        mFourthButton.setTextColor(getResources().getColor(R.color.main_text));
+        String fourth_button = mQuizzes.get(mCurrentIndex).getmFourthChoice();
+        mFourthButton.setText(fourth_button);
+        if(mQuizzes.get(mCurrentIndex).getmFourthChoice() != null) {
+            mFourthButton.setVisibility(VISIBLE);
+        }else{
+            mFourthButton.setVisibility(INVISIBLE);
+        }
+
     }
 
     @Override
@@ -270,10 +302,12 @@ public class QuizFragment extends Fragment {
             mFirstButton.setEnabled(true);
             mSecondButton.setEnabled(true);
             mThirdButton.setEnabled(true);
+            mFourthButton.setEnabled(true);
         } else {
             mFirstButton.setEnabled(false);
             mSecondButton.setEnabled(false);
             mThirdButton.setEnabled(false);
+            mFourthButton.setEnabled(false);
         }
     }
 

@@ -14,14 +14,16 @@ public class Quiz {
     private String mFirstChoice;
     private String mSecondChoice;
     private String mThirdChoice;
+    private String mFourthChoice;
     private int mAnswerIndex;
 
-    public Quiz(int sectionID, String QuestionText, String FirstChoice, String SecondChoice, String ThirdChoice, int AnswerIndex) {
+    public Quiz(int sectionID, String QuestionText, String FirstChoice, String SecondChoice, String ThirdChoice,String FourthChoice, int AnswerIndex) {
         mQuizSectionID = sectionID;
         mQuestionText = QuestionText;
         mFirstChoice = FirstChoice;
         mSecondChoice = SecondChoice;
         mThirdChoice = ThirdChoice;
+        mFourthChoice = FourthChoice;
         mAnswerIndex = AnswerIndex;
     }
 
@@ -44,6 +46,8 @@ public class Quiz {
     public String getmThirdChoice() {
         return mThirdChoice;
     }
+
+    public String getmFourthChoice() {return mFourthChoice;}
 
     public int getmAnswerIndex() {
         return mAnswerIndex;
@@ -69,6 +73,8 @@ public class Quiz {
     public void setmThirsChoice(String mThirsChoice) {
         this.mThirdChoice = mThirsChoice;
     }
+
+    public void setmFourthChoice(String mFourthChoice) {this.mFourthChoice = mFourthChoice;}
 
     public void setmAnswerIndex(int mAnswerIndex) {
         this.mAnswerIndex = mAnswerIndex;
