@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.aki.javaq.Domain.Helper.SharedPrefRef;
 import com.example.aki.javaq.Domain.Usecase.Badge;
 import com.example.aki.javaq.R;
 
@@ -36,6 +37,8 @@ public class QuizSectionFragment extends Fragment {
     public static final String PREFS_NAME = "MyPrefsFile";
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,8 @@ public class QuizSectionFragment extends Fragment {
         // reset all shared preferences
       // resetSharedPref();
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +78,9 @@ public class QuizSectionFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
+
         return view;
     }
 
@@ -143,15 +151,14 @@ public class QuizSectionFragment extends Fragment {
         SharedPreferences.Editor editor = scoreData.edit();
         editor.clear().commit();
 
-        SharedPreferences progressData = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences progressData = getActivity().getSharedPreferences(SharedPrefRef.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor2 = progressData.edit();
         editor2.clear().commit();
 
-        SharedPreferences data = getActivity().getSharedPreferences(QuizResultFragment.SHEARED_PREF_PROGRESS_LONGEST_DAYS, Context.MODE_PRIVATE);
+        SharedPreferences data = getActivity().getSharedPreferences(SharedPrefRef.SHEARED_PREF_PROGRESS_LONGEST_DAYS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor3 = data.edit();
         editor3.clear().commit();
     }
-
 }
 
 

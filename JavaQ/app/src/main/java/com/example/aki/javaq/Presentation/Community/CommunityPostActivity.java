@@ -17,7 +17,6 @@ import android.widget.EditText;
 
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
-import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -90,7 +89,7 @@ public class CommunityPostActivity extends AppCompatActivity {
         mEditTextView = (EditText) findViewById(R.id.edit_post);
 //        mEditTextView.setFilters(new InputFilter[]{new InputFilter
 //                .LengthFilter(mSharedPreferences
-//                .getInt(JavaQPreferences
+//                .getInt(SharedPrefRef
 //                        .FRIENDLY_MSG_LENGTH, DEFAULT_MSG_LENGTH_LIMIT))});
         mEditTextView.addTextChangedListener(new TextWatcher() {
             @Override

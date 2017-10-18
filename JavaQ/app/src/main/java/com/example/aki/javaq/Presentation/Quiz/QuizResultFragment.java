@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.aki.javaq.Domain.Helper.SharedPrefRef;
 import com.example.aki.javaq.Domain.Usecase.Badge;
 import com.example.aki.javaq.Domain.Usecase.DayOfWeek;
 import com.example.aki.javaq.R;
@@ -22,11 +23,7 @@ import java.util.GregorianCalendar;
 public class QuizResultFragment extends Fragment {
     private static final String EXTRA_SCORE = "com.example.aki.javaq.score";
     private static final String EXTRA_QUIZZES = "com.example.aki.javaq.quizzes";
-    public static final String SHEARED_PREF_PROGRESS = "shared_pref_progress";
-    public static final String SHEARED_PREF_PROGRESS_ACTIVE_DAYS = "shared_pref_progress_active_days";
-    public static final String SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP = "shared_pref_progress_active_time_stamp";
-    public static final String SHEARED_PREF_PROGRESS_WEEKLY = "shared_pref_progress_weekly";
-    public static final String SHEARED_PREF_PROGRESS_LONGEST_DAYS = "shared_pref_progress_previous_days";
+
     private int mScore;
     private TextView mScoreTextView;
     private TextView mScoreCommentTextView;
@@ -40,16 +37,38 @@ public class QuizResultFragment extends Fragment {
     private boolean isUsedYesterday = true;
     private int mCountAccess;
 
+    private long ONE_DAY_MILLIS = 86400000;
+    private long lastCheckedMillis;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAcStreakShearedPref = getActivity().getSharedPreferences(SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
+        mAcStreakShearedPref = getActivity().getSharedPreferences(SharedPrefRef.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
         editor = mAcStreakShearedPref.edit();
+
+        // check reset
+        SharedPreferences mProgressShearedPref = getActivity().getSharedPreferences(SharedPrefRef.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
+        lastCheckedMillis = mProgressShearedPref.getLong(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
+        long now = System.currentTimeMillis();
+
+        if (now - lastCheckedMillis > ONE_DAY_MILLIS * 7) {
+            resetSharedPrefForWeeklyProgress();
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(lastCheckedMillis);
+            int lastDOF = calendar.get(Calendar.DAY_OF_WEEK);
+
+            if (getNextMidnightMillis() - lastCheckedMillis + ONE_DAY_MILLIS * (7 - lastDOF) < now - lastCheckedMillis) {
+                resetSharedPrefForWeeklyProgress();
+            }
+        }
+
         countStreak(checkOnceParDay());
         weeklyProgress();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,28 +118,28 @@ public class QuizResultFragment extends Fragment {
 
     private void countStreak(boolean checkOnceParDay) {
 
-        editor.putLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, System.currentTimeMillis());
+        editor.putLong(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, System.currentTimeMillis());
         editor.commit();
 
         if (checkOnceParDay) {
-            mCountAccess = mAcStreakShearedPref.getInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 0);
+            mCountAccess = mAcStreakShearedPref.getInt(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 0);
             mCountAccess++;
-            editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
+            editor.putInt(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_DAYS, mCountAccess);
             editor.commit();
 
         } else {
             // reset to 1
             if (!isUsedYesterday) {
-                editor.remove(SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
-                editor.putInt(SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
+                editor.remove(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_DAYS).commit();
+                editor.putInt(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_DAYS, 1);
                 editor.commit();
             }
         }
     }
 
     private boolean checkOnceParDay() {
-        long lastCheckedMillis = mAcStreakShearedPref.getLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
-        editor.putLong(SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, lastCheckedMillis);
+        long lastCheckedMillis = mAcStreakShearedPref.getLong(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, 0);
+        editor.putLong(SharedPrefRef.SHEARED_PREF_PROGRESS_ACTIVE_TIME_STAMP, lastCheckedMillis);
         long now = System.currentTimeMillis();
 
         // tomorrow at midnight
@@ -153,10 +172,27 @@ public class QuizResultFragment extends Fragment {
 
         for (int i = 1; i <= 7; i++) {
             if(dayOfWeek.getIntDay() == i){
-                editor.putBoolean(SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
+                editor.putBoolean(SharedPrefRef.SHEARED_PREF_PROGRESS_WEEKLY + String.valueOf(i), true);
             }
         }
         editor.commit();
+    }
+
+    private void resetSharedPrefForWeeklyProgress() {
+        SharedPreferences progressData = getActivity().getSharedPreferences(SharedPrefRef.SHEARED_PREF_PROGRESS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = progressData.edit();
+        editor.clear().commit();
+    }
+
+    private long getNextMidnightMillis() {
+        Calendar date = new GregorianCalendar();
+        date.setTime(new Date(lastCheckedMillis));
+        date.set(Calendar.HOUR_OF_DAY, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        date.add(Calendar.DAY_OF_MONTH, 1); //next day
+        return date.getTimeInMillis();
     }
 }
 

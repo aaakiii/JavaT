@@ -34,7 +34,6 @@ import com.bumptech.glide.Glide;
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Entity.User;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
-import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.Domain.Helper.PictureUtils;
 import com.example.aki.javaq.Presentation.Community.CommunityListActivity;

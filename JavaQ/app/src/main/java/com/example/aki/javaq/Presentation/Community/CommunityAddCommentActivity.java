@@ -20,7 +20,6 @@ import android.widget.EditText;
 import com.example.aki.javaq.Domain.Entity.PostComment;
 import com.example.aki.javaq.Domain.Entity.PostMain;
 import com.example.aki.javaq.Domain.Helper.FirebaseNodes;
-import com.example.aki.javaq.Domain.Helper.JavaQPreferences;
 import com.example.aki.javaq.Domain.Usecase.FirebaseLab;
 import com.example.aki.javaq.R;
 import com.google.firebase.analytics.FirebaseAnalytics;
