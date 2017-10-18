@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -21,7 +20,6 @@ import android.media.SoundPool;
 import android.os.Build;
 
 import com.example.aki.javaq.Domain.Entity.Quiz;
-import com.example.aki.javaq.Domain.Helper.ResetUtil;
 import com.example.aki.javaq.Domain.Usecase.QuizLab;
 import com.example.aki.javaq.R;
 

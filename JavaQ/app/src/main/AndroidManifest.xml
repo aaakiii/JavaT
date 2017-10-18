@@ -12,10 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name=".Domain.Helper.ResetReceiver"
-            android:process=":remote"/>
 
-        <activity android:name=".Presentation.Quiz.QuizSectionActivity">
         <activity android:name=".Presentation.Quiz.QuizSectionActivity"
                     android:screenOrientation="portrait">
             <intent-filter>
