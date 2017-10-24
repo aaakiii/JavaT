@@ -116,7 +116,6 @@ public class QuizFragment extends Fragment {
         });
 
         mThirdButton = (Button) v.findViewById(R.id.third_button);
-        mThirdButton.setText(mQuizzes.get(mCurrentIndex).getmThirdChoice());
         mThirdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +125,11 @@ public class QuizFragment extends Fragment {
                 setButtonColor();
             }
         });
+        if(mQuizzes.get(mCurrentIndex).getmThirdChoice() != null){
+            mThirdButton.setText(mQuizzes.get(mCurrentIndex).getmThirdChoice());
+        }else {
+            mThirdButton.setVisibility(INVISIBLE);
+        }
 
         mFourthButton = (Button) v.findViewById(R.id.fourth_button);
         mFourthButton.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +284,11 @@ public class QuizFragment extends Fragment {
         mThirdButton.setTextColor(getResources().getColor(R.color.main_text));
         String third_button = mQuizzes.get(mCurrentIndex).getmThirdChoice();
         mThirdButton.setText(third_button);
+        if(mQuizzes.get(mCurrentIndex).getmThirdChoice() != null) {
+            mThirdButton.setVisibility(VISIBLE);
+        }else{
+            mThirdButton.setVisibility(INVISIBLE);
+        }
 
         mFourthButton.setBackgroundResource(R.drawable.answer_button_customize);
         mFourthButton.setTextColor(getResources().getColor(R.color.main_text));

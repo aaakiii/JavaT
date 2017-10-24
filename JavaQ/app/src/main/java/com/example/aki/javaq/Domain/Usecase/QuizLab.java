@@ -22,9 +22,9 @@ public class QuizLab {
         switch (sectionID){
             case 0 :
                 mQuizzes.add(new Quiz(0, "Which of these lines create a variable?", "myAge = 17;", "String myName;", "myName = \"Marty\";", null, 2));
-                mQuizzes.add(new Quiz(0, "What's true about 42 and \"42\"?", "42 is an integer value while \"42\"is a string value", "They're the same", "42 can not be used for arithmetic","aaa", 1));
+                mQuizzes.add(new Quiz(0, "What's true about 42 and \"42\"?", "42 is an integer value while \"42\"is a string value", "They're the same", null ,null, 1));
                 mQuizzes.add(new Quiz(0, "Can you find the mistake in this snippet?\nint myAge;\nmyAge = \"17\";\nSystem.out.print(myAge);", "myAge needs to be a double-type variable", "print()can't be used for integer", "myAge can't take a String-type value like \"17\"","abc", 3));
-                mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point",null, 3));
+                mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point","", 3));
                 mQuizzes.add(new Quiz(0, "Can you anticipate the result of this not-so-complex arithmetic operation?\nint number = 80;\nSystem.out.print(number/40);", "40", "20", "20.0","", 2));
                 mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point","", 3));
                 mQuizzes.add(new Quiz(0, "What's the difference between int and double", "int defines variable while double defines a method", "They are the same", "Integers are whole numbers while doubles have a decimal point","", 3));
