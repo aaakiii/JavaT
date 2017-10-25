@@ -150,6 +150,7 @@ public class QuizFragment extends Fragment {
 
         mContinueButton = (Button) v.findViewById(R.id.continue_button);
         mContinueButton.getBackground().setAlpha(128);
+        mContinueButton.setEnabled(false);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,6 +268,7 @@ public class QuizFragment extends Fragment {
 
     private void updateQuestion() {
         mContinueButton.getBackground().setAlpha(128);
+        mContinueButton.setEnabled(false);
         String question = mQuizzes.get(mCurrentIndex).getmQuestionText();
         mQuizTextView.setText(question);
 
