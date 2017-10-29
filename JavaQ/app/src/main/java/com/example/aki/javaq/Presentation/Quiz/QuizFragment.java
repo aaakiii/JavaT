@@ -257,6 +257,7 @@ public class QuizFragment extends Fragment {
     private void setItemVisibility(boolean on) {
         if(on){
             mContinueButton.getBackground().setAlpha(255);
+            mContinueButton.setEnabled(true);
             mPopUpImageView.setVisibility(VISIBLE);
             mPopUpTextView.setVisibility(VISIBLE);
         }
