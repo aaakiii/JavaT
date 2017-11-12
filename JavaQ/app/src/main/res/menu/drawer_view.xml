@@ -10,27 +10,24 @@
             android:id="@+id/nav_progress"
             android:icon="@drawable/ic_navi_progress"
             android:title="@string/progress" />
-        <!--<item-->
-            <!--android:id="@+id/nav_community"-->
-            <!--android:icon="@drawable/ic_navi_com"-->
-            <!--android:title="@string/community" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_setting"-->
-            <!--android:icon="@drawable/navi_setting"-->
-            <!--android:title="@string/setting" />-->
+        <item
+            android:id="@+id/nav_community"
+            android:icon="@drawable/ic_navi_com"
+            android:title="@string/community" />
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_navi_com"
+            android:title="@string/setting" />
 
-        <!--<item android:title="@string/other">-->
-            <!--<menu>-->
-                <!--<group android:checkableBehavior="single">-->
-                    <!--<item-->
-                        <!--android:id="@+id/nav_pp"-->
-                        <!--android:title="@string/pp" />-->
-                    <!--<item-->
-                        <!--android:id="@+id/nav_feedback"-->
-                        <!--android:title="@string/feedback" />-->
-                <!--</group>-->
-            <!--</menu>-->
-        <!--</item>-->
+        <item android:title="@string/other">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/nav_pp"
+                        android:title="@string/pp" />
+                </group>
+            </menu>
+        </item>
     </group>
 
 
