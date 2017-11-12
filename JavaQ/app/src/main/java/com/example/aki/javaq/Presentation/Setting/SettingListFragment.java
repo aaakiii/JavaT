@@ -5,7 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,8 @@ public class SettingListFragment extends Fragment {
     TextView mListTextView;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private boolean isLoggedin;
+    private static final String LOGIN_DIALOG = "login_dialog";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,46 +52,62 @@ public class SettingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_list_fragment, container, false);
 
+
+        // Check if the user already logged-in or not
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    isLoggedin = true;
+                } else {
+                    isLoggedin = false;
+                }
+            }
+        };
+        FirebaseLab.getFirebaseAuth().addAuthStateListener(mAuthListener);
+
+        // Create setting item list
         mSettingArrayList = new ArrayList<>();
         mSettingList = getResources().getStringArray(R.array.setting_list);
 
-        //TODO:未ログインだったら.length -1（logout非表示）
         for (int i = 0; i < mSettingList.length; i++) {
             mSettingArrayList.add(mSettingList[i]);
         }
+        if (!isLoggedin) {
+            mSettingArrayList.remove(mSettingArrayList.size()-1);
+        }
 
+        // Set adapter
         myArrayAdapter adapter =
                 new myArrayAdapter(getActivity(), R.layout.setting_list_item, mSettingArrayList);
 
         mListView = (ListView) view.findViewById(R.id.list_view_container);
         mListView.setAdapter(adapter);
 
+        // OnClickListener
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        //TODO: 未ログインだったらダイアログ表示
-                        Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
-                        intent.putExtra(UserRegistrationActivity.NEW_USER, false);
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        //TODO: notificationに設定
-                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
-                        break;
-                    case 2:
-                        //TODO:showDialogを有効にする
-//                        showDialog(getActivity());
-                        mFirebaseUser = FirebaseLab.getFirebaseUser();
-                        if(mFirebaseUser != null){
-                            SignInLab.signOut();
-                            Toast.makeText(getActivity(), "Sign out", Toast.LENGTH_SHORT).show();
+                        if (isLoggedin) {
+                            Intent intent = new Intent(getContext(), UserRegistrationActivity.class);
+                            intent.putExtra(UserRegistrationActivity.NEW_USER, false);
+                            startActivity(intent);
+                            break;
                         } else {
-                            Toast.makeText(getActivity(), "already ..", Toast.LENGTH_SHORT).show();
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            LoginDialogFragment dialog = LoginDialogFragment.newInstance();
+                            dialog.show(manager, LOGIN_DIALOG);
+                        }
+
+                    case 1:
+                        if(isLoggedin){
+                            showConformDialog(getActivity());
+                            Toast.makeText(getActivity(), "Sign out", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     default:
-                        startActivity(new Intent(getActivity(), UserRegistrationActivity.class));
                         break;
                 }
             }
@@ -127,7 +147,7 @@ public class SettingListFragment extends Fragment {
         }
     }
 
-    private void showDialog(Context context){
+    private void showConformDialog(Context context){
         AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog_Alert);
@@ -152,10 +172,6 @@ public class SettingListFragment extends Fragment {
 
         builder.create().show();
     }
-
-
-
-
 }
 
 
