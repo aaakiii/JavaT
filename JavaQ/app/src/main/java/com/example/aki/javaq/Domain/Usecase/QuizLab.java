@@ -56,10 +56,10 @@ public class QuizLab {
                 mQuizzes.add(new Quiz(4,"What is the output of the following code?\nint[] arry = new int[4];\nystem.out.println(arry[4]));","4","error because array is not initialized","error,because index is out of range",null,3));
                 mQuizzes.add(new Quiz(4,"What number will be printed by the following code?\nint[] nums = {1,2,3,4,5,6};\nfor(int i = 0; i < 5; i++){\n\tSystem.out.println(nums[i + 1]));\n}","0-6","1-6","2-6",null,3));
                 mQuizzes.add(new Quiz(4,"Which of the following code is an invalid declaration?","String[] arry = new String[3];","String arry[] = new String[4];","String[] arry = new String[0];","all are valid",4));
-                mQuizzes.add(new Quiz(4,"What is the hegihest index value of the following code?\nint[] values = new int[x];","x","x+1","x-1",null,3));
+                mQuizzes.add(new Quiz(4,"What is the highest index value of the following code?\nint[] values = new int[x];","x","x+1","x-1",null,3));
                 mQuizzes.add(new Quiz(4,"The length of the following array is int[] grades = new int[7];","6","8","7",null,3));
                 mQuizzes.add(new Quiz(4,"Which of the following code gets the number of integers in the following array?\nint[] nums = new int[30];","int size = nums.length;","int size = nums.length());","int size = nums.size());",null,1));
-                mQuizzes.add(new Quiz(4,"What is the output of the following code?\nint[] arry = new int[5];\nSystem.out.println(arr[0]));","error,bacause array is not initialized","error, because index must be greater than 0","0",null,3));
+                mQuizzes.add(new Quiz(4,"What is the output of the following code?\nint[] arry = new int[5];\nSystem.out.println(arr[0]));","error,because array is not initialized","error, because index must be greater than 0","0",null,3));
                 mQuizzes.add(new Quiz(4,"What is the value of arry[4]?\nint[] arry = {1,2,3,4,5};","3","4","5",null,3));
                 break;
 
