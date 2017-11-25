@@ -1,7 +1,8 @@
 # JavaT
 This is an Android Java quiz and community app for Java learners.
 
-<img src="./images/Screenshot_1510616774.png" width="200px"> <img src="./images/Screenshot_1510616138.png" width="200px">  <img src="./images/Screenshot_1510616279.png" width="200px">  <img src="./images/Screenshot_1510616412.png" width="200px">  
+<img src="./images/ts01.png" width="200px"> <img src="./images/ts02.png" width="200px">  <img src="./images/ts03.png" width="200px">  <img src="./images/ts04.png" width="200px">  
+<img src="./images/qs01.png" width="200px"> <img src="./images/qs02.png" width="200px">  <img src="./images/qs03.png" width="200px">  <img src="./images/qs04.png" width="200px"> 
 
 ## Contents of Quiz
 - Basic concepts
